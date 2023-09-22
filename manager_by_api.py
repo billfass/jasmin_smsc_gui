@@ -96,11 +96,21 @@ def new_user(data):
     
     ret=jasmin.users(['create_user',data['uid'],data['username'], data['password'], data['group']])
 
-    if ret:
-        return api_resp(dict(data), 400, ret)
+    if not ret:
+        ret = db.j_user.update_or_insert(db.j_user.j_uid == data['uid'],
+            username = data['username'],    
+            password = data['password'],
+            j_uid = data['uid'],
+            j_group = data['group'])
+        
+        if ret: #means we have inserted new one 
+            db.j_user_cred.insert(juser = data['uid'])
+            data["balance"] = 0
+            refill_user(data)
+        else:
+            return api_resp(dict(data), 400, ret)
     else:
-        data["balance"] = 0
-        refill_user(data)
+        return api_resp(dict(data), 400, ret)
 
     return api_resp(dict(data), 200, 'Added user %s' %data['username'])
 
