@@ -26,28 +26,6 @@ def datetime(date_string=None,date_format=None):
     iso8601_datetime = current_datetime.isoformat()
     return iso8601_datetime
 
-def new_user():
-    data = request.POST
-
-    try:
-        data["uid"]=data["uid"]
-        data["username"]=data["username"]
-        data["password"]=data["password"]
-        data["group"]=data["group"]
-    except Exception as e:
-        flash.set(str(e), "danger")
-        return api_resp(dict(data), 403)
-    
-    ret=jasmin.users(['create_user',data['uid'],data['username'], data['password'], data['group']])
-
-    if ret:
-        flash.set(ret, "danger")
-        return api_resp(dict(data), 400)
-    else:
-        flash.set('Added user %s' %data['username'], "success")
-
-    return api_resp(dict(data))
-
 def refill_user(data):
     user = data["uid"]
 
@@ -112,11 +90,35 @@ def refill_user(data):
     data["new_balance"] = quota_balance
     return api_resp(dict(data))
 
+def new_user():
+    data = request.POST
+
+    try:
+        data["uid"]=data["uid"]
+        data["username"]=data["username"]
+        data["password"]=data["password"]
+        data["group"]=data["group"]
+    except Exception as e:
+        flash.set(str(e), "danger")
+        return api_resp(dict(data), 403)
+    
+    ret=jasmin.users(['create_user',data['uid'],data['username'], data['password'], data['group']])
+
+    if ret:
+        flash.set(ret, "danger")
+        return api_resp(dict(data), 400)
+    else:
+        flash.set('Added user %s' %data['username'], "success")
+        data["balance"] = 0
+        refill_user(data)
+
+    return api_resp(dict(data))
+
 @action('api/groups/get', method=['GET', 'POST'])
 @action.uses(db, session, auth, flash)
 def groups():
     data = request.GET
-    
+    flash.set("Group's user", "success")
     return api_resp(list_groups())
 
 @action('api/users/<action>', method=['GET', 'POST'])
