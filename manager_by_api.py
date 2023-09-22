@@ -4,13 +4,15 @@ from pydal.validators import *
 from .utils import cols_split
 from .user_manager import list_groups
 
-def api_resp(items=[], code=200):
+def api_resp(items=[], code=200, message=''):
     if code == 200:
+        flash.set(message, "success")
         status="success"
     else:
+        flash.set(message, "danger")
         status="fail"
 
-    return dict(api_version="",timestamp=datetime(),code=code,status=status, items=items)
+    return dict(api_version="",timestamp=datetime(),code=code,status=status, items=items, message=message)
 
 def datetime(date_string=None,date_format=None):
     from datetime import datetime
@@ -56,16 +58,13 @@ def refill_user(data):
         author_validity_period = juser.author_validity_period
         author_http_bulk = juser.author_http_bulk
     except Exception as e:
-        flash.set(str(e), "danger")
-        return api_resp(dict(data), 403)
+        return api_resp(dict(data), 403, str(e))
     
     if juser:
         db.j_user_cred.juser.readable = db.j_user_cred.juser.writable = False
         db.j_user_cred.juser.default = user
         db.j_user_cred.id.readable = db.j_user_cred.id.writable = False
         
-        flash.set('Please refer to the Jamsin user manual when updating values')
-
         if not add_balance == "ND" and not quota_balance == "ND":
             quota_balance += add_balance
         else:
@@ -78,63 +77,51 @@ def refill_user(data):
             author_http_balance,author_smpps_send,author_priority,author_http_long_content,author_src_addr,\
             author_dlr_level,author_http_rate,author_validity_period,author_http_bulk])
         
-        if not ret:
-            flash.set('User credentials updated', "success")
-        else:
-            flash.set('Unable to update credentials', "warning")
-            return api_resp(dict(data), 400)
+        if ret:
+            return api_resp(dict(data), 400, 'Unable to update credentials')
     else:
-        flash.set("User '%s' could not be found" % (user), "danger")
-        return api_resp(dict(data), 404)
+        return api_resp(dict(data), 404, "User '%s' could not be found" % (user))
 
     data["new_balance"] = quota_balance
-    return api_resp(dict(data))
+    return api_resp(dict(data), 200, 'User credentials updated')
 
-def new_user():
-    data = request.POST
-
+def new_user(data):
     try:
         data["uid"]=data["uid"]
         data["username"]=data["username"]
         data["password"]=data["password"]
         data["group"]=data["group"]
     except Exception as e:
-        flash.set(str(e), "danger")
-        return api_resp(dict(data), 403)
+        return api_resp(dict(data), 403, str(e))
     
     ret=jasmin.users(['create_user',data['uid'],data['username'], data['password'], data['group']])
 
     if ret:
-        flash.set(ret, "danger")
-        return api_resp(dict(data), 400)
+        return api_resp(dict(data), 400, ret)
     else:
-        flash.set('Added user %s' %data['username'], "success")
         data["balance"] = 0
         refill_user(data)
 
-    return api_resp(dict(data))
+    return api_resp(dict(data), 200, 'Added user %s' %data['username'])
 
 @action('api/groups/get', method=['GET', 'POST'])
 @action.uses(db, session, auth, flash)
 def groups():
     data = request.GET
-    flash.set("Group's user", "success")
-    return api_resp(list_groups())
+    return api_resp(list_groups(), 200, "Group's user")
 
 @action('api/users/<action>', method=['GET', 'POST'])
 @action.uses(db, session, auth, flash)
 def user_cred(action=None):
     data = request.POST
 
-    if action == "refill":
-        return refill_user(data)
+    if action == "add":
+        return new_user(data)
     else:
-        if action == "add":
-            return new_user()
+        if action == "refill":
+            return refill_user(data)
         
-    flash.set('Undefined action', "danger")
-
-    return api_resp(dict(data), 400) 
+    return api_resp(dict(data), 400, 'Undefined action') 
     
 @action('api/stats/<usr>', method=['GET', 'POST'])
 @action.uses(db, session, auth, flash)
