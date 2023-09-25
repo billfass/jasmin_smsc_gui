@@ -99,8 +99,9 @@ def new_user(data):
     if not ret:        
         ret = db.j_user.update_or_insert(db.j_user.j_uid == data['uid'], username = data['username'], password = data['password'], j_uid = data['uid'], j_group = data['group'])
 
-        #if ret: #means we have inserted new one 
-        #    cred = db.j_user_cred.insert(juser = data['uid'])
+        if ret: #means we have inserted new one 
+            return api_resp(dict(data), 200, ret)
+            #cred = db.j_user_cred.insert(juser = data['uid'])
         
         return api_resp(dict(data), 200, 'Added user %s' %data['username'])
     """
