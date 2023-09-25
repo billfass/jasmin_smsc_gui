@@ -140,7 +140,7 @@ def user_cred(action=None):
 
         for t in users:
             user = {}
-            user.update(id=t.id,uid=t.juser)
+            user.update(t.id,t.juser)
             dataUsers.append(user)
             nber += 1
 
