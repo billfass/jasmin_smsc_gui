@@ -135,14 +135,14 @@ def user_cred(action=None):
         title= 'Credentials for user %s ' % user
         users = db(db.j_user_cred).select()
 
-        dataUsers = "List"
+        dataUsers = [""]
         nber = 0
 
         for t in users:
-            dataUsers = dataUsers+" - "+t.juser
+            dataUsers.insert(0,t.juser)
             nber += 1
 
-        return api_resp(dict(data), 200, '%s Creds : %s'%nber%dataUsers) 
+        return api_resp(dict(dataUsers), 200, '%s Creds : %s'%nber%dataUsers) 
 
         """
         if juser:
