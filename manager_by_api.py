@@ -138,11 +138,11 @@ def user_cred(action=None):
         dataUsers = []
         nber = 0
 
-        for t in users:
-            dataUsers.append(t.juser)
-            nber += 1
+        # for t in users:
+        #     dataUsers.append(t.juser)
+        #     nber += 1
 
-        return api_resp(dict(dataUsers), 200, 'Get %s Creds'%nber) 
+        return api_resp(dict(users), 200, 'Get %s Creds'%nber) 
 
         """
         if juser:
