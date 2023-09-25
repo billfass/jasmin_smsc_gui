@@ -128,9 +128,17 @@ def user_cred(action=None):
 
     if action == "add":
         return new_user(data)
-    else:
-        if action == "refill":
-            return refill_user(data)
+    elif action == "refill":
+        return refill_user(data)
+    elif action == "cred":
+        user="USER_896"
+        title= 'Credentials for user %s ' % user
+        query = db.j_user_cred.juser == user
+        juser = db(query).select().first()
+        if juser:
+            return api_resp(dict(data), 200, user)
+        else:
+            return api_resp(dict(data), 400, 'No User cred')
         
     return api_resp(dict(data), 400, 'Undefined action') 
     
