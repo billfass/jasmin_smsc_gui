@@ -96,12 +96,14 @@ def new_user(data):
     
     ret = jasmin.users(['create_user', data['uid'], data['username'], data['password'], data['group']])
 
-    if not ret:        
-        ret = db.j_user.update_or_insert(db.j_user.j_uid == data['uid'], username = data['username'], password = data['password'], j_uid = data['uid'], j_group = data['group'])
-
-        if ret: #means we have inserted new one 
-            return api_resp(dict(data), 200, ret)
-            #cred = db.j_user_cred.insert(juser = data['uid'])
+    if not ret:
+        try:
+            ret = db.j_user.update_or_insert(db.j_user.j_uid == data['uid'], username = data['username'], password = data['password'], j_uid = data['uid'], j_group = data['group'])
+        
+            if ret: #means we have inserted new one 
+                db.j_user_cred.insert(juser = data['uid'])
+        except Exception as e:
+            return api_resp(dict(data), 403, str(e))
         
         return api_resp(dict(data), 200, 'Added user %s' %data['username'])
     """
