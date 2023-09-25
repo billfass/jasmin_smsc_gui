@@ -139,10 +139,9 @@ def user_cred(action=None):
         nber = 0
 
         for t in users:
-            dataUsers.append(t)
-            # user = []
-            # user.update(uid=, )
-            # dataUsers.append(t)
+            user = {}
+            user.update(id=t.id,uid=t.juser)
+            dataUsers.append(user)
             nber += 1
 
         return api_resp(dict(dataUsers), 200, 'Get %s Creds'%nber) 
