@@ -95,16 +95,25 @@ def new_user(data):
         return api_resp(dict(data), 403, str(e))
     
     ret = jasmin.users(['create_user', data['uid'], data['username'], data['password'], data['group']])
-    if not ret : return api_resp(dict(data), 200, 'Added user %s' %data['username'])
+    if not ret:
+        flash.set('Added user %s' %data['username'])
+        ret = db.j_user.update_or_insert(db.j_user.j_uid == data['uid'],
+            username = data['username'],    
+            password = data['password'],
+            j_uid = data['uid'],
+            j_group = data['group'])
+        if ret: #means we have inserted new one 
+            cred = db.j_user_cred.insert(juser = data['uid'])
+        
+        return api_resp(dict(data), 200, 'Added user %s' %data['username'])
     """
     if not ret:
         ret = jasmin.users(['update', data['uid'], None, "ND", 0, "ND", "ND", "ND", "^[0-3]$", ".*", ".*", ".*", "^\d+$", True, True, True, True, True, True, True, True, True, True, False])
         
         if not ret:
             return api_resp(dict(data), 200, 'Added user %s' %data['username'])
-            
-    return api_resp(dict(data), 400, ret)
     """
+    return api_resp(dict(data), 400, ret)
 
 @action('api/groups/get', method=['GET', 'POST'])
 @action.uses(db, session, auth, flash)
