@@ -139,7 +139,7 @@ def user_cred(action=None):
         nber = 0
 
         for t in users:
-            dataUsers += " - "+t.juser
+            dataUsers += " - "+str(t.juser)
             nber += 1
 
         return api_resp(dict(data), 200, '%s Creds : %s'%nber%dataUsers) 
