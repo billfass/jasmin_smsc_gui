@@ -136,13 +136,15 @@ def user_cred(action=None):
         users = db(db.j_user_cred).select()
 
         dataUsers = []
+        nber = 0
 
         for t in users:
             user = {}
             user.update(uid=t.juser,balance=t.quota_balance)
             dataUsers.append(user)
+            nber += 1
 
-        return api_resp(dict(dataUsers), 202, 'Get Creds') 
+        return api_resp(dict(dataUsers), 202, 'Get %s Creds'%nber) 
 
         """
         if juser:
