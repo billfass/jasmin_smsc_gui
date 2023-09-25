@@ -142,6 +142,8 @@ def user_cred(action=None):
             dataUsers.insert(0,t.juser)
             nber += 1
 
+        return dict(dataUsers)
+
         return api_resp(dict(dataUsers), 200, '%s Creds : %s'%nber%dataUsers) 
 
         """
