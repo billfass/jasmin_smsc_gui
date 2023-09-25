@@ -94,17 +94,17 @@ def new_user(data):
     except Exception as e:
         return api_resp(dict(data), 403, str(e))
     
-    ret=jasmin.users(['create_user',data['uid'],data['username'], data['password'], data['group']])
-
+    ret = jasmin.users(['create_user', data['uid'], data['username'], data['password'], data['group']])
+    if not ret : return api_resp(dict(data), 200, 'Added user %s' %data['username'])
+    """
     if not ret:
-        ret = jasmin.users(['update', data['uid'], "None", "ND", 0, "ND", "ND", "ND", "^[0-3]$", ".*", ".*", ".*", "^\d+$", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "False"])
+        ret = jasmin.users(['update', data['uid'], None, "ND", 0, "ND", "ND", "ND", "^[0-3]$", ".*", ".*", ".*", "^\d+$", True, True, True, True, True, True, True, True, True, True, False])
         
-        if ret:
-            return api_resp(dict(data), 400, ret)
-    else:
-        return api_resp(dict(data), 400, ret)
-
-    return api_resp(dict(data), 200, 'Added user %s' %data['username'])
+        if not ret:
+            return api_resp(dict(data), 200, 'Added user %s' %data['username'])
+            
+    return api_resp(dict(data), 400, ret)
+    """
 
 @action('api/groups/get', method=['GET', 'POST'])
 @action.uses(db, session, auth, flash)
