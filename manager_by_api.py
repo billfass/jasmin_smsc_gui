@@ -137,6 +137,13 @@ def user_cred(action=None):
         try:
             user="FAST_6618"
             title= 'Credentials for user %s ' % user
+
+            juser = jasmin.users(["get_creds", user])
+
+            for j in juser[2:-1]:
+                r = str.split(j)
+                return api_resp(r, 403, j)
+
             
             ret = jasmin.users(['update', user, "None", "ND", "10", "ND", "ND", "ND", "^[0-3]$", ".*", ".*", ".*", "^\d+$", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "False"])
             if ret:
