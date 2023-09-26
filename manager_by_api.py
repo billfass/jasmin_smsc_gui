@@ -140,30 +140,28 @@ def user_cred(action=None):
 
             juser = jasmin.users(["get_creds", user])
 
-            # dataUser = {"default_src_addr":"",
-            # "quota_http_throughput"="",
-            # "quota_balance"="",
-            # "quota_smpps_throughput"="",
-            # "quota_sms_count"="",
-            # "quota_early_percent"="",
-            # "value_priority"="",
-            # value_content="",
-            # value_src_addr="",
-            # value_dst_addr="",
-            # value_validity_period="",
-            # author_http_send="",
-            # author_http_dlr_method="",
-            # author_http_balance="",
-            # author_smpps_send="",
-            # author_priority="",
-            # author_http_long_content="",
-            # author_src_addr="",
-            # author_dlr_level="",
-            # author_http_rate="",
-            # author_validity_period="",
-            # author_http_bulk=""}
-
-            dataUser = dict()
+            dataUser = {"default_src_addr":"",
+            "quota_http_throughput":"",
+            "quota_balance":"",
+            "quota_smpps_throughput":"",
+            "quota_sms_count":"",
+            "quota_early_percent":"",
+            "value_priority":"",
+            "value_content":"",
+            "value_src_addr":"",
+            "value_dst_addr":"",
+            "value_validity_period":"",
+            "author_http_send":"",
+            "author_http_dlr_method":"",
+            "author_http_balance":"",
+            "author_smpps_send":"",
+            "author_priority":"",
+            "author_http_long_content":"",
+            "author_src_addr":"",
+            "author_dlr_level":"",
+            "author_http_rate":"",
+            "author_validity_period":"",
+            "author_http_bulk":""}
 
             for j in juser[2:-1]:
                 r = str.split(j)
@@ -180,7 +178,7 @@ def user_cred(action=None):
 
                 # dataUser[l] = r[3]
 
-            return api_resp(dataUser, 200, type(dataUser))
+            return api_resp(dataUser, 200, "")
 
             
             ret = jasmin.users(['update', user, "None", "ND", "10", "ND", "ND", "ND", "^[0-3]$", ".*", ".*", ".*", "^\d+$", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "False"])
