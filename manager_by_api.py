@@ -91,6 +91,7 @@ def new_user(data):
         data["username"]=data["username"]
         data["password"]=data["password"]
         data["group"]=data["group"]
+        data["balance"]=data["balance"]
     except Exception as e:
         return api_resp(dict(data), 403, str(e))
     
@@ -101,7 +102,7 @@ def new_user(data):
             ret = db.j_user.update_or_insert(db.j_user.j_uid == data['uid'], username = data['username'], password = data['password'], j_uid = data['uid'], j_group = data['group'])
         
             if ret: #means we have inserted new one 
-                db.j_user_cred.insert(juser = data['uid'])
+                db.j_user_cred.insert(juser=data['uid'], default_src_addr="None",quota_http_throughput="ND",quota_balance=data['balance'],quota_smpps_throughput="ND",quota_sms_count="ND",quota_early_percent="ND",value_priority="^[0-3]$",value_content=".*",value_src_addr=".*",value_dst_addr=".*",value_validity_period="^\d+$",author_http_send="True",author_http_dlr_method="True",author_http_balance="True",author_smpps_send="True",author_priority="True",author_http_long_content="True",author_src_addr="True",author_dlr_level="True",author_http_rate="True",author_validity_period="True",author_http_bulk="False")
         except Exception as e:
             return api_resp(dict(data), 403, str(e))
         
@@ -133,24 +134,16 @@ def user_cred(action=None):
     elif action == "cred":
         user="USER_896"
         title= 'Credentials for user %s ' % user
-        users = db(db.j_user_cred).select()
+        query = db.j_user_cred.juser == user
+        juser = db(query).select().first()
 
-        dataUsers = [""]
-        nber = 0
-
-        for t in users:
-            dataUsers.insert(0,t.juser)
-            nber += 1
-
-        return dict(dataUsers)
-
-        return api_resp(dict(dataUsers), 200, '%s Creds : %s'%nber%dataUsers) 
+        return api_resp(dict(data), 200, 'Creds : %s'%juser)
 
         """
         if juser:
             return api_resp(dict(data), 200, user)
         else:
-            ret = db.j_user_cred.update_or_insert(db.j_user_cred.juser == user, default_src_addr="None",quota_http_throughput="ND",quota_balance="0",quota_smpps_throughput="ND",quota_sms_count="ND",quota_early_percent="ND",value_priority="^[0-3]$",value_content=".*",value_src_addr=".*",value_dst_addr=".*",value_validity_period="^\d+$",author_http_send="True",author_http_dlr_method="True",author_http_balance="True",author_smpps_send="True",author_priority="True",author_http_long_content="True",author_src_addr="True",author_dlr_level="True",author_http_rate="True",author_validity_period="True",author_http_bulk="False")
+            ret = db.j_user_cred.update_or_insert(db.j_user_cred.juser == user, juser = user, default_src_addr="None",quota_http_throughput="ND",quota_balance="0",quota_smpps_throughput="ND",quota_sms_count="ND",quota_early_percent="ND",value_priority="^[0-3]$",value_content=".*",value_src_addr=".*",value_dst_addr=".*",value_validity_period="^\d+$",author_http_send="True",author_http_dlr_method="True",author_http_balance="True",author_smpps_send="True",author_priority="True",author_http_long_content="True",author_src_addr="True",author_dlr_level="True",author_http_rate="True",author_validity_period="True",author_http_bulk="False")
             
             return api_resp(dict(data), 200, 'User cred adding %s'%ret)
         """
