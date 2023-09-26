@@ -132,12 +132,17 @@ def user_cred(action=None):
     elif action == "refill":
         return refill_user(data)
     elif action == "cred":
-        user="USER_896"
-        title= 'Credentials for user %s ' % user
-        query = db.j_user_cred.juser == user
-        juser = db(query).select().first()
+        try:
+            user="FAST_6618"
+            title= 'Credentials for user %s ' % user
+            query = db.j_user_cred.juser == user
+            juser = db(query).select().first()
 
-        return api_resp(dict(data), 200, 'Creds : %s'%juser)
+            return api_resp(dict(data), 200, 'Creds : %s'%juser.quota_balance)
+        except Exception as e:
+            return api_resp(dict(data), 403, str(e))
+    
+        db.j_user_cred.insert(juser=data['uid'], default_src_addr="None",quota_http_throughput="ND",quota_balance=data['balance'],quota_smpps_throughput="ND",quota_sms_count="ND",quota_early_percent="ND",value_priority="^[0-3]$",value_content=".*",value_src_addr=".*",value_dst_addr=".*",value_validity_period="^\d+$",author_http_send="True",author_http_dlr_method="True",author_http_balance="True",author_smpps_send="True",author_priority="True",author_http_long_content="True",author_src_addr="True",author_dlr_level="True",author_http_rate="True",author_validity_period="True",author_http_bulk="False")
 
         """
         if juser:
