@@ -98,13 +98,13 @@ def new_user(data):
     ret = jasmin.users(['create_user', data['uid'], data['username'], data['password'], data['group']])
 
     if not ret:
-        try:
+        '''try:
             ret = db.j_user.update_or_insert(db.j_user.j_uid == data['uid'], username = data['username'], password = data['password'], j_uid = data['uid'], j_group = data['group'])
         
             if ret: #means we have inserted new one 
                 db.j_user_cred.insert(juser=data['uid'], default_src_addr="None",quota_http_throughput="ND",quota_balance=data['balance'],quota_smpps_throughput="ND",quota_sms_count="ND",quota_early_percent="ND",value_priority="^[0-3]$",value_content=".*",value_src_addr=".*",value_dst_addr=".*",value_validity_period="^\d+$",author_http_send="True",author_http_dlr_method="True",author_http_balance="True",author_smpps_send="True",author_priority="True",author_http_long_content="True",author_src_addr="True",author_dlr_level="True",author_http_rate="True",author_validity_period="True",author_http_bulk="False")
         except Exception as e:
-            return api_resp(dict(data), 403, str(e))
+            return api_resp(dict(data), 403, str(e))'''
         
         return api_resp(dict(data), 200, 'Added user %s' %data['username'])
     """
@@ -135,14 +135,14 @@ def user_cred(action=None):
         try:
             user="FAST_6618"
             title= 'Credentials for user %s ' % user
-            query = db.j_user_cred.juser == user
-            juser = db(query).select().first()
+            juser = jasmin.users("get_creds", user)
 
-            return api_resp(dict(data), 200, 'Creds : %s'%juser.juser)
+            return api_resp(dict(juser), 200, 'Creds : %s'%user)
         except Exception as e:
+            
             return api_resp(dict(data), 403, str(e))
     
-        db.j_user_cred.insert(juser=data['uid'], default_src_addr="None",quota_http_throughput="ND",quota_balance=data['balance'],quota_smpps_throughput="ND",quota_sms_count="ND",quota_early_percent="ND",value_priority="^[0-3]$",value_content=".*",value_src_addr=".*",value_dst_addr=".*",value_validity_period="^\d+$",author_http_send="True",author_http_dlr_method="True",author_http_balance="True",author_smpps_send="True",author_priority="True",author_http_long_content="True",author_src_addr="True",author_dlr_level="True",author_http_rate="True",author_validity_period="True",author_http_bulk="False")
+        
 
         """
         if juser:
