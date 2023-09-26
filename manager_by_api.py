@@ -165,18 +165,17 @@ def user_cred(action=None):
 
             for j in juser[2:-1]:
                 r = str.split(j)
-                l = r[1]
 
                 if r[1] == "defaultvalue":
-                   l = "default_"+r[2]
+                   dataUser.update("default_"+r[2],r[3])
                 elif r[1] == "quota":
-                    l = "quota_"+r[2]
+                    dataUser.update("quota_"+r[2],r[3])
                 elif r[1] == "valuefilter":
                     l = "value_"+r[2]
                 elif r[1] == "authorization":
                     l = "author_"+r[2]
-
-                # dataUser[l] = r[3]
+                else:
+                    dataUser.update(r[1],r[3])
 
             return api_resp(dataUser, 200, "")
 
