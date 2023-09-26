@@ -178,9 +178,9 @@ def user_cred(action=None):
                 elif r[1] == "authorization":
                     l = "author_"+r[2]
 
-                dataUser[l] = r[3]
+                # dataUser[l] = r[3]
 
-            return api_resp(dataUser, 200, "creds")
+            return api_resp(dataUser, 200, type(dataUser))
 
             
             ret = jasmin.users(['update', user, "None", "ND", "10", "ND", "ND", "ND", "^[0-3]$", ".*", ".*", ".*", "^\d+$", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "False"])
