@@ -54,37 +54,37 @@ def refill_user(data):
             elif r[1] == "authorization":
                 cred["author_"+r[2]] = r[3]
 
-            if not balance == "ND" and not cred["quota_balance"] == "ND":
-                cred["quota_balance"] = float(cred["quota_balance"]) + float(balance)
-            else:
-                cred["quota_balance"] = balance
+        if not balance == "ND" and not cred["quota_balance"] == "ND":
+            cred["quota_balance"] = float(cred["quota_balance"]) + float(balance)
+        else:
+            cred["quota_balance"] = balance
             
-            ret = jasmin.users(['update', user,
-                                cred["default_src_addr"],
-                                cred["quota_http_throughput"],
-                                str(cred["quota_balance"]),
-                                cred["quota_smpps_throughput"],
-                                cred["quota_sms_count"],
-                                cred["quota_early_percent"],
-                                cred["value_priority"],
-                                cred["value_content"],
-                                cred["value_src_addr"],
-                                cred["value_dst_addr"],
-                                cred["value_validity_period"],
-                                cred["author_http_send"],
-                                cred["author_http_dlr_method"],
-                                cred["author_http_balance"],
-                                cred["author_smpps_send"],
-                                cred["author_priority"],
-                                cred["author_http_long_content"],
-                                cred["author_src_addr"],
-                                cred["author_dlr_level"],
-                                cred["author_http_rate"],
-                                cred["author_validity_period"],
-                                cred["author_http_bulk"]])
+        ret = jasmin.users(['update', user,
+                            cred["default_src_addr"],
+                            cred["quota_http_throughput"],
+                            str(cred["quota_balance"]),
+                            cred["quota_smpps_throughput"],
+                            cred["quota_sms_count"],
+                            cred["quota_early_percent"],
+                            cred["value_priority"],
+                            cred["value_content"],
+                            cred["value_src_addr"],
+                            cred["value_dst_addr"],
+                            cred["value_validity_period"],
+                            cred["author_http_send"],
+                            cred["author_http_dlr_method"],
+                            cred["author_http_balance"],
+                            cred["author_smpps_send"],
+                            cred["author_priority"],
+                            cred["author_http_long_content"],
+                            cred["author_src_addr"],
+                            cred["author_dlr_level"],
+                            cred["author_http_rate"],
+                            cred["author_validity_period"],
+                            cred["author_http_bulk"]])
 
-            if ret:
-                return dict(code=403, message=ret)
+        if ret:
+            return dict(code=403, message=ret)
     
         return dict(code=200, balance=cred["quota_balance"], message='User credentials updated')
     except Exception as e:
