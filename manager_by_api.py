@@ -176,8 +176,8 @@ def user_cred(action=None):
                     dataUser["value_"+r[2]] = r[3]
                 elif r[1] == "authorization":
                     dataUser["author_"+r[2]] = r[3]
-                else:
-                    dataUser[r[1]] = r[3]
+                # else:
+                #     dataUser[r[1]] = r[3]
 
             return api_resp(dataUser, 200, "")
 
