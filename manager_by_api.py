@@ -163,7 +163,7 @@ def user_cred(action=None):
             # author_validity_period="",
             # author_http_bulk=""}
 
-            dataUser = {}
+            dataUser = dict()
 
             for j in juser[2:-1]:
                 r = str.split(j)
