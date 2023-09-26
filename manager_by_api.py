@@ -38,7 +38,7 @@ def refill_user(data):
         juser = jasmin.users(["get_creds", user])
 
         if not juser:
-            return api_resp(dict(data), 404, "User '%s' could not be found" % (user))
+            return dict(code=404, message="User '%s' could not be found" % (user))
 
         cred = {}
 
@@ -84,12 +84,11 @@ def refill_user(data):
                                 cred["author_http_bulk"]])
 
             if ret:
-                return api_resp(dict(data), 403, ret)
-    except Exception as e:
-        return api_resp(dict(data), 403, str(e))
+                return dict(code=403, message=ret)
     
-    data["new_balance"] = cred["quota_balance"]
-    return api_resp(dict(data), 200, 'User credentials updated')
+        return dict(code=200, balance=cred["quota_balance"], message='User credentials updated')
+    except Exception as e:
+        return dict(code=403, message=str(e))
 
 def new_user(data):
     try:
@@ -99,14 +98,19 @@ def new_user(data):
         data["group"]=data["group"]
         data["balance"]=data["balance"]
     except Exception as e:
-        return api_resp(dict(data), 403, str(e))
+        return dict(code=403, message=str(e))
     
     ret = jasmin.users(['create_user', data['uid'], data['username'], data['password'], data['group']])
 
-    if not ret:
-        return api_resp(dict(data), 200, 'Added user %s' %data['username'])
+    if ret:
+        return dict(code=400, message=ret)
     
-    return api_resp(dict(data), 400, ret)
+    ret = refill_user(data)
+
+    if not ret["code"] == 200:
+        return dict(code=ret["code"], message=ret["message"])
+
+    return dict(code=200, balance=ret["balance"], message='Added user %s' %data['username'])
 
 @action('api/groups/get', method=['GET', 'POST'])
 @action.uses(db, session, auth, flash)
@@ -120,11 +124,13 @@ def user_cred(action=None):
     data = request.POST
 
     if action == "add":
-        return new_user(data)
+        ret = new_user(data)
     elif action == "refill":
-        return refill_user(data)
+        ret = refill_user(data)
+    else:
+        return api_resp(dict(data), 400, 'Undefined action') 
     
-    return api_resp(dict(data), 400, 'Undefined action') 
+
     
 @action('api/stats/<usr>', method=['GET', 'POST'])
 @action.uses(db, session, auth, flash)
