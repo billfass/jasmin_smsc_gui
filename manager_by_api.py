@@ -140,13 +140,13 @@ def user_cred(action=None):
 
             juser = jasmin.users(["get_creds", user])
 
-            # dataUser = dict(default_src_addr="",
-            # quota_http_throughput="",
-            # quota_balance="",
-            # quota_smpps_throughput="",
-            # quota_sms_count="",
-            # quota_early_percent="",
-            # value_priority="",
+            # dataUser = {"default_src_addr":"",
+            # "quota_http_throughput"="",
+            # "quota_balance"="",
+            # "quota_smpps_throughput"="",
+            # "quota_sms_count"="",
+            # "quota_early_percent"="",
+            # "value_priority"="",
             # value_content="",
             # value_src_addr="",
             # value_dst_addr="",
@@ -161,7 +161,7 @@ def user_cred(action=None):
             # author_dlr_level="",
             # author_http_rate="",
             # author_validity_period="",
-            # author_http_bulk="")
+            # author_http_bulk=""}
 
             dataUser = {}
 
