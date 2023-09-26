@@ -136,32 +136,11 @@ def user_cred(action=None):
     elif action == "cred":
         try:
             user="FAST_6618"
+            balance = "20"
+
             title= 'Credentials for user %s ' % user
 
             juser = jasmin.users(["get_creds", user])
-
-            dataUser = {"default_src_addr":"",
-            "quota_http_throughput":"",
-            "quota_balance":"",
-            "quota_smpps_throughput":"",
-            "quota_sms_count":"",
-            "quota_early_percent":"",
-            "value_priority":"",
-            "value_content":"",
-            "value_src_addr":"",
-            "value_dst_addr":"",
-            "value_validity_period":"",
-            "author_http_send":"",
-            "author_http_dlr_method":"",
-            "author_http_balance":"",
-            "author_smpps_send":"",
-            "author_priority":"",
-            "author_http_long_content":"",
-            "author_src_addr":"",
-            "author_dlr_level":"",
-            "author_http_rate":"",
-            "author_validity_period":"",
-            "author_http_bulk":""}
 
             dataUser = {}
 
@@ -176,13 +155,36 @@ def user_cred(action=None):
                     dataUser["value_"+r[2]] = r[3]
                 elif r[1] == "authorization":
                     dataUser["author_"+r[2]] = r[3]
-                else:
-                    return api_resp(r, 200, "")
 
-            return api_resp(dataUser, 200, "")
-
+            if not balance == "ND" and not dataUser["quota_balance"] == "ND":
+                dataUser["quota_balance"] = int(dataUser["quota_balance"]) + int(balance)
+            else:
+                dataUser["quota_balance"] = balance
             
-            ret = jasmin.users(['update', user, "None", "ND", "10", "ND", "ND", "ND", "^[0-3]$", ".*", ".*", ".*", "^\d+$", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "False"])
+            ret = jasmin.users(['update', user,
+                                dataUser["default_src_addr"],
+                                dataUser["quota_http_throughput"],
+                                dataUser["quota_balance"],
+                                dataUser["quota_smpps_throughput"],
+                                dataUser["quota_sms_count"],
+                                dataUser["quota_early_percent"],
+                                dataUser["value_priority"],
+                                dataUser["value_content"],
+                                dataUser["value_src_addr"],
+                                dataUser["value_dst_addr"],
+                                dataUser["value_validity_period"],
+                                dataUser["author_http_send"],
+                                dataUser["author_http_dlr_method"],
+                                dataUser["author_http_balance"],
+                                dataUser["author_smpps_send"],
+                                dataUser["author_priority"],
+                                dataUser["author_http_long_content"],
+                                dataUser["author_src_addr"],
+                                dataUser["author_dlr_level"],
+                                dataUser["author_http_rate"],
+                                dataUser["author_validity_period"],
+                                dataUser["author_http_bulk"]])
+
             if ret:
                 return api_resp(dict(data), 403, ret)
             
