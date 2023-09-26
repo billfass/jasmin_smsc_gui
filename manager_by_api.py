@@ -140,7 +140,7 @@ def user_cred(action=None):
 
             juser = jasmin.users(["get_creds", user])
 
-            dataUser = []
+            dataUser = dict()
 
             for j in juser[2:-1]:
                 r = str.split(j)
