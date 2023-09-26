@@ -178,7 +178,7 @@ def user_cred(action=None):
 
                 r.append(l)
 
-                # dataUser[l] = r[3]
+                dataUser.update(l=r[3])
 
             return api_resp(dataUser, 200, "creds")
 
