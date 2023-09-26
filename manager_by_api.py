@@ -157,14 +157,14 @@ def user_cred(action=None):
                     dataUser["author_"+r[2]] = r[3]
 
             if not balance == "ND" and not dataUser["quota_balance"] == "ND":
-                dataUser["quota_balance"] = int(dataUser["quota_balance"]) + int(balance)
+                dataUser["quota_balance"] = float(dataUser["quota_balance"]) + float(balance)
             else:
                 dataUser["quota_balance"] = balance
             
             ret = jasmin.users(['update', user,
                                 dataUser["default_src_addr"],
                                 dataUser["quota_http_throughput"],
-                                dataUser["quota_balance"],
+                                str(dataUser["quota_balance"]),
                                 dataUser["quota_smpps_throughput"],
                                 dataUser["quota_sms_count"],
                                 dataUser["quota_early_percent"],
