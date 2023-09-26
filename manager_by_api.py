@@ -31,60 +31,64 @@ def datetime(date_string=None,date_format=None):
 # def splits():
 
 def refill_user(data):
-    user = data["uid"]
-
     try:
-        add_balance = data["balance"]
-        query = db.j_user_cred.juser == user
-        juser = db(query).select().first()
-        default_src_addr = juser.default_src_addr
-        quota_http_throughput = juser.quota_http_throughput
-        quota_balance = juser.quota_balance
-        quota_smpps_throughput = juser.quota_smpps_throughput
-        quota_sms_count = juser.quota_sms_count
-        quota_early_percent = juser.quota_early_percent
-        value_priority = juser.value_priority
-        value_content = juser.value_content
-        value_src_addr = juser.value_src_addr
-        value_dst_addr = juser.value_dst_addr
-        value_validity_period = juser.value_validity_period
-        author_http_send = juser.author_http_send
-        author_http_dlr_method = juser.author_http_dlr_method
-        author_http_balance = juser.author_http_balance
-        author_smpps_send = juser.author_smpps_send
-        author_priority = juser.author_priority
-        author_http_long_content = juser.author_http_long_content
-        author_src_addr = juser.author_src_addr
-        author_dlr_level = juser.author_dlr_level
-        author_http_rate = juser.author_http_rate
-        author_validity_period = juser.author_validity_period
-        author_http_bulk = juser.author_http_bulk
+        user = data["uid"]
+        balance = data["balance"]
+
+        juser = jasmin.users(["get_creds", user])
+
+        if not juser:
+            return api_resp(dict(data), 404, "User '%s' could not be found" % (user))
+
+        cred = {}
+
+        for j in juser[2:-1]:
+            r = str.split(j)
+
+            if r[1] == "defaultvalue":
+                cred["default_"+r[2]] = r[3]
+            elif r[1] == "quota":
+                cred["quota_"+r[2]] = r[3]
+            elif r[1] == "valuefilter":
+                cred["value_"+r[2]] = r[3]
+            elif r[1] == "authorization":
+                cred["author_"+r[2]] = r[3]
+
+            if not balance == "ND" and not cred["quota_balance"] == "ND":
+                cred["quota_balance"] = float(cred["quota_balance"]) + float(balance)
+            else:
+                cred["quota_balance"] = balance
+            
+            ret = jasmin.users(['update', user,
+                                cred["default_src_addr"],
+                                cred["quota_http_throughput"],
+                                str(cred["quota_balance"]),
+                                cred["quota_smpps_throughput"],
+                                cred["quota_sms_count"],
+                                cred["quota_early_percent"],
+                                cred["value_priority"],
+                                cred["value_content"],
+                                cred["value_src_addr"],
+                                cred["value_dst_addr"],
+                                cred["value_validity_period"],
+                                cred["author_http_send"],
+                                cred["author_http_dlr_method"],
+                                cred["author_http_balance"],
+                                cred["author_smpps_send"],
+                                cred["author_priority"],
+                                cred["author_http_long_content"],
+                                cred["author_src_addr"],
+                                cred["author_dlr_level"],
+                                cred["author_http_rate"],
+                                cred["author_validity_period"],
+                                cred["author_http_bulk"]])
+
+            if ret:
+                return api_resp(dict(data), 403, ret)
     except Exception as e:
         return api_resp(dict(data), 403, str(e))
     
-    if juser:
-        db.j_user_cred.juser.readable = db.j_user_cred.juser.writable = False
-        db.j_user_cred.juser.default = user
-        db.j_user_cred.id.readable = db.j_user_cred.id.writable = False
-        
-        if not add_balance == "ND" and not quota_balance == "ND":
-            quota_balance += add_balance
-        else:
-            quota_balance = add_balance
-
-        ret = jasmin.users(['update', user, \
-            default_src_addr,quota_http_throughput,quota_balance,quota_smpps_throughput,\
-            quota_sms_count,quota_early_percent,value_priority,value_content,value_src_addr,\
-            value_dst_addr,value_validity_period,author_http_send,author_http_dlr_method,\
-            author_http_balance,author_smpps_send,author_priority,author_http_long_content,author_src_addr,\
-            author_dlr_level,author_http_rate,author_validity_period,author_http_bulk])
-        
-        if ret:
-            return api_resp(dict(data), 400, 'Unable to update credentials')
-    else:
-        return api_resp(dict(data), 404, "User '%s' could not be found" % (user))
-
-    data["new_balance"] = quota_balance
+    data["new_balance"] = cred["quota_balance"]
     return api_resp(dict(data), 200, 'User credentials updated')
 
 def new_user(data):
@@ -100,22 +104,8 @@ def new_user(data):
     ret = jasmin.users(['create_user', data['uid'], data['username'], data['password'], data['group']])
 
     if not ret:
-        '''try:
-            ret = db.j_user.update_or_insert(db.j_user.j_uid == data['uid'], username = data['username'], password = data['password'], j_uid = data['uid'], j_group = data['group'])
-        
-            if ret: #means we have inserted new one 
-                db.j_user_cred.insert(juser=data['uid'], default_src_addr="None",quota_http_throughput="ND",quota_balance=data['balance'],quota_smpps_throughput="ND",quota_sms_count="ND",quota_early_percent="ND",value_priority="^[0-3]$",value_content=".*",value_src_addr=".*",value_dst_addr=".*",value_validity_period="^\d+$",author_http_send="True",author_http_dlr_method="True",author_http_balance="True",author_smpps_send="True",author_priority="True",author_http_long_content="True",author_src_addr="True",author_dlr_level="True",author_http_rate="True",author_validity_period="True",author_http_bulk="False")
-        except Exception as e:
-            return api_resp(dict(data), 403, str(e))'''
-        
         return api_resp(dict(data), 200, 'Added user %s' %data['username'])
-    """
-    if not ret:
-        ret = jasmin.users(['update', data['uid'], None, "ND", 0, "ND", "ND", "ND", "^[0-3]$", ".*", ".*", ".*", "^\d+$", True, True, True, True, True, True, True, True, True, True, False])
-        
-        if not ret:
-            return api_resp(dict(data), 200, 'Added user %s' %data['username'])
-    """
+    
     return api_resp(dict(data), 400, ret)
 
 @action('api/groups/get', method=['GET', 'POST'])
@@ -133,78 +123,7 @@ def user_cred(action=None):
         return new_user(data)
     elif action == "refill":
         return refill_user(data)
-    elif action == "cred":
-        try:
-            user="FAST_6618"
-            balance = "20"
-
-            title= 'Credentials for user %s ' % user
-
-            juser = jasmin.users(["get_creds", user])
-
-            dataUser = {}
-
-            for j in juser[2:-1]:
-                r = str.split(j)
-
-                if r[1] == "defaultvalue":
-                    dataUser["default_"+r[2]] = r[3]
-                elif r[1] == "quota":
-                    dataUser["quota_"+r[2]] = r[3]
-                elif r[1] == "valuefilter":
-                    dataUser["value_"+r[2]] = r[3]
-                elif r[1] == "authorization":
-                    dataUser["author_"+r[2]] = r[3]
-
-            if not balance == "ND" and not dataUser["quota_balance"] == "ND":
-                dataUser["quota_balance"] = float(dataUser["quota_balance"]) + float(balance)
-            else:
-                dataUser["quota_balance"] = balance
-            
-            ret = jasmin.users(['update', user,
-                                dataUser["default_src_addr"],
-                                dataUser["quota_http_throughput"],
-                                str(dataUser["quota_balance"]),
-                                dataUser["quota_smpps_throughput"],
-                                dataUser["quota_sms_count"],
-                                dataUser["quota_early_percent"],
-                                dataUser["value_priority"],
-                                dataUser["value_content"],
-                                dataUser["value_src_addr"],
-                                dataUser["value_dst_addr"],
-                                dataUser["value_validity_period"],
-                                dataUser["author_http_send"],
-                                dataUser["author_http_dlr_method"],
-                                dataUser["author_http_balance"],
-                                dataUser["author_smpps_send"],
-                                dataUser["author_priority"],
-                                dataUser["author_http_long_content"],
-                                dataUser["author_src_addr"],
-                                dataUser["author_dlr_level"],
-                                dataUser["author_http_rate"],
-                                dataUser["author_validity_period"],
-                                dataUser["author_http_bulk"]])
-
-            if ret:
-                return api_resp(dict(data), 403, ret)
-            
-            juser = jasmin.users(["get_creds", user])
-            
-            return api_resp(juser, 200, 'Creds : %s'%user)
-        except Exception as e:
-            return api_resp(dict(data), 403, str(e))
     
-        
-
-        """
-        if juser:
-            return api_resp(dict(data), 200, user)
-        else:
-            ret = db.j_user_cred.update_or_insert(db.j_user_cred.juser == user, juser = user, default_src_addr="None",quota_http_throughput="ND",quota_balance="0",quota_smpps_throughput="ND",quota_sms_count="ND",quota_early_percent="ND",value_priority="^[0-3]$",value_content=".*",value_src_addr=".*",value_dst_addr=".*",value_validity_period="^\d+$",author_http_send="True",author_http_dlr_method="True",author_http_balance="True",author_smpps_send="True",author_priority="True",author_http_long_content="True",author_src_addr="True",author_dlr_level="True",author_http_rate="True",author_validity_period="True",author_http_bulk="False")
-            
-            return api_resp(dict(data), 200, 'User cred adding %s'%ret)
-        """
-        
     return api_resp(dict(data), 400, 'Undefined action') 
     
 @action('api/stats/<usr>', method=['GET', 'POST'])
