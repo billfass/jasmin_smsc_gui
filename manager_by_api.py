@@ -135,7 +135,7 @@ def user_cred(action=None):
         try:
             user="FAST_6618"
             title= 'Credentials for user %s ' % user
-            juser = jasmin.users("get_creds", user)
+            juser = jasmin.users(["get_creds", user])
 
             return api_resp(dict(juser), 200, 'Creds : %s'%user)
         except Exception as e:
