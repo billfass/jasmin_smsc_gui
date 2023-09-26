@@ -28,6 +28,8 @@ def datetime(date_string=None,date_format=None):
     iso8601_datetime = current_datetime.isoformat()
     return iso8601_datetime
 
+# def splits():
+
 def refill_user(data):
     user = data["uid"]
 
@@ -135,11 +137,15 @@ def user_cred(action=None):
         try:
             user="FAST_6618"
             title= 'Credentials for user %s ' % user
+            
+            ret = jasmin.users(['update', user, "None", "ND", "10", "ND", "ND", "ND", "^[0-3]$", ".*", ".*", ".*", "^\d+$", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "False"])
+            if ret:
+                return api_resp(dict(data), 403, ret)
+            
             juser = jasmin.users(["get_creds", user])
             
             return api_resp(juser, 200, 'Creds : %s'%user)
         except Exception as e:
-            
             return api_resp(dict(data), 403, str(e))
     
         
