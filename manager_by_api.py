@@ -142,7 +142,7 @@ def user_cred(action=None):
 
             for j in juser[2:-1]:
                 r = str.split(j)
-                return api_resp(r, 403, j)
+                # return api_resp(r, 403, j)
 
             
             ret = jasmin.users(['update', user, "None", "ND", "10", "ND", "ND", "ND", "^[0-3]$", ".*", ".*", ".*", "^\d+$", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "False"])
