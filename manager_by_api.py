@@ -138,7 +138,7 @@ def user_cred(action=None):
             query = db.j_user_cred.juser == user
             juser = db(query).select().first()
 
-            return api_resp(dict(data), 200, 'Creds : %s'%juser.quota_balance)
+            return api_resp(dict(data), 200, 'Creds : %s'%juser.juser)
         except Exception as e:
             return api_resp(dict(data), 403, str(e))
     
