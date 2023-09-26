@@ -163,11 +163,13 @@ def user_cred(action=None):
             "author_validity_period":"",
             "author_http_bulk":""}
 
+            dataUser = {}
+
             for j in juser[2:-1]:
                 r = str.split(j)
 
-                # if r[1] == "defaultvalue":
-                #    dataUser["default_"+r[2]] = r[3]
+                if r[1] == "defaultvalue":
+                   dataUser["default_"+r[2]] = r[3]
                 # elif r[1] == "quota":
                 #     dataUser["quota_"+r[2]] = r[3]
                 # elif r[1] == "valuefilter":
@@ -176,6 +178,8 @@ def user_cred(action=None):
                 #     l = "author_"+r[2]
                 # else:
                 #     dataUser[r[1]] = r[3]
+
+
 
             return api_resp(dataUser, 200, "")
 
