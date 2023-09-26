@@ -130,7 +130,7 @@ def user_cred(action=None):
     else:
         return api_resp(dict(data), 400, 'Undefined action') 
     
-
+    return api_resp(dict(data), ret["code"], ret["message"])
     
 @action('api/stats/<usr>', method=['GET', 'POST'])
 @action.uses(db, session, auth, flash)
