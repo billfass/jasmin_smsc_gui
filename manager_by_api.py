@@ -144,15 +144,22 @@ def user_cred(action=None):
 
             for j in juser[2:-1]:
                 r = str.split(j)
-                if r[1] == "defaultvalue":
-                   r[1] = "default_"
-                elif r[1] == "quota":
-                    r[1] = "quota_"
-                elif r[1] == "valuefilter":
-                    r[1] = "value_"
+                l = r[1]
 
-                dataUser.append(r)
-            return api_resp(dataUser, 403, "creds")
+                if r[1] == "defaultvalue":
+                   l = "default_"+r[2]
+                elif r[1] == "quota":
+                    l = "quota_"+r[2]
+                elif r[1] == "valuefilter":
+                    l = "value_"+r[2]
+                elif r[1] == "authorization":
+                    l = "author_"+r[2]
+
+                r.append(l)
+
+                dataUser[l] = r[3]
+
+            return api_resp(dataUser, 200, "creds")
 
             
             ret = jasmin.users(['update', user, "None", "ND", "10", "ND", "ND", "ND", "^[0-3]$", ".*", ".*", ".*", "^\d+$", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "False"])
