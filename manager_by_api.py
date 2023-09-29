@@ -3,6 +3,7 @@ from .common import db, session, auth, flash, jasmin
 from pydal.validators import *
 from .utils import cols_split
 from .user_manager import list_groups
+from .route_manager import mt_routes
 
 def api_resp(items=[], code=200, message=''):
     if code == 200:
@@ -111,7 +112,7 @@ def new_user(data):
     return dict(code=200, balance=ret["balance"], message='Added user %s' %data['username'])
 
 def rate_mtrouter(data):
-    tt = jasmin.list_it('mtrouter')
+    tt = mt_routes()
     return tt
 
 @action('api/groups/get', method=['GET', 'POST'])
