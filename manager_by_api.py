@@ -111,7 +111,7 @@ def new_user(data):
     return dict(code=200, balance=ret["balance"], message='Added user %s' %data['username'])
 
 def rate_mtrouter(data):
-    tt = jasmin.list_it(['mtrouter'])
+    tt = jasmin.list_it('mtrouter')
     return tt
 
 @action('api/groups/get', method=['GET', 'POST'])
