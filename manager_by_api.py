@@ -125,6 +125,9 @@ def user_cred(action=None):
         ret = new_user(data)
     elif action == "refill":
         ret = refill_user(data)
+    elif action == "balance":
+        tt = jasmin.stats(['httpapi',data["uid"]])
+        return api_resp(tt, 200, "")
     else:
         return api_resp(dict(data), 400, 'Undefined action') 
     
