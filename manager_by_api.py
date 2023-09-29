@@ -28,8 +28,6 @@ def datetime(date_string=None,date_format=None):
     iso8601_datetime = current_datetime.isoformat()
     return iso8601_datetime
 
-# def splits():
-
 def refill_user(data):
     try:
         user = data["uid"]
