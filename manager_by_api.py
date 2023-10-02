@@ -112,6 +112,9 @@ def new_user(data):
 
     return dict(code=200, balance=ret["balance"], message='Added user %s' %data['username'])
 
+def mtrouter(data):
+    return dict(code=200, id="", message='Added mtrouter')
+
 @action('api/groups/get', method=['GET', 'POST'])
 @action.uses(db, session, auth, flash)
 def groups():
@@ -134,7 +137,7 @@ def user_cred(action=None):
     elif action == "refill":
         ret = refill_user(data)
     elif action == "mtrouter":
-        return api_resp(mt_routes(), 200, "r_connectors")
+        ret = mtrouter(data)
     else:
         return api_resp(dict(data), 400, 'Undefined action') 
     
