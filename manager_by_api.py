@@ -4,6 +4,7 @@ from pydal.validators import *
 from .utils import cols_split
 from .user_manager import list_groups
 from .route_manager import mt_routes
+from .filter_manager import list_filters
 
 def api_resp(items=[], code=200, message=''):
     if code == 200:
@@ -116,6 +117,12 @@ def new_user(data):
 def groups():
     data = request.GET
     return api_resp(list_groups(), 200, "Group's user")
+
+@action('api/filters/get', method=['GET', 'POST'])
+@action.uses(db, session, auth, flash)
+def groups():
+    data = request.GET
+    return api_resp(list_filters(), 200, "Filters")
 
 @action('api/users/<action>', method=['GET', 'POST'])
 @action.uses(db, session, auth, flash)
