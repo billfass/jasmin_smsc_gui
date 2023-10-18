@@ -7,17 +7,9 @@ from .route_manager import mt_routes
 from .filter_manager import list_filters
 import requests
 
-def log(sec, uuid, code):
+def log(sec, lev, uuid, code):
     from datetime import datetime
-
-    if sec == "api1":
-        db.api_dlr_log.insert(uuid=uuid, code=code, date=datetime.now().isoformat(), sec=sec)
-    elif sec == "api2":
-        db.api_dlr_log.insert(uuid=uuid, code=code, date=datetime.now().isoformat(), sec=sec)
-    elif sec == "web1":
-        db.dlr_log.insert(uuid=uuid, code=code, date=datetime.now().isoformat(), sec=sec)
-    elif sec == "web2":
-        db.dlr_log.insert(uuid=uuid, code=code, date=datetime.now().isoformat(), sec=sec)
+    db.dlr_log.insert(uuid=uuid, code=code, date=datetime.now().isoformat(), sec=sec+lev)
 
 def dlr_1(sec, id, data):
     if sec == "web":
@@ -92,10 +84,7 @@ def callback(sec="web"):
     except Exception as e:
         return str(e)
     
-    if sec == "web":
-        db.callback.update_or_insert(db.callback.uuid == data['id'], uuid=data['id'], batchuuid=data['batchId'], status=data['status'], to=data['to'])
-    else:
-        db.api_callback.update_or_insert(db.api_callback.uuid == data['id'], uuid=data['id'], batchuuid=data['batchId'], status=data['status'], to=data['to'])
+    db.callback.update_or_insert(db.callback.uuid == data['id'], uuid=data['id'], batchuuid=data['batchId'], status=data['status'], to=data['to'])
 
     return 'ACK/Jasmin'
 
@@ -115,7 +104,7 @@ def errback(sec="web"):
     if sec == "web":
         requests.get("https://fastermessage.com/app2/sms/errbatch/dlr/"+data['batchId']+"/"+data["to"]+"?statusText="+data["statusText"]+"&status="+data['status'], data={}, headers={})
     else:
-        requests.get("https://fastermessage.com/app2/sms/errbatch/dlr/"+data['batchId']+"/"+data["to"], data=dict(data), headers={})
+        requests.get("https://fastermessage.com/app2/sms/errbatch/dlr/"+data['batchId']+"/"+data["to"]+"?statusText="+data["statusText"]+"&status="+data['status'], data={}, headers={})
 
     return 'ACK/Jasmin'
 
@@ -132,10 +121,10 @@ def dlr(sec="web", id=None):
         log(sec, id, str(e))
         return str(e)
     
-    if data["level"] == 1:
-        return dlr_1(sec, id, data)
-    else:
-        return dlr_2(sec, id, data)
+    return dict(data)
+    
+    # if sec == "web":
+    #     r = requests.post("https://fastermessage.com/app2/sms/batch/dlr/1/"+sec+"/"+data["id"], data={}, headers={})
 
 @action('dlr/data/<niv>/<sec>/<uuid>', method=['GET', 'POST'])
 @action.uses(db, session, auth, flash)
