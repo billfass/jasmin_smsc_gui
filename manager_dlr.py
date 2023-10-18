@@ -125,18 +125,21 @@ def dlr(sec="web", id=None):
         data['to'] = callback.to
         data['status'] = callback.status
     except Exception as e:
-        log(sec, id, str(e))
+        log(sec, 0, id, str(e))
         return str(e)
     
-    r = requests.post("https://fastermessage.com/app2/sms/api/dlr/customer/"+data["id"], data=dict(data), headers={})
+    if sec == "web":
+        r = requests.post("https://fastermessage.com/app2/sms/batch/dlr/"+data['level']+"/"+data["id"], data=dict(data), headers={})
+
+    log(sec, data["level"], data["id"], r.status_code)
 
     if r.status_code == 200:
-        return dict(data)
+        return 'ACK/Jasmin'
+    elif r.status_code == 202:
+        db(db.callback.uuid == data['id']).delete()
+        return 'ACK/Jasmin'
     
-    return dict()
-    
-    # if sec == "web":
-    #     r = requests.post("https://fastermessage.com/app2/sms/batch/dlr/1/"+sec+"/"+data["id"], data={}, headers={})
+    return 'NOACK/Jasmin'    
 
 @action('dlr/data/<niv>/<sec>/<uuid>', method=['GET', 'POST'])
 @action.uses(db, session, auth, flash)
