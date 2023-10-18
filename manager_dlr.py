@@ -5,7 +5,7 @@ from .utils import cols_split
 from .user_manager import list_groups
 from .route_manager import mt_routes
 from .filter_manager import list_filters
-import requests
+import requests, time
 
 def log(sec, lev, uuid, code):
     from datetime import datetime
@@ -112,18 +112,23 @@ def errback(sec="web"):
 @action.uses(db, session, auth, flash)
 def dlr(sec="web", id=None):
     data = request.POST
+    cpt = 0
 
     try:
         data['messageId'] = id
         data['id'] = data['id']
         data['level'] = data['level']
         data['message_status'] = data['message_status']
-        callback = db(db.callback.uuid == data['id']).select().first()
-        # if not callback:
-        #     return 'ACK/Jasmin'
-        # data['batchId'] = callback.batchuuid
-        # data['to'] = callback.to
-        # data['status'] = callback.status
+        callback = None
+        while not callback and cpt < 5:
+            cpt += 1
+            callback = db(db.callback.uuid == data['id']).select().first()
+            time.sleep(1)
+        if not callback:
+            return 'ACK/Jasmin'
+        data['batchId'] = callback.batchuuid
+        data['to'] = callback.to
+        data['status'] = callback.status
     except Exception as e:
         log(sec, 0, id, str(e))
         return str(e)
