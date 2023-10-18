@@ -123,8 +123,11 @@ def dlr(sec="web", id=None):
         return str(e)
     
     r = requests.post("https://fastermessage.com/app2/sms/api/dlr/customer/"+data["id"], data=dict(data), headers={})
+
+    if r.status_code == 200:
+        return dict(data)
     
-    return dict(r.status_code)
+    return dict()
     
     # if sec == "web":
     #     r = requests.post("https://fastermessage.com/app2/sms/batch/dlr/1/"+sec+"/"+data["id"], data={}, headers={})
