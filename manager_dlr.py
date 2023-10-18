@@ -121,7 +121,7 @@ def dlr(sec="web", id=None):
         log(sec, id, str(e))
         return str(e)
     
-    r = requests.post("https://fastermessage.com/app2/sms/api/dlr/customer/"+data["id"], data=dict(data), headers={})
+    r = requests.post("https://fastermessage.com/app2/sms/api/dlr/customer/"+data["id"], data={}, headers={})
     
     return r.status_code
     
