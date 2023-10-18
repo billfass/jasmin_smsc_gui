@@ -15,6 +15,7 @@ from . import route_manager
 from . import stats
 from . import interceptor_manager
 from . import manager_by_api
+from . import manager_dlr
 # optional parameters
 __version__ = "1.0.0.0"
 __author__ = "John Bannister <eudorajab1@gmail.com>"
