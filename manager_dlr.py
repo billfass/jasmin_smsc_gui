@@ -19,42 +19,7 @@ def log(sec, uuid, code):
     elif sec == "web2":
         db.dlr_log.insert(uuid=uuid, code=code, date=datetime.now().isoformat(), sec=sec)
 
-@action('callback/<sec>', method=['GET', 'POST'])
-@action.uses(db, session, auth, flash)
-def callback(sec="web"):
-    data = request.GET
-
-    try:
-        statusText = data["statusText"]
-        r = str.split(statusText, '"')
-        data['id'] = r[1]
-        data['batchId'] = data['batchId']
-        data['to'] = data['to']
-        data['status'] = data['status']
-    except Exception as e:
-        return str(e)
-    
-    if sec == "web":
-        db.callback.update_or_insert(db.callback.uuid == data['id'], uuid=data['id'], batchuuid=data['batchId'], status=data['status'], to=data['to'])
-    else:
-        db.api_callback.update_or_insert(db.api_callback.uuid == data['id'], uuid=data['id'], batchuuid=data['batchId'], status=data['status'], to=data['to'])
-
-    return 'ACK/Jasmin'
-
-@action('dlr/1/<sec>/<id>', method=['GET', 'POST'])
-@action.uses(db, session, auth, flash)
-def dlr_1(sec="web", id=None):
-    data = request.POST
-
-    try:
-        data['id'] = data['id']
-        data['level'] = data['level']
-        data['connector'] = data['connector']
-        data['message_status'] = data['message_status']
-    except Exception as e:
-        log(sec+1, id, str(e))
-        return str(e)
-    
+def dlr_1(sec, id, data):
     if sec == "web":
         have_one = db(db.dlr_1.uuid == data['id']).select().first()
         if not have_one:
@@ -83,19 +48,7 @@ def dlr_1(sec="web", id=None):
     else:
         return r.status_code
 
-@action('dlr/2/<sec>/<id>', method=['GET', 'POST'])
-@action.uses(db, session, auth, flash)
-def dlr_2(sec="web", id=None):
-    data = request.POST
-
-    try:
-        data['id'] = data['id']
-        data['level'] = data['level']
-        data['message_status'] = data['message_status']
-    except Exception as e:
-        log(sec+2, id, str(e))
-        return str(e)
-    
+def dlr_2(sec, id, data):
     if sec == "web":
         have_one = db(db.dlr_2.uuid == data['id']).select().first()
         if not have_one:
@@ -123,6 +76,46 @@ def dlr_2(sec="web", id=None):
         return 'ACK/Jasmin'
     else:
         return r.status_code
+    
+@action('callback/<sec>', method=['GET', 'POST'])
+@action.uses(db, session, auth, flash)
+def callback(sec="web"):
+    data = request.GET
+
+    try:
+        statusText = data["statusText"]
+        r = str.split(statusText, '"')
+        data['id'] = r[1]
+        data['batchId'] = data['batchId']
+        data['to'] = data['to']
+        data['status'] = data['status']
+    except Exception as e:
+        return str(e)
+    
+    if sec == "web":
+        db.callback.update_or_insert(db.callback.uuid == data['id'], uuid=data['id'], batchuuid=data['batchId'], status=data['status'], to=data['to'])
+    else:
+        db.api_callback.update_or_insert(db.api_callback.uuid == data['id'], uuid=data['id'], batchuuid=data['batchId'], status=data['status'], to=data['to'])
+
+    return 'ACK/Jasmin'
+
+@action('dlr/<sec>/<id>', method=['GET', 'POST'])
+@action.uses(db, session, auth, flash)
+def dlr(sec="web", id=None):
+    data = request.POST
+
+    try:
+        data['id'] = data['id']
+        data['level'] = data['level']
+        data['message_status'] = data['message_status']
+    except Exception as e:
+        log(sec, id, str(e))
+        return str(e)
+    
+    if data["level"] == 1:
+        return dlr_1(sec, id, data)
+    else:
+        return dlr_2(sec, id, data)
 
 @action('dlr/data/<niv>/<sec>/<uuid>', method=['GET', 'POST'])
 @action.uses(db, session, auth, flash)
