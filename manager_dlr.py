@@ -118,6 +118,12 @@ def dlr(sec="web", id=None):
         data['id'] = data['id']
         data['level'] = data['level']
         data['message_status'] = data['message_status']
+        callback = db(db.callback.uuid == data['id']).select().first()
+        if not callback:
+            return 'ACK/Jasmin'
+        data['batchId'] = callback.batchuuid
+        data['to'] = callback.to
+        data['status'] = callback.status
     except Exception as e:
         log(sec, id, str(e))
         return str(e)
