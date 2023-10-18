@@ -151,55 +151,7 @@ db.define_table('callback',
     Field('to', 'string', length=50, label='to',comment=''),
     format='%(uuid)s')
 
-db.define_table('dlr_1',
-    Field('uuid', 'string', length=100, label='uuid',comment=''),
-    Field('level', 'string', length=2, label='level',comment=''),
-    Field('message_status', 'string', length=20, label='message_status',comment=''),
-    Field('message_id', 'string', length=50, label='message_id',comment=''),
-    Field('connector', 'string', length=50, label='connector',comment=''),
-    Field('send', 'string', length=1, label='send',comment=''),
-    format='%(uuid)s')
-
-db.define_table('dlr_2',
-    Field('uuid', 'string', length=100, label='uuid',comment=''),
-    Field('level', 'string', length=2, label='level',comment=''),
-    Field('message_status', 'string', length=20, label='message_status',comment=''),
-    Field('message_id', 'string', length=50, label='message_id',comment=''),
-    Field('send', 'string', length=1, label='send',comment=''),
-    format='%(uuid)s')
-
 db.define_table('dlr_log',
-    Field('uuid', 'string', length=100, label='uuid',comment=''),
-    Field('code', 'string', length=255, label='code',comment=''),
-    Field('date', 'string', length=50, label='date',comment=''),
-    Field('sec', 'string', length=50, label='sec',comment=''),
-    format='%(uuid)s')
-
-db.define_table('api_callback',
-    Field('uuid', 'string', length=100, label='uuid',comment=''),
-    Field('batchuuid', 'string', length=100, label='batchuuid',comment=''),
-    Field('status', 'string', length=5, label='status',comment=''),
-    Field('to', 'string', length=50, label='to',comment=''),
-    format='%(uuid)s')
-
-db.define_table('api_dlr_1',
-    Field('uuid', 'string', length=100, label='uuid',comment=''),
-    Field('level', 'string', length=2, label='level',comment=''),
-    Field('message_status', 'string', length=20, label='message_status',comment=''),
-    Field('message_id', 'string', length=50, label='message_id',comment=''),
-    Field('connector', 'string', length=50, label='connector',comment=''),
-    Field('send', 'string', length=1, label='send',comment=''),
-    format='%(uuid)s')
-
-db.define_table('api_dlr_2',
-    Field('uuid', 'string', length=100, label='uuid',comment=''),
-    Field('level', 'string', length=2, label='level',comment=''),
-    Field('message_status', 'string', length=20, label='message_status',comment=''),
-    Field('message_id', 'string', length=50, label='message_id',comment=''),
-    Field('send', 'string', length=1, label='send',comment=''),
-    format='%(uuid)s')
-
-db.define_table('api_dlr_log',
     Field('uuid', 'string', length=100, label='uuid',comment=''),
     Field('code', 'string', length=255, label='code',comment=''),
     Field('date', 'string', length=50, label='date',comment=''),
