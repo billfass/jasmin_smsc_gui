@@ -113,9 +113,9 @@ def errback(sec="web"):
         return str(e)
     
     if sec == "web":
-        requests.get("https://fastermessage.com/app2/sms/batch/dlr/err/"+data['batchId']+"/"+data["to"]+"?statusText="+data["statusText"]+"&status="+data['status'], data={}, headers={})
+        requests.get("https://fastermessage.com/app2/sms/errbatch/dlr/"+data['batchId']+"/"+data["to"]+"?statusText="+data["statusText"]+"&status="+data['status'], data={}, headers={})
     else:
-        requests.get("https://fastermessage.com/app2/sms/batch/dlr/err/"+data['batchId']+"/"+data["to"], data=dict(data), headers={})
+        requests.get("https://fastermessage.com/app2/sms/errbatch/dlr/"+data['batchId']+"/"+data["to"], data=dict(data), headers={})
 
     return 'ACK/Jasmin'
 
