@@ -99,6 +99,26 @@ def callback(sec="web"):
 
     return 'ACK/Jasmin'
 
+@action('errback/<sec>', method=['GET', 'POST'])
+@action.uses(db, session, auth, flash)
+def errback(sec="web"):
+    data = request.GET
+
+    try:
+        data["statusText"] = data["statusText"]
+        data['batchId'] = data['batchId']
+        data['to'] = data['to']
+        data['status'] = data['status']
+    except Exception as e:
+        return str(e)
+    
+    if sec == "web":
+        requests.post("https://fastermessage.com/app2/sms/batch/dlr/err/"+data['batchId']+"/"+data["to"], data=dict(data), headers={})
+    else:
+        requests.post("https://fastermessage.com/app2/sms/batch/dlr/err/"+data['batchId']+"/"+data["to"], data=dict(data), headers={})
+
+    return 'ACK/Jasmin'
+
 @action('dlr/<sec>/<id>', method=['GET', 'POST'])
 @action.uses(db, session, auth, flash)
 def dlr(sec="web", id=None):
