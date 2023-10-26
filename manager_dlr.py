@@ -97,13 +97,13 @@ def clear():
 
     data = []
 
-    # for row in rows:
-    #     # Accédez aux colonnes de chaque ligne en utilisant la notation point
-    #     uuid = row.callback.uuid
-    #     batchuuid = row.callback.batchuuid
-    #     status = row.callback.status
-    #     to = row.callback.to
-    #     date = row.callback.date
+    for row in rows:
+        # Accédez aux colonnes de chaque ligne en utilisant la notation point
+        uuid = row.callback.uuid
+        batchuuid = row.callback.batchuuid
+        status = row.callback.status
+        to = row.callback.to
+        # date = row.callback.date
         
         # Effectuez les opérations nécessaires avec les données
         # data.append("UUID: "+uuid+", BatchUUID: "+batchuuid+", Status: "+status+", To: "+to+", Date: "+date)
