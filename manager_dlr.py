@@ -97,25 +97,28 @@ def clear():
 
     data = []
 
-    for row in rows:
-        # Accédez aux colonnes de chaque ligne en utilisant la notation point
-        uuid = row.uuid
-        batchuuid = row.batchuuid
-        if(row.status):
-            status = row.status
-        else:
-            status = ""
-        if(row.to):
-            to = row.to
-        else:
-            to = ""
-        if(row.date):
-            date = row.date
-        else:
-            date = ""
-        
-        # Effectuez les opérations nécessaires avec les données
-        data.append("UUID: "+uuid+", BatchUUID: "+batchuuid+", Status: "+status+", To: "+to+", Date: "+date)
-        # print(f"UUID: {uuid}, BatchUUID: {batchuuid}, Status: {status}, To: {to}, Date: {date}")
+    try:
+        for row in rows:
+            # Accédez aux colonnes de chaque ligne en utilisant la notation point
+            uuid = row.uuid
+            batchuuid = row.batchuuid
+            if(row.status):
+                status = row.status
+            else:
+                status = ""
+            if(row.to):
+                to = row.to
+            else:
+                to = ""
+            if(row.date):
+                date = row.date
+            else:
+                date = ""
+    except Exception as e:
+        return str(e)
+            
+    # Effectuez les opérations nécessaires avec les données
+    data.append("UUID: "+uuid+", BatchUUID: "+batchuuid+", Status: "+status+", To: "+to+", Date: "+date)
+    # print(f"UUID: {uuid}, BatchUUID: {batchuuid}, Status: {status}, To: {to}, Date: {date}")
 
     return dict(data)
