@@ -149,6 +149,7 @@ db.define_table('callback',
     Field('batchuuid', 'string', length=100, label='batchuuid',comment=''),
     Field('status', 'string', length=5, label='status',comment=''),
     Field('to', 'string', length=50, label='to',comment=''),
+    Field('date', 'string', length=50, label='date',comment=''),
     format='%(uuid)s')
 
 db.define_table('dlr_log',
