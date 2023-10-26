@@ -95,6 +95,8 @@ def dlr(sec="web", id=None):
 def clear():
     rows = db(db.callback.id > 0).select()
 
+    data = []
+
     for row in rows:
         # Accédez aux colonnes de chaque ligne en utilisant la notation point
         uuid = row.callback.uuid
@@ -104,6 +106,7 @@ def clear():
         date = row.callback.date
         
         # Effectuez les opérations nécessaires avec les données
-        print(f"UUID: {uuid}, BatchUUID: {batchuuid}, Status: {status}, To: {to}, Date: {date}")
+        data.append(f"UUID: {uuid}, BatchUUID: {batchuuid}, Status: {status}, To: {to}, Date: {date}")
+        # print(f"UUID: {uuid}, BatchUUID: {batchuuid}, Status: {status}, To: {to}, Date: {date}")
 
-    return 'ACK/Jasmin'
+    return dict(data)
