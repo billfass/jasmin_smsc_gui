@@ -106,7 +106,7 @@ def clear():
         date = row.callback.date
         
         # Effectuez les opérations nécessaires avec les données
-        data.append("UUID: "+uuid+", BatchUUID: "+batchuuid+", Status: "+status+", To: "+to+", Date: "+date)
+        # data.append("UUID: "+uuid+", BatchUUID: "+batchuuid+", Status: "+status+", To: "+to+", Date: "+date)
         # print(f"UUID: {uuid}, BatchUUID: {batchuuid}, Status: {status}, To: {to}, Date: {date}")
 
     return dict(data)
