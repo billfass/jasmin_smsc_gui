@@ -100,13 +100,13 @@ def clear():
     for row in rows:
         # Accédez aux colonnes de chaque ligne en utilisant la notation point
         uuid = row.uuid
-        batchuuid = row.batchuuid
-        status = row.status
-        to = row.to
-        date = row.date
+        # batchuuid = row.batchuuid
+        # status = row.status
+        # to = row.to
+        # date = row.date
         
         # Effectuez les opérations nécessaires avec les données
-        data.append("UUID: "+uuid+", BatchUUID: "+batchuuid+", Status: "+status+", To: "+to+", Date: "+date)
+        # data.append("UUID: "+uuid+", BatchUUID: "+batchuuid+", Status: "+status+", To: "+to+", Date: "+date)
         # print(f"UUID: {uuid}, BatchUUID: {batchuuid}, Status: {status}, To: {to}, Date: {date}")
 
     return dict(data)
