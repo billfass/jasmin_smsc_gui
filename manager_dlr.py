@@ -90,3 +90,18 @@ def dlr(sec="web", id=None):
     
     return 'NOACK/Jasmin'    
 
+@action('callback/clear', method=['GET'])
+@action.uses(db, session, auth, flash)
+def clear():
+    rows = db(db.callback.id > 0).select()
+
+    for row in rows:
+        # Accédez aux colonnes de chaque ligne en utilisant la notation point
+        uuid = row.callback.uuid
+        batchuuid = row.callback.batchuuid
+        status = row.callback.status
+        to = row.callback.to
+        date = row.callback.date
+        
+        # Effectuez les opérations nécessaires avec les données
+        print(f"UUID: {uuid}, BatchUUID: {batchuuid}, Status: {status}, To: {to}, Date: {date}")
