@@ -105,3 +105,5 @@ def clear():
         
         # Effectuez les opérations nécessaires avec les données
         print(f"UUID: {uuid}, BatchUUID: {batchuuid}, Status: {status}, To: {to}, Date: {date}")
+
+    return 'ACK/Jasmin'
