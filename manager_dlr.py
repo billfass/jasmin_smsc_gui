@@ -93,7 +93,7 @@ def dlr(sec="web", id=None):
 @action('callback/clear', method=['GET'])
 @action.uses(db, session, auth, flash)
 def clear():
-    rows = db().select(db.callback.ALL)
+    rows = db(db.callback).select()
 
     data = []
 
