@@ -31,7 +31,7 @@ from .common import db, session, T, cache, auth, logger, authenticated, unauthen
 
 
 @action("index", method=['GET', 'POST'])
-@action.uses(db, session, auth, flash, "index.html")
+@action.uses(db, session, auth.user, flash, "index.html")
 def index():
     tot_imos = 0
     tot_imts = 0
