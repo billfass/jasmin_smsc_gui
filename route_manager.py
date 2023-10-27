@@ -12,7 +12,7 @@ def index():
     return dict()
 
 @action('show_mt_route/<order>', method = ['GET','POST'])
-@action.uses(db, flash, session, 'record_content.html')
+@action.uses(db, flash, auth.user, session, 'record_content.html')
 def show_mt_route(order):
     if not order:
         flash.set('Please select a route to show')
@@ -24,7 +24,7 @@ def show_mt_route(order):
     return dict(caller = "../manage_mt_routes", title= title, content=form)
 
 @action('remove_mt_route/<order>', method = ['GET','POST'])
-@action.uses(db, flash, session, 'record_content.html')
+@action.uses(db, flash, session, auth.user, 'record_content.html')
 def remove_mtroute(order):
     route = order
     res = jasmin.mtrouter(['remove',route])
@@ -33,7 +33,7 @@ def remove_mtroute(order):
     redirect(URL('manage_mt_routes'))
     
 @action('mt_static/<route_type>', method=['GET', 'POST'])
-@action.uses(db, session, flash, 'record_content.html')
+@action.uses(db, session, flash, auth.user, 'record_content.html')
 def mt_static(route_type=None):
     if not route_type:
         flash.set('You need to select a route type')
@@ -78,7 +78,7 @@ def mt_static(route_type=None):
     return dict(content=form, title=title, caller='../manage_mt_routes')
 
 @action('mt_default/<route_type>', method=['GET', 'POST'])
-@action.uses(db, session, flash, 'record_content.html')
+@action.uses(db, session, flash, auth.user, 'record_content.html')
 def mt_default(route_type=None):
     if not route_type:
         flash.set('You need to select a route type')
@@ -117,7 +117,7 @@ def mt_default(route_type=None):
     return dict(content=form, title=title, caller='../manage_mt_routes')
 
 @action('mt_random/<route_type>', method=['GET', 'POST'])
-@action.uses(db, session, auth, flash, 'record_content.html')
+@action.uses(db, session, auth.user, flash, 'record_content.html')
 def mt_random(route_type):
     if not route_type:
         flash.set('You need to select a route type')
@@ -167,7 +167,7 @@ def mt_random(route_type):
     return dict(content=form, title=title, caller='../manage_mt_routes')
     
 @action('mt_failover/<route_type>', method=['GET', 'POST'])
-@action.uses(db, session, auth, flash, 'record_content.html')
+@action.uses(db, session, auth.user, flash, 'record_content.html')
 def mt_failover(route_type):
     if not route_type:
         flash.set('You need to select a route type')
@@ -217,7 +217,7 @@ def mt_failover(route_type):
     return dict(content=form, title=title, caller='../manage_mt_routes')
     
 @action('manage_mt_routes', method=['GET', 'POST'])
-@action.uses(db, session, flash, 'mt_routes_list.html')
+@action.uses(db, session, auth.user, flash, 'mt_routes_list.html')
 def manage_mt_routes():
     form = Form([
         Field('r_tpe',label='Mt Route Type', requires=IS_IN_SET(MTROUTE_TYPES))
@@ -373,7 +373,7 @@ def route_exists(order):
     return ret
 
 @action('mo_create/<route_type>', method=['GET', 'POST'])
-@action.uses(db, session, auth, flash, 'record_content.html')
+@action.uses(db, session, auth.user, flash, 'record_content.html')
 def mo_create(route_type):
     resp=None
     cons = ''
@@ -555,7 +555,7 @@ def mo_create(route_type):
     return dict(content=form, title=title, caller='../manage_mo_routes')
 
 @action('remove_moroute/<route_order>', method=['GET', 'POST'])
-@action.uses(db,session,auth,flash)
+@action.uses(db,session, auth.user,flash)
 def remove_moroute(route_order):
     route = route_order
     t = jasmin.morouter(['remove', route])
@@ -643,7 +643,7 @@ def mo_routes():
     return routes
 
 @action('manage_mo_routes', method=['GET', 'POST'])
-@action.uses(db, session, auth, flash, 'list_moroutes.html')
+@action.uses(db, session, auth.user, flash, 'list_moroutes.html')
 def manage_mo_routes():
     form = Form([
                 Field('r_tpe',label='Mo Route Type', requires=IS_IN_SET(MOROUTE_TYPES))

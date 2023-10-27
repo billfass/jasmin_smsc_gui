@@ -9,7 +9,7 @@ from .utils import cols_split
 from . common import jasmin
 
 @action('user_manager_index')
-@action.uses(db, session, 'generic.html')
+@action.uses(db, session, auth.user, 'generic.html')
 def index():
     return dict(msg="Hello form User Manager Index")
 
@@ -64,7 +64,7 @@ def enable_group(group):
 
 @action('manage_groups', method=['GET', 'POST'])
 @action('manage_groups/<group>/<action>')
-@action.uses(db, session, auth, flash, 'groups_list.html')
+@action.uses(db, session, auth.user, flash, 'groups_list.html')
 def manage_groups(group=None, action=None):
     groups=[]
     if action == 'enable':
@@ -123,7 +123,7 @@ def remove_user(user):
     redirect(URL('manage_users'))
     
 @action('user_credentials/<user>', method=['GET', 'POST'])
-@action.uses(db, session, auth, flash, 'record_content.html')
+@action.uses(db, session, auth.user, flash, 'record_content.html')
 def user_cred(user=None):
     usr = user
     title= 'Credentials for user %s ' % user
@@ -184,7 +184,7 @@ def user_cred(user=None):
 
 @action('manage_users', method=['GET', 'POST'])
 @action('manage_users/<user>/<action>', method=['GET', 'POST'])
-@action.uses(db, session, auth, flash, 'users_list.html')
+@action.uses(db, session, auth.user, flash, 'users_list.html')
 def manage_users(user=None, action=None):
     j_gid = ''
     if action == 'enable':

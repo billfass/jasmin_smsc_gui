@@ -8,14 +8,14 @@ from . common import jasmin
 from .utils import cols_split
 
 @action('db_filters', method=['GET', 'POST'])
-@action.uses(db, auth, session, flash, 'generic.html')
+@action.uses(db, auth.user, session, flash, 'generic.html')
 def db_filters():
     rows = db(db.mt_filter.id >0).select()
     return dict(rows=rows)
 
 
 @action('delete_filter/<fid>')
-@action.uses(db,auth,session,flash)
+@action.uses(db,auth.user,session,flash)
 def delete_filter(fid):
     if not fid:
         flash.set('You need to select a filter to delet')
@@ -73,7 +73,7 @@ def list_filters():
     return filters
 
 @action('manage_filters', method=['GET', 'POST'])
-@action.uses(db, auth, session, flash, 'list_filters.html')
+@action.uses(db, auth.user, session, flash, 'list_filters.html')
 def manage_filters():
     db.mt_filter.filter_route.readable = db.mt_filter.filter_route.writable = False
     form=Form([Field('fid', 'string', length=15, label='FID', comment='Filter ID must be unique'),

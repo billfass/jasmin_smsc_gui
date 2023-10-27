@@ -29,7 +29,7 @@ def stop_smpp_connector(cid):
     redirect(URL('manage_smpp_connectors'))
 
 @action('edit_smpp_connector/<cid>', method=['GET', 'POST'])
-@action.uses(db, flash, session, 'record_content.html')
+@action.uses(db, flash, session, auth.user, 'record_content.html')
 def edit_smpp_connector(cid):
     if not cid:
         flash.set('No connector selected you need to select a connector')
@@ -73,7 +73,7 @@ def edit_smpp_connector(cid):
     return dict(content=form, back=back, title=title, caller='../manage_smpp_connectors')
 
 @action('show_smpp_connector/<cid>', method = ['GET','POST'])
-@action.uses(db, flash, session, 'show_record.html')
+@action.uses(db, flash, session, auth.user, 'show_record.html')
 def show_smpp_connector(cid):
     flash.set('Inside show smpp connector %s' % cid)
     import re
@@ -97,7 +97,7 @@ def show_smpp_connector(cid):
     return dict(caller = "../manage_smpp_connectors", rows=connectors)
     
 @action('remove_smpp_connector/<cid>')
-@action.uses(db, flash, session)
+@action.uses(db, flash, auth.user, session)
 def remove_smpp_connector(cid):
     flash.set('Inside remove smpp connector %s' % cid)
     con = cid
@@ -132,7 +132,7 @@ def list_smpp_connectors():
     return connectors
 
 @action('manage_smpp_connectors', method=['GET', 'POST'])
-@action.uses(db, flash, session, 'smpp_connector_list.html')
+@action.uses(db, flash, session, auth.user, 'smpp_connector_list.html')
 def manage_smpp_connectors():
     headers = ['CID', 'Status', 'Host', 'Port', 'Username', 'Pasword', 'Session', 'Starts', 'Stops', 'Options']
     for f in db['connector']:
@@ -166,7 +166,7 @@ def manage_smpp_connectors():
     return dict(form=form, cons=cons, db=db)
 
 @action('delete_http_con/<cid>', method=['GET', 'POST'])
-@action.uses(db,auth,session,flash)
+@action.uses(db,auth.user,session,flash)
 def delete_http_con(cid):
     if not cid:
         flash.set('Please select a connector to delete')
@@ -193,7 +193,7 @@ def http_cons():
     return connectors
 
 @action('manage_http_connectors', method=['GET','POST'])
-@action.uses(db, session, auth, flash, 'http_connector_list.html')
+@action.uses(db, session, auth.user, flash, 'http_connector_list.html')
 def manage_http_connectors():
     form=Form([
         Field('hcon_cid','string',length=10,label='Connector ID', comment= 'Must be unique'),

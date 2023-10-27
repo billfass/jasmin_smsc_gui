@@ -59,7 +59,7 @@ def get_imts():
     return imts
 
 @action('manage_imts', method=['GET', 'POST'])
-@action.uses(db, session, auth, flash, 'list_interceptors.html')
+@action.uses(db, session, auth.user, flash, 'list_interceptors.html')
 def manage_imts():
     title='Manage MT Interceptors'
     form = Form(db.j_imt, formstyle=FormStyleBulma)
@@ -139,7 +139,7 @@ def get_imos():
     return imos
 
 @action('manage_imos', method=['GET', 'POST'])
-@action.uses(db, session, auth, flash, 'list_interceptors.html')
+@action.uses(db, session, auth.user, flash, 'list_interceptors.html')
 def manage_imos():
     title = 'Manage MO Interceptors'
     

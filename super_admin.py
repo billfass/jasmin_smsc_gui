@@ -344,7 +344,7 @@ def get_imts():
     return 'Isnside get_imts'
 
 @action("populate_database", method=['GET', 'POST'])
-@action.uses(db, session, auth, flash, "generic.html")
+@action.uses(db, session, auth.user, flash, "generic.html")
 def popualate_database():
     groups = get_groups()
     users = get_users()
@@ -360,7 +360,7 @@ def popualate_database():
 
 
 @action("super_admin", method=['GET', 'POST'])
-@action.uses(db, session, auth, flash, "superadmin_index.html")
+@action.uses(db, session, auth.user, flash, "superadmin_index.html")
 def super_admin():
     tot_imos = 0
     tot_imts = 0
@@ -378,22 +378,23 @@ def super_admin():
                 tot_mtroutes = tot_mtroutes,
                 tot_moroutes = tot_moroutes,
                 )
+
 @action('user_unbind<user>', method=['GET', 'POST'])
-@action.uses(db, session, auth, flash)
+@action.uses(db, session, auth.user, flash)
 def user_unbind(user):
     j_user = user
     ret = jasmin.users(['unbind', j_user] )
     return ret
 
 @action('user_ban/<user>', method=['GET', 'POST'])
-@action.uses(db, session, auth, flash)
+@action.uses(db, session, auth.user, flash)
 def user_ban(user):
     j_user = user
     ret = jasmin.users(['ban', j_user] )
     return ret
 
 @action('flush_moroutes', method=['GET', 'POST'])
-@action.uses(db, session, auth, flash)
+@action.uses(db, session, auth.user, flash)
 def flush_moroutes():
     route= ''
     t = jasmin.morouter(['flush', route])
@@ -405,7 +406,7 @@ def flush_moroutes():
     redirect(URL('super_admin'))
     
 @action('flush_mtroutes', method=['GET', 'POST'])
-@action.uses(db, session, auth, flash)
+@action.uses(db, session, auth.user, flash)
 def flush_mtroutes():
     route = ''
     t = jasmin.mtrouter(['flush',route])
@@ -417,7 +418,7 @@ def flush_mtroutes():
     redirect(URL('super_admin'))
     
 @action('flush_imos', method=['GET', 'POST'])
-@action.uses(db, session, auth, flash)
+@action.uses(db, session, auth.user, flash)
 def flush_imos():
     order = script = filters = ''
     resp= jasmin.interceptor(['mo','flush', order, script,filters])
@@ -429,7 +430,7 @@ def flush_imos():
     redirect(URL('super_admin'))
     
 @action('flush_imts', method=['GET', 'POST'])
-@action.uses(db, session, auth, flash)
+@action.uses(db, session, auth.user, flash)
 def flush_imts():
     order = script = filters = ''
     resp= jasmin.interceptor(['mt','flush', order, script,filters])
@@ -442,7 +443,7 @@ def flush_imts():
     
 @action('s_users', method=['GET', 'POST'])
 @action('s_users/<user>/<action>', method=['GET', 'POST'])
-@action.uses(db, session, auth, flash, 's_users.html')
+@action.uses(db, session, auth.user, flash, 's_users.html')
 def s_users(user=None, action=None):
     j_gid = ''
     if action == 'unbind':
