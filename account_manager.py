@@ -5,7 +5,7 @@ from py4web import action, request, response, abort, redirect, URL
 from py4web.utils.form import Form, FormStyleBulma
 from py4web.utils.url_signer import URLSigner
 
-@action('accounts', method=['GET'])
+@action('auth/accounts', method=['GET'])
 @action.uses(db, auth, "accounts.html", T)
 def index():
 
@@ -15,18 +15,18 @@ def index():
 
     return dict(rows=rows,user=user)
 
-@action('add_user', method=['GET', 'POST'])
+@action('auth/add_user', method=['GET', 'POST'])
 @action.uses(db,session,auth,"add_user.html", T)
 def add_user():
     user = auth.get_user()
     form = Form(db.auth_user,csrf_session=session,formstyle=FormStyleBulma)
 
     if form.accepted:
-        redirect(URL('accounts'))
+        redirect(URL('auth/accounts'))
 
     return dict(form=form,user=user)
 
-@action('edit_user/<user_id:int>',method=['GET', 'POST'])
+@action('auth/edit_user/<user_id:int>',method=['GET', 'POST'])
 @action.uses(db,session,auth,"edit_user.html", T)
 def edit_user(user_id=None):
 
@@ -35,18 +35,18 @@ def edit_user(user_id=None):
     user = auth.get_user()
 
     if u is None:
-        redirect(URL('accounts'))
+        redirect(URL('auth/accounts'))
 
     form = Form(db.auth_user,record=u, deletable=False,csrf_session=session,formstyle=FormStyleBulma)
     auth.db.auth_user.id.readable = False
     auth.db.auth_user.id.writable = False
     if form.accepted:
-       redirect(URL('accounts'))
+       redirect(URL('auth/accounts'))
 
     return dict(form=form,user=user)
 
 
-@action('actif_user/<user_id:int>')
+@action('auth/actif_user/<user_id:int>')
 @action.uses(db,session,auth, T)
 def actif_user(user_id=None):
 
@@ -54,9 +54,9 @@ def actif_user(user_id=None):
    
     db(db.auth_user.id == user_id).update(action_token="")
 
-    redirect(URL('accounts'))
+    redirect(URL('auth/accounts'))
 
-@action('delete_user/<user_id:int>')
+@action('auth/delete_user/<user_id:int>')
 @action.uses(db,session,auth, T)
 def delete_user(user_id=None):
 
@@ -64,4 +64,4 @@ def delete_user(user_id=None):
     
     db(db.auth_user.id==user_id).delete()
 
-    redirect(URL('accounts'))
+    redirect(URL('auth/accounts'))
