@@ -27,7 +27,7 @@ def add_user():
     return dict(form=form,user=user)
 
 @action('edit_user/<user_id:int>',method=['GET', 'POST'])
-@action.uses(db,session,"edit_user.html", T)
+@action.uses(db,session,auth,"edit_user.html", T)
 def edit_user(user_id=None):
 
     assert user_id is not None
@@ -47,7 +47,7 @@ def edit_user(user_id=None):
 
 
 @action('actif_user/<user_id:int>')
-@action.uses(db,session, T)
+@action.uses(db,session,auth, T)
 def actif_user(user_id=None):
 
     assert user_id is not None
@@ -57,7 +57,7 @@ def actif_user(user_id=None):
     redirect(URL('index_accounts'))
 
 @action('delete_user/<user_id:int>')
-@action.uses(db,session, T)
+@action.uses(db,session,auth, T)
 def delete_user(user_id=None):
 
     assert user_id is not None
