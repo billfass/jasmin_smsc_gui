@@ -90,6 +90,37 @@ def refill_user(data):
     except Exception as e:
         return dict(code=403, message=str(e))
 
+def new_filter(data):
+    try:
+        data["fid"]=data["fid"]
+        data["ftype"]=data["ftype"]
+        data["fvalue"]=data["fvalue"]
+    except Exception as e:
+        return dict(code=403, message=str(e))
+    
+    ret=jasmin.filters(['create', data["fid"], data["ftype"], data["fvalue"]])
+
+    if ret:
+        return dict(code=400, message=ret)
+    
+    db.mt_filter.update_or_insert(db.mt_filter.fid == data["fid"],
+        fid = data["fid"],    
+        filter_type = data["ftype"],
+        f_value = data["fvalue"])
+    
+    return dict(code=200, message='Added filter %s' %data)
+        
+def del_filter(fid):
+    if not fid:
+        flash.set('You need to select a filter to delet')
+
+    res = jasmin.filters(['delete',  fid])
+    
+    flash.set('Removed Filter %s' % fid)
+    
+    query = db.mt_filter.fid == fid
+    db(query).delete()
+
 def new_user(data):
     try:
         data["uid"]=data["uid"]
@@ -105,8 +136,14 @@ def new_user(data):
     if ret:
         return dict(code=400, message=ret)
     
+    data["fid"] = data['uid']
+    data["ftype"] = "UserFilter"
+    data["fvalue"] = data['uid']
+    ret = new_filter(data)
+    if not ret["code"] == 200:
+        return dict(code=ret["code"], message=ret["message"])
+    
     ret = refill_user(data)
-
     if not ret["code"] == 200:
         return dict(code=ret["code"], message=ret["message"])
 
@@ -138,6 +175,21 @@ def user_cred(action=None):
         ret = refill_user(data)
     elif action == "mtrouter":
         ret = mtrouter(data)
+    else:
+        return api_resp(dict(data), 400, 'Undefined action') 
+    
+    return api_resp(dict(data), ret["code"], ret["message"])
+
+@action('api/filters/<action>', method=['GET', 'POST'])
+@action.uses(db, session, auth, flash)
+def filters_manage(action=None):
+    data = request.POST
+
+    if action == "add":
+        ret = new_filter(data)
+    elif action == "update":
+        del_filter(data["fid"])
+        ret = new_filter(data)
     else:
         return api_resp(dict(data), 400, 'Undefined action') 
     
