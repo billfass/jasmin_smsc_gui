@@ -5,8 +5,8 @@ from py4web import action, request, response, abort, redirect, URL
 from py4web.utils.form import Form, FormStyleBulma
 from py4web.utils.url_signer import URLSigner
 
-@action("index_accounts")
-@action.uses(db, auth,"accounts.html", T)
+@action('accounts', method=['GET'])
+@action.uses(db, auth, "accounts.html", T)
 def index():
 
     user    = auth.get_user()
@@ -22,7 +22,7 @@ def add_user():
     form = Form(db.auth_user,csrf_session=session,formstyle=FormStyleBulma)
 
     if form.accepted:
-        redirect(URL('index_accounts'))
+        redirect(URL('accounts'))
 
     return dict(form=form,user=user)
 
@@ -35,13 +35,13 @@ def edit_user(user_id=None):
     user = auth.get_user()
 
     if u is None:
-        redirect(URL('index_accounts'))
+        redirect(URL('accounts'))
 
     form = Form(db.auth_user,record=u, deletable=False,csrf_session=session,formstyle=FormStyleBulma)
     auth.db.auth_user.id.readable = False
     auth.db.auth_user.id.writable = False
     if form.accepted:
-       redirect(URL('index_accounts'))
+       redirect(URL('accounts'))
 
     return dict(form=form,user=user)
 
@@ -54,7 +54,7 @@ def actif_user(user_id=None):
    
     db(db.auth_user.id == user_id).update(action_token="")
 
-    redirect(URL('index_accounts'))
+    redirect(URL('accounts'))
 
 @action('delete_user/<user_id:int>')
 @action.uses(db,session,auth, T)
@@ -64,4 +64,4 @@ def delete_user(user_id=None):
     
     db(db.auth_user.id==user_id).delete()
 
-    redirect(URL('index_accounts'))
+    redirect(URL('accounts'))
