@@ -343,9 +343,7 @@ def get_imos():
 def get_imts():
     return 'Isnside get_imts'
 
-@action("populate_database", method=['GET', 'POST'])
-@action.uses(db, session, auth.user, flash, "generic.html")
-def popualate_database():
+def api_popualate_database():
     groups = get_groups()
     users = get_users()
     filters= get_filters()
@@ -355,6 +353,11 @@ def popualate_database():
     mo_routes = get_moroutes()
     mo_interceptors = get_imos()
     mt_interceptors = get_imts()
+
+@action("populate_database", method=['GET', 'POST'])
+@action.uses(db, session, auth.user, flash, "generic.html")
+def popualate_database():
+    api_popualate_database()
     flash.set('Database populated with existing Jasmin data')
     redirect(URL('index'))
 
