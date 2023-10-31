@@ -16,7 +16,7 @@ def index():
     return dict(rows=rows,user=user)
 
 @action('add_user', method=['GET', 'POST'])
-@action.uses(db,session,auth.user,"add_user.html", T)
+@action.uses(db,session,auth,"add_user.html", T)
 def add_user():
     user = auth.get_user()
     form = Form(db.auth_user,csrf_session=session,formstyle=FormStyleBulma)
