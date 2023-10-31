@@ -5,6 +5,7 @@ from .utils import cols_split
 from .user_manager import list_groups
 from .route_manager import mt_routes
 from .filter_manager import list_filters
+from .super_admin import api_popualate_database
 
 def api_resp(items=[], code=200, message=''):
     if code == 200:
@@ -103,11 +104,6 @@ def new_filter(data):
     if ret:
         return dict(code=400, message=ret)
     
-    db.mt_filter.update_or_insert(db.mt_filter.fid == data["fid"],
-        fid = data["fid"],    
-        filter_type = data["ftype"],
-        f_value = data["fvalue"])
-    
     return dict(code=200, message='Added filter %s' %data)
         
 def del_filter(fid):
@@ -176,7 +172,9 @@ def user_cred(action=None):
     elif action == "mtrouter":
         ret = mtrouter(data)
     else:
-        return api_resp(dict(data), 400, 'Undefined action') 
+        return api_resp(dict(data), 400, 'Undefined action')
+    
+    api_popualate_database()
     
     return api_resp(dict(data), ret["code"], ret["message"])
 
@@ -191,7 +189,9 @@ def filters_manage(action=None):
         del_filter(data["fid"])
         ret = new_filter(data)
     else:
-        return api_resp(dict(data), 400, 'Undefined action') 
+        return api_resp(dict(data), 400, 'Undefined action')
+
+    api_popualate_database() 
     
     return api_resp(dict(data), ret["code"], ret["message"])
 
