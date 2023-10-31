@@ -1,0 +1,45 @@
+[[extend 'layout.html']]
+
+<div class="section"> 
+  <center><h3 class="title">Liste utilisateur</h3></center>
+  <a class="button" href="[[=URL('add_user')]]">
+    <span class="icon"> <i class="fa fa-plus"></i> </span>
+    <span> Ajouter </span>
+  </a>
+</div><br>
+<div class="container">
+  
+  <table class="table is-striped is-fullwidth">
+    <tr>
+      <th>ID</th>
+      <th>PSEUDO</th>
+      <th>NOM</th>
+      <th>Email</th>
+      <th>Action</th>
+    </tr>
+    [[for row in rows:]]
+    <tr>
+      <td>[[=row.id]]</td>
+      <td>[[=row.username]] </td>
+      <td>[[=row.first_name]] [[=row.last_name]]</td>
+      <td>[[=row.email]]</td>
+      <td>
+        <a class="button" href="[[=URL('edit_user',row.id)]]" title="Modifier">
+          <span class="icon"> <i class="fa fa-edit"></i> </span>
+          <!-- <span> Modifier </span> -->
+        </a>
+        <a class="button" href="[[=URL('delete_user',row.id)]]" title="Supprimer">
+          <span class="icon custom-red-icon"> <i class="fa fa-trash"></i> </span>
+          <!-- <span> Supprimer </span> -->
+        </a>
+        [[if row.action_token != "" and row.action_token is not None:]]
+        <a class="button" href="[[=URL('actif_user',row.id)]]" title="Activer">
+          <span class="icon custom-green-icon"> <i class="fa fa-check"></i> </span>
+          <!-- <span> Supprimer </span> -->
+        </a>
+        [[pass]]
+      </td>
+    </tr>
+    [[pass]]
+  </table>
+</div>
