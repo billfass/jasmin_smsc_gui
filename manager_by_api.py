@@ -287,7 +287,7 @@ def filters_manage(action=None):
     elif action == "add":
         ret = new_mtrouter(data)
     elif action == "test":
-        return get_order()
+        return dict(o=get_order())
     else:
         return api_resp(dict(data), 400, 'Undefined action')
     
