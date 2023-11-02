@@ -176,7 +176,7 @@ def get_mtroutes():
             f_type = ''
             f_val = ''
             if 'DA' in f:
-                return dict(k=c_split)
+                return dict(k=route['r_filters'])
                 f_type = 'DestinationAddrFilter'
                 matches = re.search(con_regex, f)
                 if matches:
