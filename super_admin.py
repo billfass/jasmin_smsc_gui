@@ -349,7 +349,7 @@ def api_popualate_database():
     filters= get_filters()
     smpp_cons = get_smppcons()
     http_cons = get_httpcons()
-    # mt_routes = get_mtroutes()
+    mt_routes = get_mtroutes()
     mo_routes = get_moroutes()
     mo_interceptors = get_imos()
     mt_interceptors = get_imts()
