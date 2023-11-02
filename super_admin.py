@@ -229,10 +229,11 @@ def get_mtroutes():
             elif '<T>' in f:
                 f_type = 'TransparentFilter'
             else:    
-                continue    
+                continue 
+            # return dict(t=f_type, v=f_val)   
             fid = get_fid(f_type, f_val)
             fids.append(fid)
-        return fids
+        return dict(fids)
         # now after all this update the records
         # ret = db.mtroute.update_or_insert(db.mtroute.mt_order == route['r_order'],
         #             mt_order = route['r_order'],
