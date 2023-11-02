@@ -225,7 +225,7 @@ def get_order():
         ods = ods[:-1]
     except Exception as e:
         return dict(code=400, message=str(e))
-    return dict(d=ods)
+    return dict(ods.split(';'))
 
 @action('api/groups/get', method=['GET', 'POST'])
 @action.uses(db, session, auth, flash)
