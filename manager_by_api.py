@@ -219,7 +219,7 @@ def get_order():
     rts = mt_routes()
     ods = []
     for r in rts:
-        ods.append(int(r.r_order))
+        ods.extend([int(r.r_order)])
     return dict(ods)
 
 @action('api/groups/get', method=['GET', 'POST'])
