@@ -147,18 +147,30 @@ def new_user(data):
 
 def mtrouter(data):
     try:
-        resp = jasmin.mtrouter([str(data["type"]), str(data["order"]), str(data["connector"]), str(data["filters"]), str(data["rate"])])
-        if resp:
-            dict(code=400, message=resp)
+        message = ""
+        # resp = jasmin.mtrouter([str(data["type"]), str(data["order"]), str(data["connector"]), str(data["filters"]), str(data["rate"])])
+        # if resp:
+        #     dict(code=400, message=resp)
     except Exception as e:
         dict(code=400, message=str(e))
     
     return dict(code=200, message='Added mtrouter')
 
+def get_order():
+    order = 0
+    try:
+        ods = []
+        for r in mt_routes():
+            ods.append(int(r["r_order"]))
+        order = max(ods)+1
+    except Exception as e:
+        return 0
+    return order
+
 def bj_mtrouter(data):
     resp = data
     try:
-        order = int(data["order"])
+        order = get_order()
         usr = data["usr"]
         data["type"] = "StaticMTRoute"
 
@@ -171,6 +183,7 @@ def bj_mtrouter(data):
         if not ret["code"] == 200:
             return dict(code=ret["code"], data=resp, message=ret["message"])
         
+        data["filters"] = {"user":usr, "dest":'bj'}
         resp["data"][0] = data
         
         data["order"] = order + 1
@@ -182,6 +195,7 @@ def bj_mtrouter(data):
         if not ret["code"] == 200:
             return dict(code=ret["code"], data=resp, message=ret["message"])
         
+        data["filters"] = {"user":usr, "dest":'bj_moov'}
         resp["data"][1] = data
         
         data["order"] = order + 2
@@ -193,6 +207,7 @@ def bj_mtrouter(data):
         if not ret["code"] == 200:
             return dict(code=ret["code"], data=resp, message=ret["message"])
         
+        data["filters"] = {"user":usr, "dest":'bj_celtiis'}
         resp["data"][2] = data
     except Exception as e:
         return dict(code=400, data=resp, message=str(e))
@@ -214,17 +229,6 @@ def new_mtrouter(data):
     
     return dict(code=200, data=data, message="Adds mt routers")
 
-
-def get_order():
-    order = 0
-    try:
-        ods = []
-        for r in mt_routes():
-            ods.append(int(r["r_order"]))
-        order = max(ods)+1
-    except Exception as e:
-        return 0
-    return order
 
 @action('api/groups/get', method=['GET', 'POST'])
 @action.uses(db, session, auth, flash)
@@ -286,8 +290,6 @@ def filters_manage(action=None):
         ret = bj_mtrouter(data)
     elif action == "add":
         ret = new_mtrouter(data)
-    elif action == "test":
-        return dict(o=get_order())
     else:
         return api_resp(dict(data), 400, 'Undefined action')
     
