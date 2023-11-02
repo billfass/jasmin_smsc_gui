@@ -178,7 +178,7 @@ def get_mtroutes():
             f_val = ''
             if '<DA' in f:
                 f_type = 'DestinationAddrFilter'
-                matches = re.search(fil_regex, f)
+                matches = re.search(con_regex, f)
                 if matches:
                     line = matches.group(1)            
                     f_val = line.split('=')[1] 
@@ -230,7 +230,7 @@ def get_mtroutes():
                 f_type = 'TransparentFilter'
             else:    
                 continue 
-            
+
             if(f_type=="DestinationAddrFilter"):
                 return dict(t=f_type, v=f_val)
             fid = get_fid(f_type, f_val)
