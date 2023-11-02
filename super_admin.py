@@ -171,6 +171,7 @@ def get_mtroutes():
             else:
                 print('MT ROUTES RE HTTP CONNECTORS', con, connector )    
         f_split = route['r_filters'].split(', ')
+        '''
         for f in f_split:
             f_type = ''
             f_val = ''
@@ -238,6 +239,8 @@ def get_mtroutes():
                     mt_filters = fids,
                     mt_rate = route['r_rate']
                     )
+
+        '''
     
     return 'Inside get_imos'
     
