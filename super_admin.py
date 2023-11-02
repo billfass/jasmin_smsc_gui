@@ -171,7 +171,7 @@ def get_mtroutes():
             else:
                 print('MT ROUTES RE HTTP CONNECTORS', con, connector )    
         f_split = route['r_filters'].split(', ')
-        '''
+        
         for f in f_split:
             f_type = ''
             f_val = ''
@@ -232,15 +232,13 @@ def get_mtroutes():
             fid = get_fid(f_type, f_val)
             fids.append(fid)
         # now after all this update the records
-        ret = db.mtroute.update_or_insert(db.mtroute.mt_order == route['r_order'],
-                    mt_order = route['r_order'],
-                    mt_type = route['r_type'], 
-                    mt_connectors = cids,
-                    mt_filters = fids,
-                    mt_rate = route['r_rate']
-                    )
-
-        '''
+        # ret = db.mtroute.update_or_insert(db.mtroute.mt_order == route['r_order'],
+        #             mt_order = route['r_order'],
+        #             mt_type = route['r_type'], 
+        #             mt_connectors = cids,
+        #             mt_filters = fids,
+        #             mt_rate = route['r_rate']
+        #             )
     
     return 'Inside get_imos'
     
