@@ -174,7 +174,7 @@ def user_cred(action=None):
     else:
         return api_resp(dict(data), 400, 'Undefined action')
     
-    api_popualate_database()
+    # api_popualate_database()
     
     return api_resp(dict(data), ret["code"], ret["message"])
 
