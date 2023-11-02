@@ -184,7 +184,7 @@ def get_mtroutes():
                     f_val = line.split('=')[1] 
             elif '<U' in f:
                 f_type = 'UserFilter'
-                matches = re.search(con_regex, f)
+                matches = re.search(fil_regex, f)
                 if matches:
                     line = matches.group(1)            
                     f_val= line.split('=')[1]
