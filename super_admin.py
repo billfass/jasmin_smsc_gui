@@ -175,7 +175,7 @@ def get_mtroutes():
         for f in f_split:
             f_type = ''
             f_val = ''
-            return dict(f)
+            return dict(k=f)
             if 'DA' in f:
                 f_type = 'DestinationAddrFilter'
                 matches = re.search(con_regex, f)
