@@ -177,10 +177,10 @@ def get_mtroutes():
             f_val = ''
             if 'DA' in f:
                 f_type = 'DestinationAddrFilter'
-                # matches = re.search(con_regex, f)
-                # if matches:
-                #     line = matches.group(1)            
-                f_val = '' #line.split('=')[1] 
+                matches = re.search(con_regex, f)
+                if matches:
+                    line = matches.group(1)            
+                    f_val = line.split('=')[1] 
             elif 'U' in f:
                 f_type = 'UserFilter'
                 matches = re.search(con_regex, f)
@@ -229,8 +229,8 @@ def get_mtroutes():
                 f_type = 'TransparentFilter'
             else:    
                 continue    
-            fid = get_fid(f_type, f_val)
-            fids.append(fid)
+            # fid = get_fid(f_type, f_val)
+            # fids.append(fid)
         # now after all this update the records
         # ret = db.mtroute.update_or_insert(db.mtroute.mt_order == route['r_order'],
         #             mt_order = route['r_order'],
