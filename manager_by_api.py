@@ -297,7 +297,7 @@ def filters_manage(action=None):
     d = {}
     d.update(data)
     resp.append(d)
-    return dict(resp)
+    return resp
     if action == "create":
         ret = bj_mtrouter(data)
     elif action == "add":
