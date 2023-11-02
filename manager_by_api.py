@@ -217,10 +217,10 @@ def new_mtrouter(data):
 
 def get_order():
     rts = mt_routes()
-    ods = []
+    ods = ""
     for r in rts:
-        ods.extend([int(r.r_order)])
-    return ods
+        ods = ods +";"+ int(r.r_order)
+    return dict(ods.split(';'))
 
 @action('api/groups/get', method=['GET', 'POST'])
 @action.uses(db, session, auth, flash)
