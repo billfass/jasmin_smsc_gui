@@ -172,7 +172,7 @@ def bj_mtrouter(data):
     d = {}
     d.update(data)
     resp.append(d)
-    return dict(code=200, data=resp, message="Adds mt routers")
+    return dict(code=200, data=d, message="Adds mt routers")
     try:
         order = get_order()
         usr = data["usr"]
