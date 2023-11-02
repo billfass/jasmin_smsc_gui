@@ -293,7 +293,11 @@ def filters_manage(action=None):
 @action.uses(db, session, auth, flash)
 def filters_manage(action=None):
     data = request.POST
-
+    resp = []
+    d = {}
+    d.update(data)
+    resp.append(d)
+    return dict(resp)
     if action == "create":
         ret = bj_mtrouter(data)
     elif action == "add":
