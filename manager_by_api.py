@@ -208,6 +208,8 @@ def filters_manage(usr=None,order=None,rate=None):
         return api_resp(dict(user=usr, order=order, rate=rate), 404, "Invalid parameter")
     
     try:
+        order = int(order)
+        
         resp = jasmin.mtrouter(['StaticMTRoute', str(order), 'smppc(bj_mtn)', usr+';bj;', rate])
         if resp:
             return api_resp(dict(user=usr, order=order, rate=rate), 400, resp)
