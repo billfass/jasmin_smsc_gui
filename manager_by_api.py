@@ -219,8 +219,10 @@ def get_order():
     rts = mt_routes()
     ods = ""
     for r in rts:
-        ods = ods +";"+ int(r.r_order)
-    return dict(ods.split(';'))
+        ods += int(r.r_order)
+        ods += ";"
+    ods = ods[:-1]
+    return dict(d=ods)
 
 @action('api/groups/get', method=['GET', 'POST'])
 @action.uses(db, session, auth, flash)
