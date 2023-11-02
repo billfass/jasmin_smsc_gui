@@ -5,7 +5,7 @@ from .utils import cols_split
 from .user_manager import list_groups
 from .route_manager import mt_routes
 from .filter_manager import list_filters
-from .super_admin import api_popualate_database, get_mtroutes
+from .super_admin import api_popualate_database
 
 def api_resp(items=[], code=200, message=''):
     if code == 200:
@@ -147,13 +147,78 @@ def new_user(data):
 
 def mtrouter(data):
     try:
-        resp = jasmin.mtrouter([data["type"], data["order"], data["connector"], data["filters"], data["rate"]])
+        resp = jasmin.mtrouter([str(data["type"]), str(data["order"]), str(data["connector"]), str(data["filters"]), str(data["rate"])])
         if resp:
             dict(code=400, message=resp)
     except Exception as e:
         dict(code=400, message=str(e))
     
     return dict(code=200, message='Added mtrouter')
+
+def bj_mtrouter(data):
+    resp = data
+    try:
+        order = int(data["order"])
+        usr = data["usr"]
+        data["type"] = "StaticMTRoute"
+
+        data["order"] = order
+        data["connector"] = 'smppc(bj_mtn)'
+        data["filters"] = usr+';bj;'
+        data["network"] = '616-03'
+
+        ret = mtrouter(data)
+        if not ret["code"] == 200:
+            return dict(code=ret["code"], data=resp, message=ret["message"])
+        
+        resp["data"][0] = data
+        
+        data["order"] = order + 1
+        data["connector"] = 'smppc(bj_moov)'
+        data["filters"] = usr+';bj_moov;'
+        data["network"] = '616-02'
+
+        ret = mtrouter(data)
+        if not ret["code"] == 200:
+            return dict(code=ret["code"], data=resp, message=ret["message"])
+        
+        resp["data"][1] = data
+        
+        data["order"] = order + 2
+        data["connector"] = 'smppc(bj_moov)'
+        data["filters"] = usr+';bj_celtiis;'
+        data["network"] = '616-07'
+
+        ret = mtrouter(data)
+        if not ret["code"] == 200:
+            return dict(code=ret["code"], data=resp, message=ret["message"])
+        
+        resp["data"][2] = data
+    except Exception as e:
+        return dict(code=400, data=resp, message=str(e))
+    
+    return dict(code=200, data=resp, message="Adds mt routers")
+
+def new_mtrouter(data):
+    try:
+        data["type"] = "StaticMTRoute"
+        data["order"] = data["order"]
+        data["connector"] = 'smppc('+data["connector"]+')'
+        data["filters"] = data["filters"]
+
+        ret = mtrouter(data)
+        if not ret["code"] == 200:
+            return dict(code=ret["code"], data=data, message=ret["message"])
+    except Exception as e:
+        return dict(code=400, data=data, message=str(e))
+    
+    return dict(code=200, data=data, message="Adds mt routers")
+
+
+def get_order():
+    rts = mt_routes()
+    for r in rts:
+        return r
 
 @action('api/groups/get', method=['GET', 'POST'])
 @action.uses(db, session, auth, flash)
@@ -176,8 +241,6 @@ def user_cred(action=None):
         ret = new_user(data)
     elif action == "refill":
         ret = refill_user(data)
-    elif action == "mtrouter":
-        ret = mtrouter(data)
     else:
         return api_resp(dict(data), 400, 'Undefined action')
     
@@ -213,35 +276,21 @@ def filters_manage(action=None):
 def filters_manage(action=None):
     data = request.POST
 
-    try:
-        order = int(data["order"])
-        usr = data["usr"]
-        rate = float(data["rate"])
-
-        resp = jasmin.mtrouter(['StaticMTRoute', str(order), 'smppc(bj_mtn)', usr+';bj;', str(rate)])
-        if resp:
-            return api_resp(dict(data), 400, resp)
-        
-        order = order + 1
-        data["order"] = order
-        resp = jasmin.mtrouter(['StaticMTRoute', str(order), 'smppc(bj_moov)', usr+';bj_moov;', str(rate)])
-        if resp:
-            return api_resp(dict(data), 400, resp)
-        
-        order = order + 1
-        data["order"] = order
-        resp = jasmin.mtrouter(['StaticMTRoute',str(order), 'smppc(bj_moov)', usr+';bj_celtiis;', str(rate)])
-        if resp:
-            return api_resp(dict(data), 400, resp)
-        
-        try:
-            api_popualate_database()
-        except Exception as e:
-            message=str(e)
-    except Exception as e:
-        return api_resp(dict(data), 400, str(e))
+    if action == "create":
+        ret = bj_mtrouter(data)
+    elif action == "add":
+        ret = new_mtrouter(data)
+    elif action == "test":
+        return api_resp(get_order(), 200, 'Listes')
+    else:
+        return api_resp(dict(data), 400, 'Undefined action')
     
-    return api_resp(dict(data), 200, "Adds mt routers")
+    try:
+        api_popualate_database()
+    except Exception as e:
+        message=str(e)
+    
+    return api_resp(dict(ret["data"]), ret["code"], ret["message"])
 
 @action('api/stats/<usr>', method=['GET', 'POST'])
 @action.uses(db, session, auth, flash)
