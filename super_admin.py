@@ -180,9 +180,10 @@ def get_mtroutes():
                 f_type = 'DestinationAddrFilter'
                 matches = re.search(fil_regex, f)
                 if matches:
-                    line = matches.group(1)            
-                    f_val = line.split('=')[1][:-1]
-                    return dict(f=f_val) 
+                    line = matches.group(1)
+                    f_val = line.split('=')[1]
+                    if(line[-1] == ")"):
+                        f_val = f_val[:-1]
             elif '<U' in f:
                 f_type = 'UserFilter'
                 matches = re.search(con_regex, f)
