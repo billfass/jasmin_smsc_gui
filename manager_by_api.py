@@ -167,14 +167,13 @@ def user_cred(action=None):
 
     if action == "add":
         ret = new_user(data)
+        api_popualate_database()
     elif action == "refill":
         ret = refill_user(data)
     elif action == "mtrouter":
         ret = mtrouter(data)
     else:
         return api_resp(dict(data), 400, 'Undefined action')
-    
-    # api_popualate_database()
     
     return api_resp(dict(data), ret["code"], ret["message"])
 
