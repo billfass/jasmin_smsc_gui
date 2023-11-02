@@ -5,7 +5,7 @@ from .utils import cols_split
 from .user_manager import list_groups
 from .route_manager import mt_routes
 from .filter_manager import list_filters
-from .super_admin import api_popualate_database
+from .super_admin import api_popualate_database, get_mtroutes
 
 def api_resp(items=[], code=200, message=''):
     if code == 200:
@@ -194,9 +194,18 @@ def filters_manage(action=None):
     else:
         return api_resp(dict(data), 400, 'Undefined action')
 
-    api_popualate_database() 
+    try:
+        api_popualate_database()
+    except Exception as e:
+        message=str(e)
     
     return api_resp(dict(data), ret["code"], ret["message"])
+
+action('api/mtroutes', method=['GET', 'POST'])
+@action.uses(db, session, auth, flash)
+def api_mtroutes():
+    
+    return api_resp(get_mtroutes(), 22, "")
 
 @action('api/stats/<usr>', method=['GET', 'POST'])
 @action.uses(db, session, auth, flash)
