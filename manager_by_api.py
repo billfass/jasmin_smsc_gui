@@ -237,9 +237,11 @@ def filters_manage(action=None):
         except Exception as e:
             message=str(e)
     except Exception as e:
-        return api_resp(dict(user=usr, order=order, rate=rate), 400, str(e))
+        return api_resp(dict(data), 400, str(e))
     
-    return api_resp(dict(user=usr, order=order, rate=rate), 200, "Adds mt routers")
+    data["rate"] = rate
+    
+    return api_resp(dict(data), 200, "Adds mt routers")
 
 @action('api/stats/<usr>', method=['GET', 'POST'])
 @action.uses(db, session, auth, flash)
