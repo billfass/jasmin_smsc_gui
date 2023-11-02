@@ -234,11 +234,8 @@ def get_mtroutes():
                 continue 
             
             fid = get_fid(f_type, f_val)
-            if(f_type=="DestinationAddrFilter"):
-                return dict(fid=fid)
-            
             fids.append(fid)
-        return dict(fids)
+        return fids
         # now after all this update the records
         # ret = db.mtroute.update_or_insert(db.mtroute.mt_order == route['r_order'],
         #             mt_order = route['r_order'],
