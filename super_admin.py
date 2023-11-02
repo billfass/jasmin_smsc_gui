@@ -158,7 +158,7 @@ def get_mtroutes():
     fil_regex = '.*\<(.*?)\>.*'
     from .route_manager import mt_routes
     routes = mt_routes()
-    return routes
+    
     for route in routes:
         c_split = route['r_connectors'].split()
         cids = []
@@ -171,13 +171,13 @@ def get_mtroutes():
                 cids.append(c.id)
             else:
                 print('MT ROUTES RE HTTP CONNECTORS', con, connector )    
-        f_split = route['r_filters'].split(', ')
+        f_split = route['r_filters'].split() #.split(', ')
         
         for f in f_split:
             f_type = ''
             f_val = ''
             if 'DA' in f:
-                return dict(k=route['r_filters'])
+                return dict(k=f)
                 f_type = 'DestinationAddrFilter'
                 matches = re.search(con_regex, f)
                 if matches:
