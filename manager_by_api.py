@@ -147,10 +147,9 @@ def new_user(data):
 
 def mtrouter(data):
     try:
-        message = ""
-        # resp = jasmin.mtrouter([str(data["type"]), str(data["order"]), str(data["connector"]), str(data["filters"]), str(data["rate"])])
-        # if resp:
-        #     dict(code=400, message=resp)
+        resp = jasmin.mtrouter([str(data["type"]), str(data["order"]), str(data["connector"]), str(data["filters"]), str(data["rate"])])
+        if resp:
+            dict(code=400, message=resp)
     except Exception as e:
         dict(code=400, message=str(e))
     
