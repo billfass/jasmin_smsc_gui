@@ -168,7 +168,8 @@ def get_order():
     return order
 
 def bj_mtrouter(data):
-    resp = [data,data]
+    resp = []
+    resp.append(dict(order=0,name=1))
     return dict(code=200, data=resp, message="Adds mt routers")
     try:
         order = get_order()
