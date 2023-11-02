@@ -230,7 +230,9 @@ def get_mtroutes():
                 f_type = 'TransparentFilter'
             else:    
                 continue 
-            return dict(t=f_type, v=f_val)   
+            
+            if(f_type=="DestinationAddrFilter"):
+                return dict(t=f_type, v=f_val)
             fid = get_fid(f_type, f_val)
             fids.append(fid)
         return dict(fids)
