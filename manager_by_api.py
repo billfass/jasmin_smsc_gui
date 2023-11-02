@@ -146,7 +146,14 @@ def new_user(data):
     return dict(code=200, balance=ret["balance"], message='Added user %s' %data['username'])
 
 def mtrouter(data):
-    return dict(code=200, id="", message='Added mtrouter')
+    try:
+        resp = jasmin.mtrouter([data["type"], data["order"], data["connector"], data["filters"], data["rate"]])
+        if resp:
+            dict(code=400, message=resp)
+    except Exception as e:
+        dict(code=400, message=str(e))
+    
+    return dict(code=200, message='Added mtrouter')
 
 @action('api/groups/get', method=['GET', 'POST'])
 @action.uses(db, session, auth, flash)
@@ -201,15 +208,16 @@ def filters_manage(action=None):
     
     return api_resp(dict(data), ret["code"], ret["message"])
 
-@action('api/mt_routes/<usr>/<order>/<rate>', method=['GET', 'POST'])
+@action('api/mt_routes/<action>', method=['GET', 'POST'])
 @action.uses(db, session, auth, flash)
-def filters_manage(usr=None,order=None,rate=None):
-    if(not usr or not order or not rate):
-        return api_resp(dict(user=usr, order=order, rate=rate), 404, "Invalid parameter")
-    
+def filters_manage(action=None):
+    data = request.POST
+
     try:
-        order = int(order)
-        
+        order = int(data["order"])
+        usr = data["usr"]
+        rate = float(data["rate"])
+
         resp = jasmin.mtrouter(['StaticMTRoute', str(order), 'smppc(bj_mtn)', usr+';bj;', rate])
         if resp:
             return api_resp(dict(user=usr, order=order, rate=rate), 400, resp)
