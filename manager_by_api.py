@@ -218,21 +218,21 @@ def filters_manage(action=None):
         usr = data["usr"]
         rate = float(data["rate"])
 
-        resp = jasmin.mtrouter(['StaticMTRoute', str(order), 'smppc(bj_mtn)', usr+';bj;', rate])
+        resp = jasmin.mtrouter(['StaticMTRoute', str(order), 'smppc(bj_mtn)', usr+';bj;', str(rate)])
         if resp:
-            return api_resp(dict(user=usr, order=order, rate=rate), 400, resp)
+            return api_resp(dict(data), 400, resp)
         
         order = order + 1
-        resp = jasmin.mtrouter(['StaticMTRoute', str(order), 'smppc(bj_moov)', usr+';bj_moov;', rate])
-        if resp:
-            return api_resp(dict(user=usr, order=order, rate=rate), 400, resp)
-        
-        order = order + 1
-        resp = jasmin.mtrouter(['StaticMTRoute',str(order), 'smppc(bj_moov)', usr+';bj_celtiis;', rate])
-        if resp:
-            return api_resp(dict(user=usr, order=order, rate=rate), 400, resp)
-    
         data["order"] = order
+        resp = jasmin.mtrouter(['StaticMTRoute', str(order), 'smppc(bj_moov)', usr+';bj_moov;', str(rate)])
+        if resp:
+            return api_resp(dict(data), 400, resp)
+        
+        order = order + 1
+        data["order"] = order
+        resp = jasmin.mtrouter(['StaticMTRoute',str(order), 'smppc(bj_moov)', usr+';bj_celtiis;', str(rate)])
+        if resp:
+            return api_resp(dict(data), 400, resp)
         
         try:
             api_popualate_database()
