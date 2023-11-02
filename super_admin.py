@@ -178,9 +178,9 @@ def get_mtroutes():
             if 'DA' in f:
                 f_type = 'DestinationAddrFilter'
                 matches = re.search(con_regex, f)
-                # if matches:
+                if matches:
                 #     line = matches.group(1)            
-                #     f_val = line.split('=')[1] 
+                    f_val = ""# = line.split('=')[1] 
             elif 'U' in f:
                 f_type = 'UserFilter'
                 matches = re.search(con_regex, f)
