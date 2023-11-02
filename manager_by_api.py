@@ -201,7 +201,7 @@ def filters_manage(action=None):
     
     return api_resp(dict(data), ret["code"], ret["message"])
 
-action('api/mtroutes', method=['GET', 'POST'])
+@action('api/mtroutes', method=['GET', 'POST'])
 @action.uses(db, session, auth, flash)
 def api_mtroutes():
     
