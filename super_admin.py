@@ -346,7 +346,7 @@ def get_imts():
 def api_popualate_database():
     groups = get_groups()
     users = get_users()
-    # filters= get_filters()
+    filters= get_filters()
     smpp_cons = get_smppcons()
     http_cons = get_httpcons()
     # mt_routes = get_mtroutes()
