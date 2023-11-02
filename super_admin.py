@@ -158,6 +158,7 @@ def get_mtroutes():
     fil_regex = '.*\<(.*?)\>.*'
     from .route_manager import mt_routes
     routes = mt_routes()
+    return routes
     for route in routes:
         c_split = route['r_connectors'].split()
         cids = []
