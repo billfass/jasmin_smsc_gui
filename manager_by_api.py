@@ -231,6 +231,8 @@ def filters_manage(action=None):
         resp = jasmin.mtrouter(['StaticMTRoute',str(order), 'smppc(bj_moov)', usr+';bj_celtiis;', rate])
         if resp:
             return api_resp(dict(user=usr, order=order, rate=rate), 400, resp)
+    
+        data["order"] = order
         
         try:
             api_popualate_database()
@@ -238,8 +240,6 @@ def filters_manage(action=None):
             message=str(e)
     except Exception as e:
         return api_resp(dict(data), 400, str(e))
-    
-    data["rate"] = rate
     
     return api_resp(dict(data), 200, "Adds mt routers")
 
