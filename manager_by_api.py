@@ -217,8 +217,10 @@ def new_mtrouter(data):
 
 def get_order():
     rts = mt_routes()
+    ods = []
     for r in rts:
-        return r
+        ods.append(int(r.r_order))
+    return dict(ods)
 
 @action('api/groups/get', method=['GET', 'POST'])
 @action.uses(db, session, auth, flash)
@@ -281,7 +283,7 @@ def filters_manage(action=None):
     elif action == "add":
         ret = new_mtrouter(data)
     elif action == "test":
-        return api_resp(mt_routes(), 200, 'Listes')
+        return api_resp(get_order(), 200, 'Listes')
     else:
         return api_resp(dict(data), 400, 'Undefined action')
     
