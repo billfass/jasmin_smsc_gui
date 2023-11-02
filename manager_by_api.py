@@ -220,7 +220,7 @@ def get_order():
     ods = []
     for r in rts:
         ods.extend([int(r.r_order)])
-    return dict(ods)
+    return ods
 
 @action('api/groups/get', method=['GET', 'POST'])
 @action.uses(db, session, auth, flash)
