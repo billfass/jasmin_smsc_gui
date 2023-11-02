@@ -221,10 +221,10 @@ def get_order():
         ods = []
         for r in mt_routes():
             ods.append(int(r["r_order"]))
-        order = max(ods)
+        order = max(ods)+1
     except Exception as e:
         return 0
-    return order+1
+    return order
 
 @action('api/groups/get', method=['GET', 'POST'])
 @action.uses(db, session, auth, flash)
