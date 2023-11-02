@@ -184,7 +184,7 @@ def bj_mtrouter(data):
             return dict(code=ret["code"], data=resp, message=ret["message"])
         
         data["filters"] = {"user":usr, "dest":'bj'}
-        resp.append(dict(data))
+        resp.append(data)
 
         #################################
         
@@ -198,7 +198,7 @@ def bj_mtrouter(data):
             return dict(code=ret["code"], data=resp, message=ret["message"])
         
         data["filters"] = {"user":usr, "dest":'bj_moov'}
-        resp.append(dict(data))
+        resp.append(data)
 
         #################################
         
@@ -212,7 +212,7 @@ def bj_mtrouter(data):
             return dict(code=ret["code"], data=resp, message=ret["message"])
         
         data["filters"] = {"user":usr, "dest":'bj_celtiis'}
-        resp.append(dict(data))
+        resp.append(data)
     except Exception as e:
         return dict(code=400, data=resp, message=str(e))
     
