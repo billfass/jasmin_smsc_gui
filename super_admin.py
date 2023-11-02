@@ -172,18 +172,18 @@ def get_mtroutes():
             else:
                 print('MT ROUTES RE HTTP CONNECTORS', con, connector)  
         f_split = route['r_filters'].split(', ')
-        return dict(k=f_split)
+        
         for f in f_split:
             f_type = ''
             f_val = ''
-            if 'DA' in f:
+            if '<DA' in f:
                 return dict(k=f)
                 f_type = 'DestinationAddrFilter'
                 matches = re.search(fil_regex, f)
                 if matches:
                 #     line = matches.group(1)            
                     f_val = ""# = line.split('=')[1] 
-            elif 'U' in f:
+            elif '<U' in f:
                 f_type = 'UserFilter'
                 matches = re.search(con_regex, f)
                 if matches:
