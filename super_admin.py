@@ -182,13 +182,13 @@ def get_mtroutes():
                 if matches:
                     line = matches.group(1)            
                     f_val = line.split('=')[1] 
-                    return f_val
             elif '<U' in f:
                 f_type = 'UserFilter'
                 matches = re.search(con_regex, f)
                 if matches:
                     line = matches.group(1)            
                     f_val= line.split('=')[1]
+                    return f_val
             elif 'SA' in f:
                 f_type = 'SourceAddrFilter'
                 matches = re.search(con_regex, f)
