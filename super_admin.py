@@ -171,7 +171,7 @@ def get_mtroutes():
                 cids.append(c.id)
             else:
                 print('MT ROUTES RE HTTP CONNECTORS', con, connector )    
-        f_split = route['r_filters'].split() #.split(', ')
+        f_split = route['r_filters'].split('>, <') #.split(', ')
         
         for f in f_split:
             f_type = ''
