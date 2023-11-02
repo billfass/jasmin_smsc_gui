@@ -217,12 +217,15 @@ def new_mtrouter(data):
 
 def get_order():
     try:
-        order = 0
-        for r in mt_routes():
-            order += 1
+        rts = mt_routes()
+        ods = ""
+        for r in rts:
+            ods += r["r_order"]
+            ods += ";"
+        ods = ods[:-1]
     except Exception as e:
         return dict(code=400, message=str(e))
-    return dict(order=order,len=len(mt_routes()))
+    return dict(l=ods.split(";"))
 
 @action('api/groups/get', method=['GET', 'POST'])
 @action.uses(db, session, auth, flash)
