@@ -208,17 +208,17 @@ def filters_manage(usr=None,order=None,rate=None):
         return api_resp(dict(user=usr, order=order, rate=rate), 404, "Invalid parameter")
     
     try:
-        # resp = jasmin.mtrouter(['StaticMTRoute', order, 'smppc(bj_mtn)', usr+';bj;', rate])
-        # if resp:
-        #     return api_resp(dict(user=usr, order=order, rate=rate), 400, resp)
+        resp = jasmin.mtrouter(['StaticMTRoute', str(order), 'smppc(bj_mtn)', usr+';bj;', rate])
+        if resp:
+            return api_resp(dict(user=usr, order=order, rate=rate), 400, resp)
         
-        # order = order + 1
-        # resp = jasmin.mtrouter(['StaticMTRoute', order, 'smppc(bj_moov)', usr+';bj_moov;', rate])
-        # if resp:
-        #     return api_resp(dict(user=usr, order=order, rate=rate), 400, resp)
+        order = order + 1
+        resp = jasmin.mtrouter(['StaticMTRoute', str(order), 'smppc(bj_moov)', usr+';bj_moov;', rate])
+        if resp:
+            return api_resp(dict(user=usr, order=order, rate=rate), 400, resp)
         
-        # order = order + 1
-        resp = jasmin.mtrouter(['StaticMTRoute',str(14+1), 'smppc(bj_moov)', usr+';bj_celtiis;', rate])
+        order = order + 1
+        resp = jasmin.mtrouter(['StaticMTRoute',str(order), 'smppc(bj_moov)', usr+';bj_celtiis;', rate])
         if resp:
             return api_resp(dict(user=usr, order=order, rate=rate), 400, resp)
         
