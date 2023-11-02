@@ -220,7 +220,7 @@ def get_order():
         rts = mt_routes()
         ods = ""
         for r in rts:
-            ods += int(r["r_order"])
+            ods += r["r_order"]
             ods += ";"
         ods = ods[:-1]
     except Exception as e:
