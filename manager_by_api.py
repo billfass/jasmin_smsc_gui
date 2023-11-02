@@ -169,10 +169,7 @@ def get_order():
 
 def bj_mtrouter(data):
     resp = []
-    d = {}
-    d.update(data)
-    resp.append(d)
-    return dict(code=200, data=d, message="Adds mt routers")
+    
     try:
         order = get_order()
         usr = data["usr"]
@@ -293,15 +290,13 @@ def filters_manage(action=None):
 @action.uses(db, session, auth, flash)
 def filters_manage(action=None):
     data = request.POST
-    resp = []
-    d = {}
-    d.update(data)
-    resp.append(d)
-    return resp
+    
     if action == "create":
         ret = bj_mtrouter(data)
+        data = ret["data"]
     elif action == "add":
         ret = new_mtrouter(data)
+        data = dict(data)
     else:
         return api_resp(dict(data), 400, 'Undefined action')
     
@@ -310,7 +305,7 @@ def filters_manage(action=None):
     except Exception as e:
         message=str(e)
     
-    return api_resp(dict(ret["data"]), ret["code"], ret["message"])
+    return api_resp(data, ret["code"], ret["message"])
 
 @action('api/stats/<usr>', method=['GET', 'POST'])
 @action.uses(db, session, auth, flash)
