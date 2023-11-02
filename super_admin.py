@@ -234,7 +234,9 @@ def get_mtroutes():
                 continue 
             
             fid = get_fid(f_type, f_val)
-            return dict(fid=fid)
+            if(f_type=="DestinationAddrFilter"):
+                return dict(fid=fid)
+            
             fids.append(fid)
         return dict(fids)
         # now after all this update the records
