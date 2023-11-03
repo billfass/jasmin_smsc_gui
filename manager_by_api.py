@@ -251,12 +251,15 @@ def groups():
 def user_cred(action=None):
     data = request.POST
 
-    if action == "add":
-        ret = new_user(data)
-    elif action == "refill":
-        ret = refill_user(data)
-    else:
-        return api_resp(dict(data), 400, 'Undefined action')
+    try:
+        if action == "add":
+            ret = new_user(data)
+        elif action == "refill":
+            ret = refill_user(data)
+        else:
+            return api_resp(dict(data), 400, 'Undefined action')
+    except Exception as e:
+        return api_resp(dict(), 400, str(e))
     
     try:
         api_popualate_database()
@@ -270,13 +273,16 @@ def user_cred(action=None):
 def filters_manage(action=None):
     data = request.POST
 
-    if action == "add":
-        ret = new_filter(data)
-    elif action == "update":
-        del_filter(data["fid"])
-        ret = new_filter(data)
-    else:
-        return api_resp(dict(data), 400, 'Undefined action')
+    try:
+        if action == "add":
+            ret = new_filter(data)
+        elif action == "update":
+            del_filter(data["fid"])
+            ret = new_filter(data)
+        else:
+            return api_resp(dict(data), 400, 'Undefined action')
+    except Exception as e:
+        return api_resp(dict(), 400, str(e))
 
     try:
         api_popualate_database()
@@ -290,14 +296,17 @@ def filters_manage(action=None):
 def filters_manage(action=None):
     data = request.POST
     
-    if action == "create":
-        ret = bj_mtrouter(data)
-        data = ret["data"]
-    elif action == "add":
-        ret = new_mtrouter(data)
-        data = dict(data)
-    else:
-        return api_resp(dict(data), 400, 'Undefined action')
+    try:
+        if action == "create":
+            ret = bj_mtrouter(data)
+            data = ret["data"]
+        elif action == "add":
+            ret = new_mtrouter(data)
+            data = dict(data)
+        else:
+            return api_resp(dict(data), 400, 'Undefined action')
+    except Exception as e:
+        return api_resp(dict(), 400, str(e))
     
     try:
         api_popualate_database()
