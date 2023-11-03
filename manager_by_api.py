@@ -259,7 +259,7 @@ def user_cred(action=None):
         else:
             return api_resp(dict(data), 400, 'Undefined action')
     except Exception as e:
-        return api_resp(dict(), 400, str(e))
+        return api_resp(dict(request.POST), 400, str(e))
     
     try:
         api_popualate_database()
@@ -282,7 +282,7 @@ def filters_manage(action=None):
         else:
             return api_resp(dict(data), 400, 'Undefined action')
     except Exception as e:
-        return api_resp(dict(), 400, str(e))
+        return api_resp(dict(request.POST), 400, str(e))
 
     try:
         api_popualate_database()
@@ -306,7 +306,7 @@ def filters_manage(action=None):
         else:
             return api_resp(dict(data), 400, 'Undefined action')
     except Exception as e:
-        return api_resp(dict(), 400, str(e))
+        return api_resp(dict(request.POST), 400, str(e))
     
     try:
         api_popualate_database()
