@@ -191,3 +191,42 @@ unauthenticated = ActionFactory(db, session, T, flash, auth)
 authenticated = ActionFactory(db, session, T, flash, auth.user)
 
 jasmin = Jptelnet()
+
+# #######################################################
+# Define functions
+# #######################################################
+def api_id(request=None):
+    # import uuid
+    # return dict(uuid=uuid.uuid5(uuid.uuid4(), 'Fastermessage'))
+
+    try:
+        if request.headers.get("api-key") == "f308cba7-cfa2-5d2d-9d38-47e50e49f771": #and request.headers.get("Host") == "127.0.0.1:8000":
+            return False
+    except Exception as e:
+        return str(e)
+    
+    return "Unauthorization"
+
+def datetime(date_string=None,date_format=None):
+    from datetime import datetime
+
+    # Obtenir la date et l'heure
+    if not date_string or date_string.lower()=="now":
+        current_datetime = datetime.now()
+    else:
+        # Définir un objet datetime à partir de la chaîne en spécifiant le format
+       current_datetime = datetime.strptime(date_string, date_format)
+    
+    # Formater la date et l'heure au format ISO 8601
+    iso8601_datetime = current_datetime.isoformat()
+    return iso8601_datetime
+
+def api_resp(items=[], code=200, message=''):
+    if code == 200:
+        flash.set(message, "success")
+        status="success"
+    else:
+        flash.set(message, "danger")
+        status="fail"
+
+    return dict(api_version="",timestamp=datetime(),code=code,status=status, items=items, message=message)
