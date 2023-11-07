@@ -12,10 +12,11 @@ def list_mtroutes():
     fil_regex = '.*\<(.*?)\>.*'
 
     routers = []
-    filters = []
+    filters = {}
 
     for f in list_filters():
-        filters.append({})
+        idx = str(f["filter_type"])+str(f["description"])
+        filters[idx] = f["filter_id"]
     
     for route in mt_routes():
         cids = []
@@ -90,15 +91,13 @@ def list_mtroutes():
                 f_type = 'TransparentFilter'
             else:    
                 continue 
-            
-            query = (db.mt_filter.filter_type == f_type)&(db.mt_filter.f_value == f_val)
-            filter = db(query).select().first()
-            fid = filter.filter_route
-            fids.append(fid)
-        
-        mtrouters.append(dict(order=route['r_order'], type=route['r_type'], connectors=cids, filters=fids, rate=route['r_rate']))
 
-    return mtrouters
+            if f_type+f_val in filters:
+                fids.append(filters[f_type+f_val])
+        
+        routers.append(dict(order=route['r_order'], type=route['r_type'], connectors=cids, filters=fids, rate=route['r_rate']))
+
+    return routers
     
 
 def switch(data):
@@ -145,18 +144,9 @@ def groups_manage(action=None):
     
     data = request.POST
 
+    return list_mtroutes()
+
     try:
-        filters = {}
-
-        for f in list_filters():
-            idx = str(f["filter_type"])+str(f["description"])
-            filters[idx] = f["filter_id"]
-
-        if "GroupFiltergrp_8" in filters:
-            return dict(u="in")
-        else:
-            return dict(u="out")
-        
         if action == "create":
             ret = new_mtrouter(data)
             data = ret['data']
