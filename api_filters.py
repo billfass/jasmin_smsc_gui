@@ -27,7 +27,7 @@ def filters_manage(action=None):
     try:
         if action == "create":
             ret = new_filter(data)
-        elif action == "get":
+        elif action == "list":
             return api_resp(list_filters(), 200, "Filters")
         else:
             return api_resp(dict(data), 400, 'Undefined action')

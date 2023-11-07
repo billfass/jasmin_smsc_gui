@@ -32,7 +32,7 @@ def groups_manage(action=None):
     try:
         if action == "create":
             ret = new_group(data)
-        elif action == "get":
+        elif action == "list":
             return api_resp(list_groups(), 200, "Group's user")
         else:
             return api_resp(dict(data), 400, 'Undefined action')

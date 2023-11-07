@@ -55,7 +55,7 @@ def groups_manage(action=None):
             data = ret['data']
         elif action == "switch":
             ret = switch(data)
-        elif action == "get":
+        elif action == "list":
             return api_resp(mt_routes(), 200, "MT Routers")
         else:
             return api_resp(dict(data), 400, 'Undefined action')

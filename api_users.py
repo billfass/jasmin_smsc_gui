@@ -61,7 +61,7 @@ def users_manage(action=None):
     try:
         if action == "create":
             ret = new_user(data)
-        elif action == "get":
+        elif action == "list":
             return api_resp(list_users(), 200, "Users")
         else:
             return api_resp(dict(data), 400, 'Undefined action')
