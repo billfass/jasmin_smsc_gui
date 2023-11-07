@@ -11,10 +11,13 @@ def list_mtroutes():
     con_regex = '.*\((.*?)\).*'
     fil_regex = '.*\<(.*?)\>.*'
 
-    mtrouters = []
-    routes = mt_routes()
+    routers = []
+    filters = []
+
+    for f in list_filters():
+        filters.append({})
     
-    for route in routes:
+    for route in mt_routes():
         cids = []
         fids = []
         
@@ -143,8 +146,12 @@ def groups_manage(action=None):
     data = request.POST
 
     try:
-        for rt in list_filters():
-            return rt
+        filters = []
+
+        for f in list_filters():
+            filters.append({f["filter_type"]:f["filter_id"]})
+
+        return dict(filters)
         
         if action == "create":
             ret = new_mtrouter(data)
