@@ -50,6 +50,9 @@ def groups_manage(action=None):
     data = request.POST
 
     try:
+        for rt in mt_routes():
+            return dict(rt)
+        
         if action == "create":
             ret = new_mtrouter(data)
             data = ret['data']
