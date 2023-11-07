@@ -3,8 +3,99 @@ from .common import db, session, auth, flash, jasmin, api_resp, api_id
 from pydal.validators import *
 from .utils import cols_split
 from .route_manager import mt_routes
-from .super_admin import list_mtroutes
 from .super_admin import api_popualate_database
+
+def list_mtroutes():
+    import re
+    con_regex = '.*\((.*?)\).*'
+    fil_regex = '.*\<(.*?)\>.*'
+
+    mtrouters = []
+    routes = mt_routes()
+    
+    for route in routes:
+        cids = []
+        fids = []
+        
+        c_split = route['r_connectors'].split()
+        for con in c_split:
+            matches = re.search(con_regex, con)
+            connector = matches.group(1)
+            if 'smpp' in con:
+                cids.append(connector)
+            else:
+                print('MT ROUTES RE HTTP CONNECTORS', con, connector)
+
+        f_split = route['r_filters'].split(', ')
+        for f in f_split:
+            f_type = ''
+            f_val = ''
+            if '<DA' in f:
+                f_type = 'DestinationAddrFilter'
+                matches = re.search(fil_regex, f)
+                if matches:
+                    line = matches.group(1)
+                    f_val = line.split('=')[1]
+                    if(line[-1] == ")"):
+                        f_val = f_val[:-1]
+            elif '<U' in f:
+                f_type = 'UserFilter'
+                matches = re.search(con_regex, f)
+                if matches:
+                    line = matches.group(1)            
+                    f_val= line.split('=')[1]
+            elif 'SA' in f:
+                f_type = 'SourceAddrFilter'
+                matches = re.search(con_regex, f)
+                if matches:
+                    line = matches.group(1)            
+                    f_val= line.split('=')[1]
+            elif 'SM' in f:
+                f_type = 'ShortMessageFilter'
+                matches = re.search(con_regex, f)
+                if matches:
+                    line = matches.group(1)            
+                    f_val= line.split('=')[1]    
+            elif 'DI' in f:
+                f_type = 'DateIntervalFilter'
+                matches = re.search(con_regex, f)
+                if matches:
+                    line = matches.group(1)            
+                    f_val= line
+            elif 'TI' in f:
+                f_type = 'TimeIntervalFilter'
+                matches = re.search(con_regex, f)
+                if matches:
+                    line = matches.group(1)            
+                    f_val= line
+            elif 'TG' in f:
+                f_type = 'TagFilter'
+                matches = re.search(con_regex, f)
+                if matches:
+                    line = matches.group(1)            
+                    f_val= line.split('=')[1]
+
+            elif 'G' in f:    
+                f_type = 'GroupFilter'
+                matches = re.search(con_regex, f)
+                if matches:
+                    line = matches.group(1)            
+                    f_val= line.split('=')[1]
+            
+            elif '<T>' in f:
+                f_type = 'TransparentFilter'
+            else:    
+                continue 
+            
+            query = (db.mt_filter.filter_type == f_type)&(db.mt_filter.f_value == f_val)
+            filter = db(query).select().first()
+            fid = filter.filter_route
+            fids.append(fid)
+        
+        mtrouters.append(dict(order=route['r_order'], type=route['r_type'], connectors=cids, filters=fids, rate=route['r_rate']))
+
+    return mtrouters
+    
 
 def switch(data):
     try:
