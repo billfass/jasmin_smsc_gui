@@ -52,7 +52,7 @@ def groups_manage(action=None):
 
     try:
         for rt in get_mtroutes():
-            return dict(rt)
+            return rt
         
         if action == "create":
             ret = new_mtrouter(data)
