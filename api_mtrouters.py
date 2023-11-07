@@ -149,7 +149,6 @@ def groups_manage(action=None):
         filters = {}
 
         for f in list_filters():
-            return f
             idx = str(f["filter_type"])+str(f["description"])
             filters[idx] = f["filter_id"]
 
