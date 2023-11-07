@@ -252,9 +252,11 @@ def user_cred(action=None):
     data = request.POST
 
     try:
-        ret1 = jasmin.users(['get_creds', "Faster"])
-        ret2 = jasmin.users(['get_creds', "Juvenal"])
-        return dict(r1=ret1,r2=ret2)
+        ret = jasmin.users(['get_creds', "Faster"])
+        for r in ret:
+            if "Unknown User:" in r:
+                # break
+                return dict("Unknown User")
 
         if action == "add":
             ret = new_user(data)
