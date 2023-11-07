@@ -3,6 +3,7 @@ from .common import db, session, auth, flash, jasmin, api_resp, api_id
 from pydal.validators import *
 from .utils import cols_split
 from .route_manager import mt_routes
+from .super_admin import get_mtroutes
 from .super_admin import api_popualate_database
 
 def switch(data):
@@ -50,7 +51,7 @@ def groups_manage(action=None):
     data = request.POST
 
     try:
-        for rt in mt_routes():
+        for rt in get_mtroutes():
             return dict(rt)
         
         if action == "create":
