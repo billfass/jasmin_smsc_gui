@@ -250,8 +250,7 @@ def groups():
 @action.uses(db, session, auth, flash)
 def user_cred(action=None):
     data = request.POST
-
-    return dict(d=request.json)
+    return dict(d=data)
     try:
         if action == "add":
             ret = new_user(data)
