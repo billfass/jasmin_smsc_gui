@@ -14,8 +14,7 @@ def new_user(data):
         
         create = True
         for grp in list_groups():
-
-            if grp.gid == data["group"]:
+            if grp["gid"] == data["group"]:
                 create = False
 
         if create:
@@ -60,7 +59,7 @@ def users_manage(action=None):
     data = request.POST
 
     for grp in list_groups():
-        return api_resp(grp.gid, 200, "Users")
+        return api_resp(grp["gid"], 200, "Users")
 
     try:
         if action == "create":
