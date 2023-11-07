@@ -18,9 +18,7 @@ def new_user(data):
                 create = False
 
         if create:
-            d = []
-            d.append({"gid":data["group"]})
-            ret = new_group(d)
+            ret = new_group(dict(gid=data["group"]))
             if not ret["code"] == 200:
                 return ret
 
@@ -36,7 +34,7 @@ def new_user(data):
             return dict(code=400, message=ret)
         
         if not data["balance"] == "ND" and not balance == "ND":
-            ret = refill({"uid":data['uid'], "balance":balance})
+            ret = refill(dict(uid=data["uid"], balance=balance))
             if not ret["code"] == 200:
                 return ret
             
@@ -61,11 +59,6 @@ def users_manage(action=None):
     data = request.POST
 
     try:
-        d = []
-        d.append({"gid":data["group"]})
-        return dict(d)
-
-        
         if action == "create":
             ret = new_user(data)
         elif action == "list":
