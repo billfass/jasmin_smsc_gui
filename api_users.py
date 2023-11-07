@@ -58,9 +58,6 @@ def users_manage(action=None):
     
     data = request.POST
 
-    for grp in list_groups():
-        return api_resp(grp["gid"], 200, "Users")
-
     try:
         if action == "create":
             ret = new_user(data)
