@@ -256,7 +256,9 @@ def user_cred(action=None):
         for r in ret:
             if "Unknown User:" in r:
                 # break
-                return dict("Unknown User")
+                return dict(u="Unknown User")
+            
+        return dict(u=ret)
 
         if action == "add":
             ret = new_user(data)
