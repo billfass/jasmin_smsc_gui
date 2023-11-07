@@ -10,7 +10,8 @@ from .super_admin import api_popualate_database
 
 def new_user(data):
     try:
-        data["balance"]=data["balance"]
+        if not "balance" in data:
+            data["balance"] = None
         
         create = True
         for grp in list_groups():
@@ -41,9 +42,10 @@ def new_user(data):
         if creds == {}:
             new_filter(dict(fid=data['uid'], ftype="UserFilter", fvalue=data['uid']))
         
-        ret = refill(data)
-        if not ret["code"] == 200:
-            return ret
+        if not data["balance"] == None:
+            ret = refill(data)
+            if not ret["code"] == 200:
+                return ret
     except Exception as e:
         return dict(code=403, message=str(e))
     
