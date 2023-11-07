@@ -146,12 +146,13 @@ def groups_manage(action=None):
     data = request.POST
 
     try:
-        filters = []
+        filters = {}
 
         for f in list_filters():
-            filters.append({f["filter_type"]:f["filter_id"]})
+            idx = f["filter_type"]
+            filters[idx] = f["filter_id"]
 
-        return dict(filters)
+        return filters
         
         if action == "create":
             ret = new_mtrouter(data)
