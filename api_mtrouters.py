@@ -3,6 +3,7 @@ from .common import db, session, auth, flash, jasmin, api_resp, api_id
 from pydal.validators import *
 from .utils import cols_split
 from .route_manager import mt_routes
+from .filter_manager import list_filters
 from .super_admin import api_popualate_database
 
 def list_mtroutes():
@@ -142,7 +143,7 @@ def groups_manage(action=None):
     data = request.POST
 
     try:
-        for rt in list_mtroutes():
+        for rt in list_filters():
             return rt
         
         if action == "create":
