@@ -11,14 +11,16 @@ from .super_admin import api_popualate_database
 def new_user(data):
     try:
         data["balance"]=data["balance"]
-
+        
         create = True
         for grp in list_groups():
             if grp.gid == data["group"]:
                 create = False
 
         if create:
-            ret = new_group(dict(gid=data["group"]))
+            d = []
+            d.append({"gid":data["group"]})
+            ret = new_group(d)
             if not ret["code"] == 200:
                 return ret
 
@@ -59,6 +61,11 @@ def users_manage(action=None):
     data = request.POST
 
     try:
+        d = []
+        d.append({"gid":data["group"]})
+        return dict(d)
+
+        
         if action == "create":
             ret = new_user(data)
         elif action == "list":
