@@ -152,7 +152,10 @@ def groups_manage(action=None):
             idx = str(f["filter_type"])+str(f["description"])
             filters[idx] = f["filter_id"]
 
-        return filters
+        if "GroupFiltergrp_8" in filters:
+            return dict(u="in")
+        else:
+            return dict(u="out")
         
         if action == "create":
             ret = new_mtrouter(data)
