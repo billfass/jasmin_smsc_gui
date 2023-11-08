@@ -39,18 +39,18 @@ def new_user(data):
                 return ret
 
         create = True
-        
-        creds = getCreds(data['uid'])
-        if not creds == {}:
+        users = {}
 
-            jasmin.users(['remove_user', data['uid']] )
-            creds['quota_balance'] = "ND"
-        elif creds == {}:
-            creds = getCreds(data['uid'])
-            if not creds == {}:
-                creds['quota_balance'] = "ND"
-                enable_user("!"+data['uid'])
-                create = False
+        for u in list_users():
+            users[u['uid']] = u['uid']
+
+        creds = getCreds(data['uid'])
+
+        if data['uid'] in users:
+            jasmin.users(['remove_user', data['uid']])
+        elif '!'+data['uid'] in users:
+            enable_user("!"+data['uid'])
+            create = False
         
         if create: 
             ret = jasmin.users(['create_user', data['uid'], data['username'], data['password'], data['group']])
@@ -59,6 +59,8 @@ def new_user(data):
         
         if creds == {}:
             new_filter(dict(fid=data['uid'], ftype="UserFilter", fvalue=data['uid']))
+        else:
+            creds['quota_balance'] = "ND"
         
         ret = refill(data, creds)
         if not ret["code"] == 200:
