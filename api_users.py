@@ -75,7 +75,7 @@ def users_manage(action=None):
         return api_resp(dict(), 400, ret)
     
     data = request.POST
-    creds = getCreds("!"+data['uid'])
+    creds = getCreds(data['uid'])
     return creds
     try:
         if action == "create":
