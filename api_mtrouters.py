@@ -228,7 +228,7 @@ def switch(data):
         for route in list_mtroutes():
             vv = iv
             vv['cn'] = array_comp(q_connectors, c_type, route['connectors'])
-            vv['ft'] = array_comp(q_filters, f_type, route['q_filters'])
+            vv['ft'] = array_comp(q_filters, f_type, route['filters'])
             vv['od'] = string_comp(q_order, route['order'])
             vv['tp'] = string_comp(q_type, route['type'])
 
