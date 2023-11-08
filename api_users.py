@@ -2,11 +2,27 @@ from py4web import action, request
 from .common import db, session, auth, flash, jasmin, api_resp, api_id
 from pydal.validators import *
 from .utils import cols_split
-from .user_manager import list_users, list_groups
+from .user_manager import list_users, list_groups, disable_user, enable_user, remove_user
 from .api_groups import new_group
 from .api_refill import getCreds, refill
 from .api_filters import new_filter
 from .super_admin import api_popualate_database
+
+def enable_user_api(data):
+    try:
+        ret = enable_user(data['uid'])
+    except Exception as e:
+        return dict(code=403, message=str(e))
+    
+    return dict(code=200, message=ret)
+
+def disable_user_api(data):
+    try:
+        ret = disable_user('!'+data['uid'])
+    except Exception as e:
+        return dict(code=403, message=str(e))
+    
+    return dict(code=200, message=ret)
 
 def new_user(data):
     try:
@@ -23,16 +39,24 @@ def new_user(data):
             if not ret["code"] == 200:
                 return ret
 
-        creds = getCreds(data['uid'])
         balance = "ND"
+        create = True
         
+        creds = getCreds(data['uid'])
         if not creds == {}:
             balance = creds['quota_balance']
-            jasmin.users(['remove_user', data['uid']])
-
-        ret = jasmin.users(['create_user', data['uid'], data['username'], data['password'], data['group']])
-        if ret:
-            return dict(code=400, message=ret)
+            remove_user(data['uid'])
+        elif creds == {}:
+            creds = getCreds("!"+data['uid'])
+            if not creds == {}:
+                balance = 0
+                enable_user("!"+data['uid'])
+                create = False
+        
+        if create: 
+            ret = jasmin.users(['create_user', data['uid'], data['username'], data['password'], data['group']])
+            if ret:
+                return dict(code=400, message=ret)
         
         if not data["balance"] == "ND" and not balance == "ND":
             ret = refill(dict(uid=data["uid"], balance=balance))
@@ -63,6 +87,10 @@ def users_manage(action=None):
     try:
         if action == "create":
             ret = new_user(data)
+        elif action == "enable":
+            ret = enable_user_api(data)
+        elif action == "disable":
+            ret = disable_user_api(data)
         elif action == "list":
             return api_resp(list_users(), 200, "Users")
         else:
