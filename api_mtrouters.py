@@ -224,7 +224,7 @@ def switch(data):
         if stt['con'] == None and stt['fil'] == None and stt['rat'] == None:
             return dict(code=400, data=data, message="Setting syntaxe error")
         
-        matchs = []
+        matchs = {}
         for route in list_mtroutes():
             vv = iv
             vv['cn'] = array_comp(q_connectors, c_type, route['connectors'])
@@ -232,7 +232,7 @@ def switch(data):
             vv['od'] = string_comp(q_order, route['order'])
             vv['tp'] = string_comp(q_type, route['type'])
 
-            matchs.append(dict(order=route['order'], check=vv))
+            matchs[route['order']] = q_connectors #vv
             
             if vv['cn'] and vv['ft'] and vv['od'] and vv['tp']:
                 setting_route(stt, route)
