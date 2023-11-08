@@ -45,10 +45,10 @@ def new_user(data):
             jasmin.users(['remove_user', data['uid']] )
             creds['quota_balance'] = "ND"
         elif creds == {}:
-            creds = getCreds("!"+data['uid'])
+            creds = getCreds(data['uid'])
             if not creds == {}:
                 creds['quota_balance'] = "ND"
-                enable_user("!"+data['uid'])
+                enable_user(data['uid'])
                 create = False
         
         if create: 
@@ -75,8 +75,7 @@ def users_manage(action=None):
         return api_resp(dict(), 400, ret)
     
     data = request.POST
-    creds = getCreds(data['uid'])
-    return creds
+
     try:
         if action == "create":
             ret = new_user(data)
