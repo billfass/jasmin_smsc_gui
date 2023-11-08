@@ -2,7 +2,7 @@ from py4web import action, request
 from .common import db, session, auth, flash, jasmin, api_resp, api_id
 from pydal.validators import *
 from .utils import cols_split
-from .user_manager import list_users, list_groups, disable_user, enable_user, remove_user
+from .user_manager import list_users, list_groups, disable_user, enable_user
 from .api_groups import new_group
 from .api_refill import getCreds, refill
 from .api_filters import new_filter
@@ -42,7 +42,7 @@ def new_user(data):
         
         creds = getCreds(data['uid'])
         if not creds == {}:
-            remove_user(data['uid'])
+            jasmin.users(['remove_user', data['uid']] )
             creds['quota_balance'] = "ND"
         elif creds == {}:
             creds = getCreds("!"+data['uid'])
