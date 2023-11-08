@@ -99,7 +99,7 @@ def list_mtroutes():
 
     return routers
     
-def array_comp(fi=[], ty=3, dd=[]):
+def array_comp(fi=[], ty=2, dd=[]):
     sy = False
     if fi == []:
         sy = True
@@ -168,12 +168,12 @@ def switch(data):
         iv = dict(cn=False, ft = False, od = False, tp = False)
 
         if not "c_type" in data["query"]:
-            c_type = 3
+            c_type = 2
         else:
             c_type = int(data["c_type"])
 
         if not "f_type" in data["query"]:
-            f_type = 3
+            f_type = 2
         else:
             f_type = int(data["f_type"])
 
@@ -232,7 +232,7 @@ def switch(data):
             vv['od'] = string_comp(q_order, route['order'])
             vv['tp'] = string_comp(q_type, route['type'])
 
-            matchs[route['order']] = q_connectors #vv
+            matchs[route['order']] = vv
             
             if vv['cn'] and vv['ft'] and vv['od'] and vv['tp']:
                 setting_route(stt, route)
