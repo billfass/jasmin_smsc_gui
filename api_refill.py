@@ -26,12 +26,13 @@ def getCreds(user):
 
     return cred
 
-def refill(data):
+def refill(data, cred=None):
     try:
         user = data["uid"]
         balance = data["balance"]
 
-        cred = getCreds(user)
+        if cred == None or cred == {}:
+            cred = getCreds(user)
 
         if cred == {}:
             return dict(code=404, message="User not found")
