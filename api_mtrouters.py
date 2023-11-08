@@ -231,11 +231,12 @@ def switch(data):
             vv['ft'] = array_comp(q_filters, f_type, route['filters'])
             vv['od'] = string_comp(q_order, route['order'])
             vv['tp'] = string_comp(q_type, route['type'])
-
-            matchs[route['order']] = vv
             
             if vv['cn'] and vv['ft'] and vv['od'] and vv['tp']:
                 setting_route(stt, route)
+                matchs[route['order']] = True
+            else:
+                matchs[route['order']] = False
                         
         data['match'] = matchs
     except Exception as e:
