@@ -233,7 +233,7 @@ def switch(data):
             vv['tp'] = string_comp(q_type, route['type'])
 
             if vv['cn'] and vv['ft'] and vv['od'] and vv['tp']:
-                matchs.append(route['order'])
+                matchs.append(dict(order=route['order'], check=vv))
                 setting_route(stt, route)
                         
         data['match'] = matchs
@@ -282,7 +282,7 @@ def groups_manage(action=None):
         elif action == "switch":
             ret = switch(data)
         elif action == "list":
-            return api_resp(mt_routes(), 200, "MT Routers")
+            return api_resp(list_mtroutes(), 200, "MT Routers")
         else:
             return api_resp(dict(data), 400, 'Undefined action')
     except Exception as e:
