@@ -10,7 +10,7 @@ from .super_admin import api_popualate_database
 
 def enable_user_api(data):
     try:
-        ret = enable_user(data['uid'])
+        ret = enable_user('!'+data['uid'])
     except Exception as e:
         return dict(code=403, message=str(e))
     
@@ -18,7 +18,7 @@ def enable_user_api(data):
 
 def disable_user_api(data):
     try:
-        ret = disable_user('!'+data['uid'])
+        ret = disable_user(data['uid'])
     except Exception as e:
         return dict(code=403, message=str(e))
     
@@ -49,7 +49,7 @@ def new_user(data):
             creds = getCreds(data['uid'])
             if not creds == {}:
                 creds['quota_balance'] = "ND"
-                enable_user(data['uid'])
+                enable_user("!"+data['uid'])
                 create = False
         
         if create: 
@@ -77,11 +77,10 @@ def users_manage(action=None):
     
     data = request.POST
 
-    jusr = jasmin.users(["get_creds", data['uid']])
-    return jusr
-
     try:
         if action == "create":
+            jusr = jasmin.users(["get_creds", data['uid']])
+            return jusr
             ret = new_user(data)
         elif action == "enable":
             ret = enable_user_api(data)
