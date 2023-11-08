@@ -232,11 +232,12 @@ def switch(data):
             vv['od'] = string_comp(q_order, route['order'])
             vv['tp'] = string_comp(q_type, route['type'])
 
+            matchs.append(dict(order=route['order'], check=vv))
+            
             if vv['cn'] and vv['ft'] and vv['od'] and vv['tp']:
-                matchs.append(dict(order=route['order'], check=vv))
                 setting_route(stt, route)
                         
-        data['match'] = list_mtroutes()
+        data['match'] = matchs
     except Exception as e:
         return dict(code=400, data=data, message=str(e))
 
