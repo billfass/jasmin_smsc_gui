@@ -81,8 +81,6 @@ def users_manage(action=None):
 
     try:
         if action == "create":
-            jusr = jasmin.users(["get_creds", data['uid']])
-            return jusr
             ret = new_user(data)
         elif action == "enable":
             ret = enable_user_api(data)
