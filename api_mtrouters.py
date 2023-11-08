@@ -99,17 +99,148 @@ def list_mtroutes():
 
     return routers
     
+def array_comp(fi=[], ty=3, dd=[]):
+    sy = False
+    if fi == []:
+        sy = True
+
+    if ty==0:
+        for f in fi:
+            if f in dd:
+                sy = True
+                break
+    
+    elif ty==1 or ty == 2:
+        l = 0
+        for f in fi:
+            if f in dd:
+                l += 1
+        
+        if ty == 2 and l == len(fi) and l == len(dd):
+            sy = True
+        elif ty==1 and l == len(fi):
+            sy = True
+        
+    return sy
+
+def string_comp(fi=None, dd=''):
+    if fi == None:
+        return True
+
+    if str(fi) == dd:
+        return True
+    
+    return False
+
+def setting_route(setting=None, route=None):
+    if setting['con'] == None:
+        setting['con'] = route['connectors']
+
+    if setting['fil'] == None:
+        setting['fil'] = route['filters']
+
+    if setting['rat'] == None:
+        setting['rat'] = route['rate']
+
+    order = route['order']
+    type = route['type']
+    rate = str(setting['rat'])
+
+    cons = ''
+    for c in setting['con']:
+        if not cons == '':
+            cons += ';'
+        cons = 'smppc('+c+')'
+
+    filters = ''
+    for f in setting['fil']:
+        filters += f+';'
+
+    if not order == '' and not type == '' and not rate == '' and not cons == '' and not filters == '':
+        try:
+            jasmin.mtrouter(['remove', order])
+            new_mtrouter(dict(type=type, order=order, rate=rate, connector=cons, filters=filters))
+        except Exception as e:
+            message=str(e)
 
 def switch(data):
     try:
-        cnt = False
-        for rt in mt_routes():
-            if "connector" in data["query"] and rt :
-                cnt = True
-    except Exception as e:
-        return str(e)
+        iv = dict(cn=False, ft = False, od = False, tp = False)
 
-    return ""
+        if not "c_type" in data["query"]:
+            c_type = 3
+        else:
+            c_type = int(data["c_type"])
+
+        if not "f_type" in data["query"]:
+            f_type = 3
+        else:
+            f_type = int(data["f_type"])
+
+        if "connectors" in data["query"]:
+            q_connectors = data["query"]["connectors"]
+        else:
+            q_connectors = []
+            iv['cn'] = True
+
+        if "filters" in data["query"]:
+            q_filters = data["query"]["filters"]
+        else:
+            q_filters = []
+            iv['ft'] = True
+
+        if "order" in data["query"]:
+            q_order = data["query"]["order"]
+        else:
+            q_order = None
+            iv['od'] = True
+
+        if "type" in data["query"]:
+            q_type = data["query"]["type"]
+        else:
+            q_type = None
+            iv['tp'] = True
+
+        if iv['cn'] and iv['ft'] and iv['od']:
+            return dict(code=400, data=data, message="Query syntaxe error")
+        
+        stt = dict()
+
+        if "connectors" in data["set"]:
+            stt['con'] = data["set"]["connectors"]
+        else:
+            stt['con'] = None
+
+        if "filters" in data["set"]:
+            stt['fil'] = data["set"]["filters"]
+        else:
+            stt['fil'] = None
+
+        if "rate" in data["set"]:
+            stt['rat'] = data["set"]["rate"]
+        else:
+            stt['rat'] = None
+
+        if stt['con'] == None and stt['fil'] == None and stt['rat'] == None:
+            return dict(code=400, data=data, message="Setting syntaxe error")
+        
+        matchs = []
+        for route in list_mtroutes():
+            vv = iv
+            vv['cn'] = array_comp(q_connectors, c_type, route['connectors'])
+            vv['ft'] = array_comp(q_filters, f_type, route['q_filters'])
+            vv['od'] = string_comp(q_order, route['order'])
+            vv['tp'] = string_comp(q_type, route['type'])
+
+            if vv['cn'] and vv['ft'] and vv['od'] and vv['tp']:
+                matchs.append(route['order'])
+                setting_route(stt, route)
+                        
+        data['match'] = matchs
+    except Exception as e:
+        return dict(code=400, data=data, message=str(e))
+
+    return dict(code=200, data=data, message="Successfull switched")
 
 def get_order():
     order = 0
@@ -143,8 +274,6 @@ def groups_manage(action=None):
         return api_resp(dict(), 400, ret)
     
     data = request.POST
-
-    return list_mtroutes()
 
     try:
         if action == "create":
