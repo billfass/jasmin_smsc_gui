@@ -37,10 +37,11 @@ def refill(data, cred=None):
         if cred == {}:
             return dict(code=404, message="User not found")
 
-        if not balance == "ND" and not cred["quota_balance"] == "ND":
-            cred["quota_balance"] = float(cred["quota_balance"]) + float(balance)
-        else:
-            cred["quota_balance"] = balance
+        if not balance == None:
+            if not balance == "ND" and not cred["quota_balance"] == "ND":
+                cred["quota_balance"] = float(cred["quota_balance"]) + float(balance)
+            else:
+                cred["quota_balance"] = balance
 
         cred["quota_balance"] = str(cred["quota_balance"])
             
