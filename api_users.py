@@ -26,8 +26,7 @@ def disable_user_api(data):
 
 def new_user(data):
     try:
-        if not "balance" in data:
-            data["balance"] = None
+        data["balance"] = data["balance"]
         
         create = True
         for grp in list_groups():
@@ -44,11 +43,11 @@ def new_user(data):
         creds = getCreds(data['uid'])
         if not creds == {}:
             remove_user(data['uid'])
+            creds['quota_balance'] = "ND"
         elif creds == {}:
             creds = getCreds("!"+data['uid'])
             if not creds == {}:
-                if not creds['quota_balance'] == "ND":
-                    creds['quota_balance'] = 0
+                creds['quota_balance'] = "ND"
                 enable_user("!"+data['uid'])
                 create = False
         
