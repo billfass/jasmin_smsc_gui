@@ -44,12 +44,12 @@ def new_user(data):
         
         creds = getCreds(data['uid'])
         if not creds == {}:
-            balance = creds['quota_balance']
             remove_user(data['uid'])
         elif creds == {}:
             creds = getCreds("!"+data['uid'])
             if not creds == {}:
-                balance = 0
+                if not creds['quota_balance'] == "ND":
+                    creds['quota_balance']= 0
                 enable_user("!"+data['uid'])
                 create = False
         
@@ -58,18 +58,15 @@ def new_user(data):
             if ret:
                 return dict(code=400, message=ret)
         
-        if not data["balance"] == "ND" and not balance == "ND":
-            ret = refill(dict(uid=data["uid"], balance=balance))
-            if not ret["code"] == 200:
-                return ret
-            
         if creds == {}:
             new_filter(dict(fid=data['uid'], ftype="UserFilter", fvalue=data['uid']))
-        
-        if not data["balance"] == None:
             ret = refill(data)
             if not ret["code"] == 200:
                 return ret
+        
+        ret = refill(data, creds)
+        if not ret["code"] == 200:
+            return ret
     except Exception as e:
         return dict(code=403, message=str(e))
     
