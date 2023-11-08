@@ -236,7 +236,7 @@ def switch(data):
                 matchs.append(dict(order=route['order'], check=vv))
                 setting_route(stt, route)
                         
-        data['match'] = matchs
+        data['match'] = list_mtroutes()
     except Exception as e:
         return dict(code=400, data=data, message=str(e))
 
