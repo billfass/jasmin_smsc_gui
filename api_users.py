@@ -39,7 +39,6 @@ def new_user(data):
             if not ret["code"] == 200:
                 return ret
 
-        balance = "ND"
         create = True
         
         creds = getCreds(data['uid'])
@@ -49,7 +48,7 @@ def new_user(data):
             creds = getCreds("!"+data['uid'])
             if not creds == {}:
                 if not creds['quota_balance'] == "ND":
-                    creds['quota_balance']= 0
+                    creds['quota_balance'] = 0
                 enable_user("!"+data['uid'])
                 create = False
         
@@ -60,9 +59,6 @@ def new_user(data):
         
         if creds == {}:
             new_filter(dict(fid=data['uid'], ftype="UserFilter", fvalue=data['uid']))
-            ret = refill(data)
-            if not ret["code"] == 200:
-                return ret
         
         ret = refill(data, creds)
         if not ret["code"] == 200:
