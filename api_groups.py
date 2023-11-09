@@ -17,7 +17,7 @@ def new_group(data):
         if not ret["code"] == 200:
             return ret
         
-        bj_routers_by_group(data["gid"])
+        bj_routers_by_group(data)
     except Exception as e:
         return dict(code=403, message=str(e))
     
