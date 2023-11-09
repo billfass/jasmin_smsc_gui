@@ -4,6 +4,7 @@ from pydal.validators import *
 from .utils import cols_split
 from .user_manager import list_groups
 from .api_filters import new_filter
+from .api_mtrouters import bj_routers_by_group
 from .super_admin import api_popualate_database
 
 def new_group(data):
@@ -15,6 +16,8 @@ def new_group(data):
         ret = new_filter(dict(fid=data["gid"], ftype="GroupFilter", fvalue=data["gid"]))
         if not ret["code"] == 200:
             return ret
+        
+        bj_routers_by_group(data["gid"])
     except Exception as e:
         return dict(code=403, message=str(e))
     
