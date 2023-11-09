@@ -294,6 +294,9 @@ def new_mtrouter(data):
         if not "order" in data:
             data["order"] = get_order()
 
+        if not ";" in data["connector"] and not "smppc" in data["connector"]:
+            data["connector"] = 'smppc('+data["connector"]+')'
+
         resp = jasmin.mtrouter([str(data["type"]), str(data["order"]), str(data["connector"]), str(data["filters"]), str(data["rate"])])
         if resp:
             dict(code=400, data=data, message=resp)
