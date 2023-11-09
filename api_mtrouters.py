@@ -259,7 +259,9 @@ def switch(data):
             return dict(code=400, data=data, message="Rate error")
         
         matchs = {}
-        for route in list_mtroutes():
+        l_mtrouters = list_mtroutes()
+        for r in l_mtrouters:
+            route = r
             vv = iv
             vv['cn'] = array_comp(q_connectors, c_type, route['connectors'])
             vv['ft'] = array_comp(q_filters, f_type, route['filters'])
