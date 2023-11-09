@@ -299,49 +299,43 @@ def new_mtrouter(data):
 
         resp = jasmin.mtrouter([str(data["type"]), str(data["order"]), str(data["connector"]), str(data["filters"]), str(data["rate"])])
         if resp:
-            dict(code=400, data=data, message=resp)
+            return dict(code=400, data=data, message=resp)
     except Exception as e:
-        dict(code=400, data=data, message=str(e))
+        return dict(code=400, data=data, message=str(e))
     
     return dict(code=200, data=data, message='Added mtrouter')
 
-def bj_routers_by_group(group):
-    resp = []
-    
+def bj_routers_by_group(data):    
     try:
         order = get_order()
         type = "StaticMTRoute"
 
-        data = dict(type=type, order=order, connector='bj_mtn', filters=group+';bj;', network='616-03')
-        ret = new_mtrouter(data)
+        d = dict(type=type, order=order, connector='bj_mtn', filters=data['group']+';bj;', rate=data['rate'])
+        ret = new_mtrouter(d)
         if ret["code"] != 200:
             return ret
 
-        resp.append(data)
+        #################################
+
+        order += 1
+
+        d = dict(type=type, order=order, connector='bj_moov', filters=data['group']+';bj_moov;', rate=data['rate'])
+        ret = new_mtrouter(d)
+        if ret["code"] != 200:
+            return ret
 
         #################################
         order += 1
 
-        data = dict(type=type, order=order, connector='bj_moov', filters=group+';bj_moov;', network='616-02')
-        ret = new_mtrouter(data)
+        d = dict(type=type, order=order, connector='bj_moov', filters=data['group']+';bj_celtiis;', rate=data['rate'])
+        ret = new_mtrouter(d)
         if ret["code"] != 200:
             return ret
-
-        resp.append(data)
-
-        #################################
-        order += 1
-
-        data = dict(type=type, order=order, connector='bj_moov', filters=group+';bj_celtiis;', network='616-07')
-        ret = new_mtrouter(data)
-        if ret["code"] != 200:
-            return ret
-
-        resp.append(data)
+        
     except Exception as e:
-        return dict(code=400, data=resp, message=str(e))
+        return dict(code=400, message=str(e))
     
-    return dict(code=200, data=resp, message="Adds mt routers")
+    return dict(code=200, message="Adds mt routers")
 
 @action('api/mtrouters/<action>', method=['GET', 'POST'])
 @action.uses(db, session, auth, flash)
@@ -359,7 +353,7 @@ def groups_manage(action=None):
         elif action == "switch":
             ret = switch(data)
         elif action == "group":
-            return bj_routers_by_group(data["group"])
+            ret = bj_routers_by_group(data)
         elif action == "list":
             return api_resp(list_mtroutes(), 200, "MT Routers")
         else:
