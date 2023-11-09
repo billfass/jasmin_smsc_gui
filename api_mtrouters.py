@@ -305,6 +305,38 @@ def new_mtrouter(data):
     
     return dict(code=200, data=data, message='Added mtrouter')
 
+def bj_routers_by_group(group):
+    resp = []
+    
+    try:
+        order = get_order()
+        type = "StaticMTRoute"
+
+        data = dict(type=type, order=order, connector='smppc(bj_mtn)', filters=group+';bj;', network='616-03')
+        new_mtrouter(data)
+
+        resp.append(dict(data))
+
+        #################################
+        order += 1
+
+        data = dict(type=type, order=order, connector='smppc(bj_moov)', filters=group+';bj_moov;', network='616-02')
+        new_mtrouter(data)
+
+        resp.append(dict(data))
+
+        #################################
+        order += 1
+
+        data = dict(type=type, order=order, connector='smppc(bj_moov)', filters=group+';bj_celtiis;', network='616-07')
+        new_mtrouter(data)
+
+        resp.append(dict(data))
+    except Exception as e:
+        return dict(code=400, data=resp, message=str(e))
+    
+    return dict(code=200, data=resp, message="Adds mt routers")
+
 @action('api/mtrouters/<action>', method=['GET', 'POST'])
 @action.uses(db, session, auth, flash)
 def groups_manage(action=None):
