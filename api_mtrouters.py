@@ -312,32 +312,32 @@ def bj_routers_by_group(group):
         order = get_order()
         type = "StaticMTRoute"
 
-        data = dict(type=type, order=order, connector='smppc(bj_mtn)', filters=group+';bj;', network='616-03')
+        data = dict(type=type, order=order, connector='bj_mtn', filters=group+';bj;', network='616-03')
         ret = new_mtrouter(data)
         if ret["code"] != 200:
             return ret
 
-        resp.append(dict(data))
+        resp.append(data)
 
         #################################
         order += 1
 
-        data = dict(type=type, order=order, connector='smppc(bj_moov)', filters=group+';bj_moov;', network='616-02')
+        data = dict(type=type, order=order, connector='bj_moov', filters=group+';bj_moov;', network='616-02')
         ret = new_mtrouter(data)
         if ret["code"] != 200:
             return ret
 
-        resp.append(dict(data))
+        resp.append(data)
 
         #################################
         order += 1
 
-        data = dict(type=type, order=order, connector='smppc(bj_moov)', filters=group+';bj_celtiis;', network='616-07')
+        data = dict(type=type, order=order, connector='bj_moov', filters=group+';bj_celtiis;', network='616-07')
         ret = new_mtrouter(data)
         if ret["code"] != 200:
             return ret
 
-        resp.append(dict(data))
+        resp.append(data)
     except Exception as e:
         return dict(code=400, data=resp, message=str(e))
     
@@ -359,8 +359,7 @@ def groups_manage(action=None):
         elif action == "switch":
             ret = switch(data)
         elif action == "group":
-            ret = bj_routers_by_group(data["group"])
-            data = ret['data']
+            return bj_routers_by_group(data["group"])
         elif action == "list":
             return api_resp(list_mtroutes(), 200, "MT Routers")
         else:
