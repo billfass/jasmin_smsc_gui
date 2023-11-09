@@ -131,39 +131,7 @@ def string_comp(fi=None, dd=''):
     if str(fi) == dd:
         return True
     
-    return False
-
-def setting_route(s=None, r=None):
-    if s['con'] == None:
-        s['con'] = r['connectors']
-
-    if s['fil'] == None:
-        s['fil'] = r['filters']
-
-    if s['rat'] == None:
-        s['rat'] = r['rate']
-
-    order = r['order']
-    type = r['type']
-    rate = str(s['rat'])
-
-    cons = ''
-    for c in s['con']:
-        if not cons == '':
-            cons += ';'
-        cons = 'smppc('+c+')'
-
-    filters = ''
-    for f in s['fil']:
-        filters += f+';'
-
-    if not order == '' and not type == '' and not rate == '' and not cons == '' and not filters == '':
-        try:
-            print(filters)
-            jasmin.mtrouter(['remove', order])
-            new_mtrouter(dict(type=type, order=order, rate=rate, connector=cons, filters=filters))
-        except Exception as e:
-            message=str(e)
+    return False    
 
 def check_cons(cons=[], lcons=[]):
     isTrue = 0
@@ -263,14 +231,44 @@ def switch(data):
         l_mtrouters = list_mtroutes()
         for route in l_mtrouters:
             vv = iv
-            ss = stt
             vv['cn'] = array_comp(q_connectors, c_type, route['connectors'])
             vv['ft'] = array_comp(q_filters, f_type, route['filters'])
             vv['od'] = string_comp(q_order, route['order'])
             vv['tp'] = string_comp(q_type, route['type'])
             
             if vv['cn'] and vv['ft'] and vv['od'] and vv['tp']:
-                setting_route(ss, route)
+                ss = {}
+
+                if stt['con'] == None:
+                    ss['con'] = route['connectors']
+                else:
+                    ss['con'] = stt['con']
+
+                if stt['fil'] == None:
+                    ss['fil'] = route['filters']
+                else:
+                    ss['fil'] = stt['fil']
+
+                if stt['rat'] == None:
+                    ss['rat'] = route['rate']
+                else:
+                    ss['rat'] = str(stt['rat'])
+
+                cons = ''
+                for c in ss['con']:
+                    if not cons == '':
+                        cons += ';'
+                    cons = 'smppc('+c+')'
+
+                filters = ''
+                for f in ss['fil']:
+                    filters += f+';'
+
+                if ss['rat'] == '' or cons == '' or filters == '':
+                    return dict(code=404, data=data, message="Data not found")
+                
+                jasmin.mtrouter(['remove', route['order']])
+                new_mtrouter(dict(type=route['type'], order=route['order'], rate=ss['rat'], connector=cons, filters=filters))
                 matchs[route['order']] = True
             else:
                 matchs[route['order']] = False
