@@ -268,7 +268,7 @@ def switch(data):
             
             if vv['cn'] and vv['ft'] and vv['od'] and vv['tp']:
                 setting_route(stt, route)
-                matchs[route['order']] = True
+                matchs[route['order']] = route #True
             else:
                 matchs[route['order']] = False
                         
