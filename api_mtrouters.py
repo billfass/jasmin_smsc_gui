@@ -159,6 +159,7 @@ def setting_route(s=None, r=None):
 
     if not order == '' and not type == '' and not rate == '' and not cons == '' and not filters == '':
         try:
+            print(filters)
             jasmin.mtrouter(['remove', order])
             new_mtrouter(dict(type=type, order=order, rate=rate, connector=cons, filters=filters))
         except Exception as e:
@@ -262,14 +263,15 @@ def switch(data):
         l_mtrouters = list_mtroutes()
         for route in l_mtrouters:
             vv = iv
+            ss = stt
             vv['cn'] = array_comp(q_connectors, c_type, route['connectors'])
             vv['ft'] = array_comp(q_filters, f_type, route['filters'])
             vv['od'] = string_comp(q_order, route['order'])
             vv['tp'] = string_comp(q_type, route['type'])
             
             if vv['cn'] and vv['ft'] and vv['od'] and vv['tp']:
-                setting_route(stt, route)
-                matchs[route['order']] = route #True
+                setting_route(ss, route)
+                matchs[route['order']] = True
             else:
                 matchs[route['order']] = False
                         
