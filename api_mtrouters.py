@@ -313,7 +313,9 @@ def bj_routers_by_group(group):
         type = "StaticMTRoute"
 
         data = dict(type=type, order=order, connector='smppc(bj_mtn)', filters=group+';bj;', network='616-03')
-        new_mtrouter(data)
+        ret = new_mtrouter(data)
+        if ret["code"] != 200:
+            return ret
 
         resp.append(dict(data))
 
@@ -321,7 +323,9 @@ def bj_routers_by_group(group):
         order += 1
 
         data = dict(type=type, order=order, connector='smppc(bj_moov)', filters=group+';bj_moov;', network='616-02')
-        new_mtrouter(data)
+        ret = new_mtrouter(data)
+        if ret["code"] != 200:
+            return ret
 
         resp.append(dict(data))
 
@@ -329,7 +333,9 @@ def bj_routers_by_group(group):
         order += 1
 
         data = dict(type=type, order=order, connector='smppc(bj_moov)', filters=group+';bj_celtiis;', network='616-07')
-        new_mtrouter(data)
+        ret = new_mtrouter(data)
+        if ret["code"] != 200:
+            return ret
 
         resp.append(dict(data))
     except Exception as e:
