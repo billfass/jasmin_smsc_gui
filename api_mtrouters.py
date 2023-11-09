@@ -164,8 +164,29 @@ def setting_route(setting=None, route=None):
         except Exception as e:
             message=str(e)
 
-def check_cons(cons):
-    lcons = list_smpp_connectors()
+def check_cons(cons=[], lcons=[]):
+    isTrue = 0
+    for c in cons:
+        for l in lcons:
+            if l['cid'] == c:
+                isTrue += 1
+
+    if isTrue == len(cons) and isTrue > 0:
+        return True
+    
+    return False
+
+def check_filt(filt=[], lfilt=[]):
+    isTrue = 0
+    for f in filt:
+        for l in lfilt:
+            if l['cid'] == f:
+                isTrue += 1
+
+    if isTrue == len(filt) and isTrue > 0:
+        return True
+    
+    return False
 
 def switch(data):
     try:
@@ -206,7 +227,7 @@ def switch(data):
             iv['tp'] = True
 
         if iv['cn'] and iv['ft'] and iv['od']:
-            return dict(code=400, data=data, message="Query syntaxe error")
+            return dict(code=400, data=data, message="Query syntax error")
         
         stt = dict()
 
@@ -226,9 +247,16 @@ def switch(data):
             stt['rat'] = None
 
         if stt['con'] == None and stt['fil'] == None and stt['rat'] == None:
-            return dict(code=400, data=data, message="Setting syntaxe error")
+            return dict(code=400, data=data, message="Set syntax error")
         
-
+        if not stt['con'] is None and not check_cons(stt['con'], list_smpp_connectors()):
+            return dict(code=400, data=data, message="Rejected connector")
+        
+        if not stt['fil'] is None and not check_filt(stt['fil'], list_filters()):
+            return dict(code=400, data=data, message="Rejected filter")
+        
+        if not stt['rat'] is None and not float(stt['rat']) > 0:
+            return dict(code=400, data=data, message="Rate error")
         
         matchs = {}
         for route in list_mtroutes():
@@ -284,7 +312,7 @@ def groups_manage(action=None):
     data = request.POST
 
     try:
-        return list_smpp_connectors()
+        return list_filters()
         if action == "create":
             ret = new_mtrouter(data)
             data = ret['data']
