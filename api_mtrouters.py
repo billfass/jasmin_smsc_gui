@@ -288,7 +288,7 @@ def get_order():
             ods.append(int(r["r_order"]))
         order = max(ods)+1
     except Exception as e:
-        return 0
+        return 1
     return order
 
 def new_mtrouter(data):
