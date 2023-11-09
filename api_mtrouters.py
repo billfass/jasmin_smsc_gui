@@ -195,12 +195,12 @@ def switch(data):
         if not "c_type" in data["query"]:
             c_type = 2
         else:
-            c_type = int(data["c_type"])
+            c_type = int(data["query"]["c_type"])
 
         if not "f_type" in data["query"]:
             f_type = 2
         else:
-            f_type = int(data["f_type"])
+            f_type = int(data["query"]["f_type"])
 
         if "connectors" in data["query"]:
             q_connectors = data["query"]["connectors"]
