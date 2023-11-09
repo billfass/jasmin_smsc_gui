@@ -4,6 +4,7 @@ from pydal.validators import *
 from .utils import cols_split
 from .route_manager import mt_routes
 from .filter_manager import list_filters
+from .connector_manager import list_smpp_connectors
 from .super_admin import api_popualate_database
 
 def list_mtroutes():
@@ -163,6 +164,9 @@ def setting_route(setting=None, route=None):
         except Exception as e:
             message=str(e)
 
+def check_cons(cons):
+    lcons = list_smpp_connectors()
+
 def switch(data):
     try:
         iv = dict(cn=False, ft = False, od = False, tp = False)
@@ -224,6 +228,8 @@ def switch(data):
         if stt['con'] == None and stt['fil'] == None and stt['rat'] == None:
             return dict(code=400, data=data, message="Setting syntaxe error")
         
+
+        
         matchs = {}
         for route in list_mtroutes():
             vv = iv
@@ -278,6 +284,7 @@ def groups_manage(action=None):
     data = request.POST
 
     try:
+        return list_smpp_connectors()
         if action == "create":
             ret = new_mtrouter(data)
             data = ret['data']
