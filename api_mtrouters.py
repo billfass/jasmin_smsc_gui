@@ -180,7 +180,7 @@ def check_filt(filt=[], lfilt=[]):
     isTrue = 0
     for f in filt:
         for l in lfilt:
-            if l['cid'] == f:
+            if l['filter_id'] == f:
                 isTrue += 1
 
     if isTrue == len(filt) and isTrue > 0:
@@ -312,7 +312,6 @@ def groups_manage(action=None):
     data = request.POST
 
     try:
-        return list_filters()
         if action == "create":
             ret = new_mtrouter(data)
             data = ret['data']
