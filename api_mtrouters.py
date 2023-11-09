@@ -310,7 +310,7 @@ def bj_routers_by_group(data):
         order = get_order()
         type = "StaticMTRoute"
 
-        d = dict(type=type, order=order, connector='bj_mtn', filters=data['group']+';bj;', rate=data['rate'])
+        d = dict(type=type, order=order, connector='bj_mtn', filters=data['gid']+';bj;', rate=data['rate'])
         ret = new_mtrouter(d)
         if ret["code"] != 200:
             return ret
@@ -319,7 +319,7 @@ def bj_routers_by_group(data):
 
         order += 1
 
-        d = dict(type=type, order=order, connector='bj_moov', filters=data['group']+';bj_moov;', rate=data['rate'])
+        d = dict(type=type, order=order, connector='bj_moov', filters=data['gid']+';bj_moov;', rate=data['rate'])
         ret = new_mtrouter(d)
         if ret["code"] != 200:
             return ret
@@ -327,7 +327,7 @@ def bj_routers_by_group(data):
         #################################
         order += 1
 
-        d = dict(type=type, order=order, connector='bj_moov', filters=data['group']+';bj_celtiis;', rate=data['rate'])
+        d = dict(type=type, order=order, connector='bj_moov', filters=data['gid']+';bj_celtiis;', rate=data['rate'])
         ret = new_mtrouter(d)
         if ret["code"] != 200:
             return ret
