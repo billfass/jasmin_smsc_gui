@@ -47,9 +47,11 @@ def new_user(data):
         creds = getCreds(data['uid'])
         
         if not creds == {}:
-            ret = jasmin.users(['create_user', data['uid'], data['username'], data['password'], data['group']])
-            if ret:
-                return dict(code=400, message=ret)
+            return dict(code=400, message="User already exists")
+
+        ret = jasmin.users(['create_user', data['uid'], data['username'], data['password'], data['group']])
+        if ret:
+            return dict(code=400, message=ret)
         
         new_filter(dict(fid=data['uid'], ftype="UserFilter", fvalue=data['uid']))
         
