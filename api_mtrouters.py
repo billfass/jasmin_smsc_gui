@@ -352,6 +352,8 @@ def groups_manage(action=None):
             data = ret['data']
         elif action == "switch":
             ret = switch(data)
+        elif action == "group":
+            ret = bj_routers_by_group(data["group"])
         elif action == "list":
             return api_resp(list_mtroutes(), 200, "MT Routers")
         else:
