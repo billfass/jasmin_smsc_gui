@@ -250,10 +250,10 @@ def switch(data):
             return dict(code=400, data=data, message="Set syntax error")
         
         if not stt['con'] is None and not check_cons(stt['con'], list_smpp_connectors()):
-            return dict(code=400, data=data, message="Rejected connector")
+            return dict(code=404, data=data, message="Rejected connector")
         
         if not stt['fil'] is None and not check_filt(stt['fil'], list_filters()):
-            return dict(code=400, data=data, message="Rejected filter")
+            return dict(code=404, data=data, message="Rejected filter")
         
         if not stt['rat'] is None and not float(stt['rat']) > 0:
             return dict(code=400, data=data, message="Rate error")
