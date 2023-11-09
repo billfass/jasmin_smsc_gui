@@ -34,7 +34,7 @@ def new_user(data):
                 create = False
 
         if create:
-            ret = new_group(dict(gid=data["group"]))
+            ret = new_group(dict(gid=data["group"], rate=data["rate"]))
             if not ret["code"] == 200:
                 return ret
 
