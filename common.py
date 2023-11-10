@@ -196,15 +196,15 @@ jasmin = Jptelnet()
 # Define functions
 # #######################################################
 def api_id(request=None):
-    # import base64
+    import base64, uuid
     
-    # return dict(uuid=uuid.uuid5(uuid.uuid4(), 'Fastermessage'))
+    myUUID = dict(uuid=uuid.uuid5(uuid.uuid4(), 'Fastermessage'))
 
-    # uuid = "f308cba7-cfa2-5d2d-9d38-47e50e49f771:Fastermessage"
-    # ma_key = base64.b64encode(uuid.encode('utf-8')).decode('utf-8')
+    myString = myUUID+":Fastermessage"
+    ma_key = base64.b64encode(myString.encode('utf-8')).decode('utf-8')
 
     try:
-        if request.headers.get("api-key") == "ZjMwOGNiYTctY2ZhMi01ZDJkLTlkMzgtNDdlNTBlNDlmNzcxOkZhc3Rlcm1lc3NhZ2U=": #and request.headers.get("Host") == "127.0.0.1:8000":
+        if request.headers.get("Authorization") == "Basic "+ma_key: #and request.headers.get("Host") == "127.0.0.1:8000":
             return False
     except Exception as e:
         return str(e)
