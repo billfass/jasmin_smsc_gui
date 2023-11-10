@@ -295,6 +295,9 @@ def new_mtrouter(data):
         if not "order" in data:
             data["order"] = get_order()
 
+        if not "type" in data:
+            data["type"] = "StaticMTRoute"
+
         if not ";" in data["connector"] and not "smppc" in data["connector"]:
             data["connector"] = 'smppc('+data["connector"]+')'
 
