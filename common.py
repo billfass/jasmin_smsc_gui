@@ -200,8 +200,8 @@ def api_id(request=None):
     
     myUUID = uuid.uuid5(uuid.uuid4(), 'Fastermessage').bytes.decode('utf-8')
 
-    myString = myUUID+":Fastermessage"
-    ma_key = base64.b64encode(myString.encode('utf-8')).decode('utf-8')
+    # myString = myUUID+":Fastermessage"
+    # ma_key = base64.b64encode(myString.encode('utf-8')).decode('utf-8')
 
     # try:
     #     if request.headers.get("Authorization") == "Basic "+ma_key: #and request.headers.get("Host") == "127.0.0.1:8000":
