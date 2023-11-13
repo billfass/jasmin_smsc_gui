@@ -196,6 +196,7 @@ jasmin = Jptelnet()
 # Define functions
 # #######################################################
 def api_id(request=None):
+    return False
     import base64, uuid
     
     myUUID = dict(uuid=uuid.uuid5(uuid.uuid4(), 'Fastermessage'))
