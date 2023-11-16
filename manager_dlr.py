@@ -83,7 +83,7 @@ def dlr(sec="web", id=None):
         r = requests.post("https://fastermessage.com/app/sms/batch/dlr/"+data['level']+"/"+data["id"], data=dict(data), headers={})
     else:
         r = requests.post("https://api.fastermessage.com/v2/sms/batch/dlr/"+data['level']+"/"+data["id"], data=dict(data), headers={})
-    return dict(c=r.status_code)
+    return dict(c=r.status_code, b=r.content)
     log(sec, data["level"], data["id"], r.status_code)
     
     if r.status_code == 200:
