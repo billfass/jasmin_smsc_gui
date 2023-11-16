@@ -64,6 +64,7 @@ def dlr(sec="web", id=None):
         data['id'] = data['id']
         data['level'] = data['level']
         data['message_status'] = data['message_status']
+        return dict(data)
         callback = None
         while not callback and cpt < 5:
             cpt += 1
@@ -84,7 +85,7 @@ def dlr(sec="web", id=None):
         r = requests.post("https://api.fastermessage.com/v2/sms/batch/dlr/"+data['level']+"/"+data["id"], data=dict(data), headers={})
 
     log(sec, data["level"], data["id"], r.status_code)
-    return dict(r)
+    
     if r.status_code == 200:
         return 'ACK/Jasmin'
     elif r.status_code == 202:
