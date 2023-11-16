@@ -106,11 +106,16 @@ def dlr(sec="web", id=None):
 def send():
     phs = ["22967754089","22994551975","22966851608","22951578457","22964082731"]
 
-    for p in phs:
-        r = requests.get("https://api.fastermessage.com/v2/sms/send?x-api-key=08df092126a78b7382036efe152888507eea3c3689d6da17e91b6a4b1cd0525e&text=test_sms_bloucle&from=FASTERMSG&to"+p, data={}, headers={})
-        r.close()
+    base = "x-api-key=08df092126a78b7382036efe152888507eea3c3689d6da17e91b6a4b1cd0525e&text=test sms bloucle&from=FASTERMSG&to="
 
-    return dict(l=len(phs))
+    rsp = {}
+
+    for p in phs:
+        r = requests.get("https://api.fastermessage.com/v2/sms/send?"+base+p, data={}, headers={})
+        r.close()
+        rsp[p] = r.status_code
+
+    return rsp
 
 @action('callback/clear', method=['GET'])
 @action.uses(db, session, auth, flash)
