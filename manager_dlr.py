@@ -48,6 +48,7 @@ def errback(sec="web"):
     else:
         r = requests.get("https://api.fastermessage.com/v2/sms/errbatch/dlr/"+data['batchId']+"/"+data["to"]+"?batchId="+data["batchId"]+"&to="+data["to"]+"&statusText="+data["statusText"]+"&status="+data['status'], data={}, headers={})
 
+    r.close()
     if r.status_code == 200:
         return 'ACK/Jasmin'
     
@@ -83,7 +84,8 @@ def dlr(sec="web", id=None):
         r = requests.post("https://fastermessage.com/app/sms/batch/dlr/"+data['level']+"/"+data["id"], data=dict(data), headers={})
     else:
         r = requests.post("https://api.fastermessage.com/v2/sms/batch/dlr/"+data['level']+"/"+data["id"], data=dict(data), headers={})
-    return dict(r)
+    r.close()
+    return dict(r.text, r.status_code)
     log(sec, data["level"], data["id"], r.status_code)
     
     if r.status_code == 200:
