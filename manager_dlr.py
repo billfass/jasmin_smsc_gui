@@ -64,7 +64,7 @@ def dlr(sec="web", id=None):
         data['id'] = data['id']
         data['level'] = data['level']
         data['message_status'] = data['message_status']
-        return dict(data)
+        
         callback = None
         while not callback and cpt < 5:
             cpt += 1
@@ -78,7 +78,7 @@ def dlr(sec="web", id=None):
     except Exception as e:
         log(sec, 0, id, str(e))
         return str(e)
-    
+    return dict(data)
     if sec == "web":
         r = requests.post("https://fastermessage.com/app/sms/batch/dlr/"+data['level']+"/"+data["id"], data=dict(data), headers={})
     else:
