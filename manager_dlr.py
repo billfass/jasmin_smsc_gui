@@ -80,19 +80,23 @@ def dlr(sec="web", id=None):
         log(sec, 0, id, str(e))
         return str(e)
     
-    if sec == "web":
-        r = requests.post("https://fastermessage.com/app/sms/batch/dlr/"+data['level']+"/"+data["id"], data=dict(data), headers={})
-    else:
-        r = requests.post("https://api.fastermessage.com/v2/sms/batch/dlr/"+data['level']+"/"+data["id"], data=dict(data), headers={})
-    # r.close()
-    return dict(r.text, r.status_code)
-    log(sec, data["level"], data["id"], r.status_code)
-    
-    if r.status_code == 200:
-        return 'ACK/Jasmin'
-    elif r.status_code == 202:
-        db(db.callback.uuid == data['id']).delete()
-        return 'ACK/Jasmin'
+    try:
+        if sec == "web":
+            r = requests.post("https://fastermessage.com/app/sms/batch/dlr/"+data['level']+"/"+data["id"], data=dict(data), headers={})
+        else:
+            r = requests.post("https://api.fastermessage.com/v2/sms/batch/dlr/"+data['level']+"/"+data["id"], data=dict(data), headers={})
+        
+        r.close()
+        return dict(t=r.text, c=r.status_code)
+        log(sec, data["level"], data["id"], r.status_code)
+        
+        if r.status_code == 200:
+            return 'ACK/Jasmin'
+        elif r.status_code == 202:
+            db(db.callback.uuid == data['id']).delete()
+            return 'ACK/Jasmin'
+    except Exception as e:
+        return str(e)
     
     return 'NOACK/Jasmin'    
 
