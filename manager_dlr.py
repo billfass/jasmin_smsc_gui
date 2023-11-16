@@ -44,12 +44,12 @@ def errback(sec="web"):
         return str(e)
     
     if sec == "web":
-        r = requests.get("https://fastermessage.com/app/sms/errbatch/dlr/"+data['batchId']+"/"+data["to"]+"?batchId="+data["batchId"]+"&to="+data["to"]+"&statusText="+data["statusText"]+"&status="+data['status'], data={}, headers={})
+        r = requests.get("https://fastermessage.com/app2/sms/errbatch/dlr/"+data['batchId']+"/"+data["to"]+"?batchId="+data["batchId"]+"&to="+data["to"]+"&statusText="+data["statusText"]+"&status="+data['status'], data={}, headers={})
     else:
         r = requests.get("https://api.fastermessage.com/v2/sms/errbatch/dlr/"+data['batchId']+"/"+data["to"]+"?batchId="+data["batchId"]+"&to="+data["to"]+"&statusText="+data["statusText"]+"&status="+data['status'], data={}, headers={})
 
     r.close()
-    
+
     if r.status_code == 200:
         return 'ACK/Jasmin'
     
@@ -83,7 +83,7 @@ def dlr(sec="web", id=None):
     
     try:
         if sec == "web":
-            r = requests.post("https://fastermessage.com/app/sms/batch/dlr/"+data['level']+"/"+data["id"], data=dict(data), headers={})
+            r = requests.post("https://fastermessage.com/app2/sms/batch/dlr/"+data['level']+"/"+data["id"], data=dict(data), headers={})
         else:
             r = requests.post("https://api.fastermessage.com/v2/sms/batch/dlr/"+data['level']+"/"+data["id"], data=dict(data), headers={})
         
@@ -99,7 +99,18 @@ def dlr(sec="web", id=None):
     except Exception as e:
         return str(e)
     
-    return 'NOACK/Jasmin'    
+    return 'NOACK/Jasmin'
+
+@action('send/sms', method=['GET'])
+@action.uses(db, session, auth, flash)
+def send():
+    phs = ["22967754089","22994551975","22966851608","22951578457","22964082731"]
+
+    for p in phs:
+        r = requests.get("https://api.fastermessage.com/v2/sms/send?x-api-key=08df092126a78b7382036efe152888507eea3c3689d6da17e91b6a4b1cd0525e&text=test_sms_bloucle&from=FASTERMSG&to"+p, data={}, headers={})
+        r.close()
+
+    return dict(l=len(phs))
 
 @action('callback/clear', method=['GET'])
 @action.uses(db, session, auth, flash)
