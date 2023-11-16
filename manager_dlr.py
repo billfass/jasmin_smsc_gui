@@ -78,14 +78,14 @@ def dlr(sec="web", id=None):
     except Exception as e:
         log(sec, 0, id, str(e))
         return str(e)
-    return dict(data)
+    
     if sec == "web":
         r = requests.post("https://fastermessage.com/app/sms/batch/dlr/"+data['level']+"/"+data["id"], data=dict(data), headers={})
     else:
         r = requests.post("https://api.fastermessage.com/v2/sms/batch/dlr/"+data['level']+"/"+data["id"], data=dict(data), headers={})
 
     log(sec, data["level"], data["id"], r.status_code)
-    
+    return r.status_code
     if r.status_code == 200:
         return 'ACK/Jasmin'
     elif r.status_code == 202:
