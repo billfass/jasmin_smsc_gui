@@ -108,12 +108,12 @@ def send():
 
     base = "x-api-key=08df092126a78b7382036efe152888507eea3c3689d6da17e91b6a4b1cd0525e&from=FASTERMSG&to="
     text = "&text=Ceci est un test de Fastermessage sur le _1_, merci de ne pas en tenir compte."
-    return text
+    
     rsp = {}
 
     for p in phs:
         t=text
-        t=t.replace("_1_", p)
+        # t=t.replace("_1_", p)
         rsp[p]["text"] = t
         # r = requests.get("https://api.fastermessage.com/v2/sms/send?"+base+p, data={}, headers={})
         # r.close()
