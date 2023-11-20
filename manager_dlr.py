@@ -2,13 +2,10 @@ from py4web import action, request
 from .common import db, session, auth, flash, jasmin
 from pydal.validators import *
 from .utils import cols_split
-from .user_manager import list_groups
-from .route_manager import mt_routes
-from .filter_manager import list_filters
+from datetime import datetime
 import requests, time
 
 def log(sec, lev, uuid, code):
-    from datetime import datetime
     db.dlr_log.insert(uuid=uuid, code=code, date=datetime.now().isoformat(), sec=sec+lev)
 
 @action('callback/<sec>', method=['GET', 'POST'])
@@ -26,7 +23,7 @@ def callback(sec="web"):
     except Exception as e:
         return str(e)
     
-    db.callback.update_or_insert(db.callback.uuid == data['id'], uuid=data['id'], batchuuid=data['batchId'], status=data['status'], to=data['to'])
+    db.callback.update_or_insert(db.callback.uuid == data['id'], uuid=data['id'], batchuuid=data['batchId'], status=data['status'], to=data['to'], date=datetime.now().isoformat())
 
     return 'ACK/Jasmin'
 
@@ -92,9 +89,8 @@ def dlr(sec="web", id=None):
         log(sec, data["level"], data["id"], r.status_code)
         
         if r.status_code == 200:
-            return 'ACK/Jasmin'
-        elif r.status_code == 202:
-            db(db.callback.uuid == data['id']).delete()
+            if data['level'] == 2:
+                db(db.callback.uuid == data['id']).delete()
             return 'ACK/Jasmin'
     except Exception as e:
         return str(e)
@@ -106,18 +102,17 @@ def dlr(sec="web", id=None):
 def send():
     phs = ["22967754089","22994551975","22966851608","22951578457","22964082731"]
 
-    base = "x-api-key=08df092126a78b7382036efe152888507eea3c3689d6da17e91b6a4b1cd0525e&from=FASTERMSG&to="
-    text = "&text=Ceci est un test de Fastermessage sur le _1_, merci de ne pas en tenir compte."
+    base = "x-api-key=08df092126a78b7382036efe152888507eea3c3689d6da17e91b6a4b1cd0525e&from=FASTERMSG&to=_1_&text=Ceci est un test de Fastermessage sur le _1_, merci de ne pas en tenir compte."
     
     rsp = {}
 
     for p in phs:
-        t=text.replace("_1_", p)
+        t=base.replace("_1_", p)
         
-        r = requests.get("https://api.fastermessage.com/v2/sms/send?"+base+p, data={}, headers={})
+        r = requests.get("https://api.fastermessage.com/v2/sms/send?"+t, data={}, headers={})
         r.close()
         
-        rsp[p] = dict(text=t, code=r.status_code, response=r.text)
+        rsp[p] = dict(code=r.status_code, response=r.text)
 
     return rsp
 
