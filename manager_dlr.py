@@ -106,14 +106,19 @@ def dlr(sec="web", id=None):
 def send():
     phs = ["22967754089","22994551975","22966851608","22951578457","22964082731"]
 
-    base = "x-api-key=08df092126a78b7382036efe152888507eea3c3689d6da17e91b6a4b1cd0525e&text=test sms bloucle&from=FASTERMSG&to="
+    base = "x-api-key=08df092126a78b7382036efe152888507eea3c3689d6da17e91b6a4b1cd0525e&from=FASTERMSG&to="
+    text = "&text=Ceci est un test de Fastermessage sur le _1_, merci de ne pas en tenir compte."
 
     rsp = {}
 
     for p in phs:
-        r = requests.get("https://api.fastermessage.com/v2/sms/send?"+base+p, data={}, headers={})
-        r.close()
-        rsp[p] = r.status_code
+        t=text
+        t=t.replace("_1_", p)
+        rsp[p]["text"] = t
+        # r = requests.get("https://api.fastermessage.com/v2/sms/send?"+base+p, data={}, headers={})
+        # r.close()
+        # rsp[p]["code"] = r.status_code
+        # rsp[p]["text"] = r.text
 
     return rsp
 
