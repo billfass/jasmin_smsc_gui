@@ -112,13 +112,14 @@ def send():
     rsp = {}
 
     for p in phs:
-        t=text
-        # t=t.replace("_1_", p)
-        rsp[p]["text"] = t
+        # t=text
+        t=text.replace("_1_", p)
+        
         # r = requests.get("https://api.fastermessage.com/v2/sms/send?"+base+p, data={}, headers={})
         # r.close()
         # rsp[p]["code"] = r.status_code
         # rsp[p]["text"] = r.text
+        rsp[p] = dict(text=t)
 
     return rsp
 
