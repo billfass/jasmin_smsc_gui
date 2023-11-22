@@ -102,8 +102,6 @@ def send():
     data = request.GET
 
     try:
-        batchId = "176efde3-b06b-4024-a0dd-8d161b5e948a"
-
         callbacks = db(db.callback.batchuuid == data["batchId"]).select()
 
         dataCallback = []
@@ -138,33 +136,15 @@ def send():
 @action('callback/clear', method=['GET'])
 @action.uses(db, session, auth, flash)
 def clear():
-    rows = db().select(db.callback.ALL)
+    rows = db(db.callback).select()
 
     data = []
 
     try:
         for row in rows:
             # Accédez aux colonnes de chaque ligne en utilisant la notation point
-            uuid = row.uuid
-            batchuuid = row.batchuuid
-            # if(row.status):
-            #     status = row.status
-            # else:
-            #     status = ""
-            # if(row.to):
-            #     to = row.to
-            # else:
-            #     to = ""
-            # if(row.date):
-            #     date = row.date
-            # else:
-            #     date = ""
+            data.append(dict(id=row.uuid,batchId=row.batchuuid,to=row.to,date=row.date))
     except Exception as e:
         return str(e)
-            
-    # Effectuez les opérations nécessaires avec les données
-    data.append("UUID: "+uuid+", BatchUUID: "+batchuuid)
-    # data.append("UUID: "+uuid+", BatchUUID: "+batchuuid+", Status: "+status+", To: "+to+", Date: "+date)
-    # print(f"UUID: {uuid}, BatchUUID: {batchuuid}, Status: {status}, To: {to}, Date: {date}")
 
     return dict(data)
