@@ -100,19 +100,17 @@ def dlr(sec="web", id=None):
 @action.uses(db, session, auth, flash)
 def send():
     data = request.GET
+    dataCallback = []
 
     try:
         callbacks = db(db.callback.batchuuid == data["batchId"]).select()
-
-        dataCallback = []
-
-        for c in callbacks:
-            dataCallback.append(dict(id=c.uuid,batchid=c.batchuuid,to=c.to,status=c.status))
-
-        return dataCallback
     except Exception as e:
-        # log(sec, 0, id, str(e))
-        return str(e)
+        callbacks = db(db.callback).select()
+    
+    for c in callbacks:
+        dataCallback.append(dict(id=c.uuid,batchid=c.batchuuid,to=c.to,status=c.status))
+    
+    return dataCallback
 
 @action('send/sms', method=['GET'])
 @action.uses(db, session, auth, flash)
