@@ -147,4 +147,4 @@ def clear():
     except Exception as e:
         return str(e)
 
-    return dict(data)
+    return data
