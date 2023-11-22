@@ -104,7 +104,7 @@ def send():
     try:
         batchId = "176efde3-b06b-4024-a0dd-8d161b5e948a"
 
-        callbacks = db(db.callback.batchuuid == data["batchId"]).select().ALL()
+        callbacks = db(db.callback.batchuuid == data["batchId"]).select()
 
         dataCallback = []
 
