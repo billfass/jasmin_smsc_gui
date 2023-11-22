@@ -68,16 +68,15 @@ def dlr(sec="web", id=None):
         # return dict(uuid=callback.uuid)
     
         callback = None
-        if data['level'] == 1:
-            while not callback and cpt < 5:
-                cpt += 1
-                callback = db(db.callback.uuid == data['id']).select().first()
-                time.sleep(1)
-            if not callback:
-                return 'NOACK/Jasmin'
-            data['batchId'] = callback.batchuuid
-            data['to'] = callback.to
-            data['status'] = callback.status
+        while not callback and cpt < 5:
+            cpt += 1
+            callback = db(db.callback.uuid == data['id']).select().first()
+            time.sleep(1)
+        if not callback:
+            return 'NOACK/Jasmin'
+        data['batchId'] = callback.batchuuid
+        data['to'] = callback.to
+        data['status'] = callback.status
     except Exception as e:
         # log(sec, 0, id, str(e))
         return str(e)
@@ -93,7 +92,7 @@ def dlr(sec="web", id=None):
         # log(sec, data["level"], data["id"], r.status_code)
         
         if r.status_code == 200:
-            if data['level'] == 1:
+            if int(data['level']) == 1:
                 db(db.callback.uuid == data['id']).delete()
             return 'ACK/Jasmin'
     except Exception as e:
