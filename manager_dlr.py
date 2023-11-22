@@ -64,18 +64,19 @@ def dlr(sec="web", id=None):
         data['level'] = data['level']
         data['message_status'] = data['message_status']
         
-        callback = None
-        while not callback and cpt < 5:
-            cpt += 1
-            callback = db(db.callback.uuid == data['id']).select().first()
-            time.sleep(1)
-        if not callback:
-            return 'ACK/Jasmin'
-        data['batchId'] = callback.batchuuid
-        data['to'] = callback.to
-        data['status'] = callback.status
+        if data['level'] == 1:
+            callback = None
+            while not callback and cpt < 5:
+                cpt += 1
+                callback = db(db.callback.uuid == data['id']).select().first()
+                time.sleep(1)
+            if not callback:
+                return 'ACK/Jasmin'
+            data['batchId'] = callback.batchuuid
+            data['to'] = callback.to
+            data['status'] = callback.status
     except Exception as e:
-        log(sec, 0, id, str(e))
+        # log(sec, 0, id, str(e))
         return str(e)
     
     try:
@@ -86,12 +87,11 @@ def dlr(sec="web", id=None):
         
         r.close()
         
-        log(sec, data["level"], data["id"], r.status_code)
+        # log(sec, data["level"], data["id"], r.status_code)
         
         if r.status_code == 200:
-            db(db.callback.uuid == data['id']).delete()
-            # if data['level'] == 2:
-            #     db(db.callback.uuid == data['id']).delete()
+            if data['level'] == 1:
+                db(db.callback.uuid == data['id']).delete()
             return 'ACK/Jasmin'
     except Exception as e:
         return str(e)
