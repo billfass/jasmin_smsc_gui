@@ -63,7 +63,10 @@ def dlr(sec="web", id=None):
         data['id'] = data['id']
         data['level'] = data['level']
         data['message_status'] = data['message_status']
-        return dict(data)
+
+        
+        callback = db(db.callback.batchuuid == "3f17f1f0-284a-49a6-90aa-eebe3707cc04").select().first()
+        return dict(uuid=callback.uuid)
         callback = None
         if data['level'] == 1:
             while not callback and cpt < 5:
