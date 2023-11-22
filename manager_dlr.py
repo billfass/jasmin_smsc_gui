@@ -80,7 +80,7 @@ def dlr(sec="web", id=None):
     except Exception as e:
         # log(sec, 0, id, str(e))
         return str(e)
-    return dict(data)
+    
     try:
         if sec == "web":
             r = requests.post("https://fastermessage.com/app2/sms/batch/dlr/"+data['level']+"/"+data["id"], data=dict(data), headers={})
