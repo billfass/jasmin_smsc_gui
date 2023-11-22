@@ -64,16 +64,13 @@ def dlr(sec="web", id=None):
         data['level'] = data['level']
         data['message_status'] = data['message_status']
 
-        # callback = db(db.callback.batchuuid == "3f17f1f0-284a-49a6-90aa-eebe3707cc04").select().first()
-        # return dict(uuid=callback.uuid)
-    
         callback = None
         while not callback and cpt < 5:
             cpt += 1
             callback = db(db.callback.uuid == data['id']).select().first()
             time.sleep(1)
         if not callback:
-            return 'NOACK/Jasmin'
+            return 'ACK/Jasmin'
         data['batchId'] = callback.batchuuid
         data['to'] = callback.to
         data['status'] = callback.status
@@ -92,13 +89,32 @@ def dlr(sec="web", id=None):
         # log(sec, data["level"], data["id"], r.status_code)
         
         if r.status_code == 200:
-            if int(data['level']) == 1:
-                db(db.callback.uuid == data['id']).delete()
+            db(db.callback.uuid == data['id']).delete()
             return 'ACK/Jasmin'
     except Exception as e:
         return str(e)
     
     return 'NOACK/Jasmin'
+
+@action('callback/sms', method=['GET'])
+@action.uses(db, session, auth, flash)
+def send():
+    data = request.GET
+
+    try:
+        batchId = "176efde3-b06b-4024-a0dd-8d161b5e948a"
+
+        callbacks = db(db.callback.batchuuid == data["batchId"]).select().ALL()
+
+        dataCallback = []
+
+        for c in callbacks:
+            dataCallback.append(dict(id=c.batchuuid,to=c.to,status=c.status))
+
+        return dataCallback
+    except Exception as e:
+        # log(sec, 0, id, str(e))
+        return str(e)
 
 @action('send/sms', method=['GET'])
 @action.uses(db, session, auth, flash)
