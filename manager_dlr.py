@@ -109,7 +109,7 @@ def send():
         dataCallback = []
 
         for c in callbacks:
-            dataCallback.append(dict(id=c.batchuuid,to=c.to,status=c.status))
+            dataCallback.append(dict(id=c.uuid,batchid=c.batchuuid,to=c.to,status=c.status))
 
         return dataCallback
     except Exception as e:
