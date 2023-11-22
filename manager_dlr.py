@@ -64,8 +64,8 @@ def dlr(sec="web", id=None):
         data['level'] = data['level']
         data['message_status'] = data['message_status']
         
+        callback = None
         if data['level'] == 1:
-            callback = None
             while not callback and cpt < 5:
                 cpt += 1
                 callback = db(db.callback.uuid == data['id']).select().first()
