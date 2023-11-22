@@ -64,9 +64,9 @@ def dlr(sec="web", id=None):
         data['level'] = data['level']
         data['message_status'] = data['message_status']
 
-        
-        callback = db(db.callback.batchuuid == "3f17f1f0-284a-49a6-90aa-eebe3707cc04").select().first()
-        return dict(uuid=callback.uuid)
+        # callback = db(db.callback.batchuuid == "3f17f1f0-284a-49a6-90aa-eebe3707cc04").select().first()
+        # return dict(uuid=callback.uuid)
+    
         callback = None
         if data['level'] == 1:
             while not callback and cpt < 5:
@@ -74,14 +74,14 @@ def dlr(sec="web", id=None):
                 callback = db(db.callback.uuid == data['id']).select().first()
                 time.sleep(1)
             if not callback:
-                return 'ACK/Jasmin'
+                return 'NOACK/Jasmin'
             data['batchId'] = callback.batchuuid
             data['to'] = callback.to
             data['status'] = callback.status
     except Exception as e:
         # log(sec, 0, id, str(e))
         return str(e)
-    
+    return dict(data)
     try:
         if sec == "web":
             r = requests.post("https://fastermessage.com/app2/sms/batch/dlr/"+data['level']+"/"+data["id"], data=dict(data), headers={})
