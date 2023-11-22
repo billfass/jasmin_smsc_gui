@@ -63,7 +63,7 @@ def dlr(sec="web", id=None):
         data['id'] = data['id']
         data['level'] = data['level']
         data['message_status'] = data['message_status']
-        
+        return dict(data)
         callback = None
         if data['level'] == 1:
             while not callback and cpt < 5:
