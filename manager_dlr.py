@@ -144,6 +144,8 @@ def clear():
         for row in rows:
             # Accédez aux colonnes de chaque ligne en utilisant la notation point
             data.append(dict(id=row.uuid,batchId=row.batchuuid,to=row.to,date=row.date))
+            db(db.callback.uuid == row.uuid).delete()
+            
     except Exception as e:
         return str(e)
 
