@@ -41,9 +41,9 @@ def errback(sec="web"):
         return str(e)
     
     if sec == "web":
-        r = requests.get("https://fastermessage.com/app2/sms/errbatch/dlr/"+data['batchId']+"/"+data["to"]+"?batchId="+data["batchId"]+"&to="+data["to"]+"&statusText="+data["statusText"]+"&status="+data['status'], data={}, headers={})
+        r = requests.get("https://fastermessage.com/app/sms/errbatch/dlr/"+data['batchId']+"/"+data["to"]+"?batchId="+data["batchId"]+"&to="+data["to"]+"&statusText="+data["statusText"]+"&status="+data['status'], data={}, headers={})
     else:
-        r = requests.get("https://api.fastermessage.com/v2/sms/errbatch/dlr/"+data['batchId']+"/"+data["to"]+"?batchId="+data["batchId"]+"&to="+data["to"]+"&statusText="+data["statusText"]+"&status="+data['status'], data={}, headers={})
+        r = requests.get("https://api.fastermessage.com/v1/sms/errbatch/dlr/"+data['batchId']+"/"+data["to"]+"?batchId="+data["batchId"]+"&to="+data["to"]+"&statusText="+data["statusText"]+"&status="+data['status'], data={}, headers={})
 
     r.close()
 
@@ -80,9 +80,9 @@ def dlr(sec="web", id=None):
     
     try:
         if sec == "web":
-            r = requests.post("https://fastermessage.com/app2/sms/batch/dlr/"+data['level']+"/"+data["id"], data=dict(data), headers={})
+            r = requests.post("https://fastermessage.com/app/sms/batch/dlr/"+data['level']+"/"+data["id"], data=dict(data), headers={})
         else:
-            r = requests.post("https://api.fastermessage.com/v2/sms/batch/dlr/"+data['level']+"/"+data["id"], data=dict(data), headers={})
+            r = requests.post("https://api.fastermessage.com/v1/sms/batch/dlr/"+data['level']+"/"+data["id"], data=dict(data), headers={})
         
         r.close()
         
@@ -124,7 +124,7 @@ def send():
     for p in phs:
         t=base.replace("_1_", p)
         
-        r = requests.get("https://api.fastermessage.com/v2/sms/send?"+t, data={}, headers={})
+        r = requests.get("https://api.fastermessage.com/v1/sms/send?"+t, data={}, headers={})
         r.close()
         
         rsp[p] = dict(code=r.status_code, response=r.text)
