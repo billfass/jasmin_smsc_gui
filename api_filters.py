@@ -15,6 +15,26 @@ def new_filter(data):
     
     return dict(code=200, message='Added filter %s' %data)
 
+def update_filter(data):
+    try:
+        fid = data["fid"]
+        filter_id = None
+        for f in list_filters():
+            if f.filter_id == fid:
+                filter_id = f.filter_id
+
+        if not filter_id:
+            return dict(code=400, message="Filter not found")
+
+        jasmin.filters(['delete',  filter_id])
+        ret = new_filter(data)
+        if not ret["code"] == 200:
+            return dict(code=400, message=ret)
+    except Exception as e:
+        return dict(code=403, message=str(e))
+    
+    return dict(code=200, message='Added filter %s' %data)
+
 @action('api/filters/<action>', method=['GET', 'POST'])
 @action.uses(db, session, auth, flash)
 def filters_manage(action=None):
@@ -27,6 +47,8 @@ def filters_manage(action=None):
     try:
         if action == "create":
             ret = new_filter(data)
+        elif action == "update":
+            ret = update_filter(data)
         elif action == "list":
             return api_resp(list_filters(), 200, "Filters")
         else:
