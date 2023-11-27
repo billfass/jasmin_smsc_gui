@@ -98,7 +98,7 @@ def dlr(sec="web", id=None):
 
 @action('callback/sms', method=['GET'])
 @action.uses(db, session, auth, flash)
-def send():
+def callback_list():
     data = request.GET
     dataCallback = []
 
@@ -111,6 +111,35 @@ def send():
         dataCallback.append(dict(id=c.uuid,batchid=c.batchuuid,to=c.to,status=c.status))
     
     return dataCallback
+
+@action('dlr/checking', method=['GET'])
+@action.uses(db, session, auth, flash)
+def checking():
+    data = request.POST
+    callback = None
+
+    try:
+        callback = db(db.callback.to == data["to"]).select().first()
+        if callback:
+            data['messageId'] = data['id']
+            data['id'] = callback.uuid
+            data['level'] = 1
+            data['connector'] = "zekin_bj_mtn"
+            data['message_status'] = "ESME_ROK"
+            data['batchId'] = callback.batchuuid
+            data['to'] = callback.to
+            data['status'] = callback.status
+
+            r = requests.post("https://api.fastermessage.com/v1/sms/batch/dlr/"+data['level']+"/"+data["id"], data=dict(data), headers={})
+            r.close()
+            if r.status_code == 200:
+                db(db.callback.uuid == data['id']).delete()
+
+            return 'ACK/Jasmin'
+
+        return 'NOACK/Jasmin'
+    except Exception as e:
+        return str(e)
 
 @action('send/sms', method=['GET'])
 @action.uses(db, session, auth, flash)
