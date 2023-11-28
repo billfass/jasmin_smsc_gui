@@ -112,7 +112,7 @@ def callback_list():
     
     return dataCallback
 
-@action('dlr/checking', method=['GET'])
+@action('dlr/checking', method=['GET','POST'])
 @action.uses(db, session, auth, flash)
 def checking():
     data = request.POST
@@ -124,7 +124,6 @@ def checking():
             data['messageId'] = data['id']
             data['id'] = callback.uuid
             data['level'] = 1
-            data['connector'] = "zekin_bj_mtn"
             data['message_status'] = "ESME_ROK"
             data['batchId'] = callback.batchuuid
             data['to'] = callback.to
