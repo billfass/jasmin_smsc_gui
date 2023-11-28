@@ -129,7 +129,7 @@ def checking():
             data['to'] = callback.to
             data['status'] = callback.status
 
-            r = requests.post("https://api.fastermessage.com/v1/sms/batch/dlr/"+data['level']+"/"+data["id"], data=dict(data), headers={})
+            r = requests.post("https://fastermessage.com/app/sms/batch/dlr/"+data['level']+"/"+data["id"], data=dict(data), headers={})
             r.close()
             if r.status_code == 200:
                 db(db.callback.uuid == data['id']).delete()
