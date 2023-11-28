@@ -123,7 +123,7 @@ def checking():
         if callback:
             data['messageId'] = data['id']
             data['id'] = callback.uuid
-            data['level'] = 1
+            data['level'] = "1"
             data['message_status'] = "ESME_ROK"
             data['batchId'] = callback.batchuuid
             data['to'] = callback.to
