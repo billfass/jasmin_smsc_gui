@@ -117,6 +117,7 @@ def callback_list():
 def checking():
     data = request.POST
     callback = None
+    import uuid
 
     try:
         callback = db(db.callback.to == data["to"]).select().first()
@@ -135,8 +136,20 @@ def checking():
                 db(db.callback.uuid == data['id']).delete()
 
             return 'ACK/Jasmin'
+        else:
+            data['messageId'] = data['id']
+            data['id'] = str(uuid.uuid5(uuid.uuid4(), 'Fastermessage'))
+            data['level'] = "1"
+            data['message_status'] = "ESME_ROK"
+            data['batchId'] = ""
+            data['status'] = "1"
 
-        return 'NOACK/Jasmin'
+            r = requests.post("https://fastermessage.com/app/sms/batch/dlr/"+data['level']+"/"+data["id"], data=dict(data), headers={})
+            r.close()
+            if r.status_code == 200:
+                return 'ACK/Jasmin'
+
+            return 'NOACK/Jasmin'
     except Exception as e:
         return str(e)
 
