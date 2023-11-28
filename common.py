@@ -198,7 +198,7 @@ jasmin = Jptelnet()
 def api_id(request=None):
     import base64, uuid
     
-    myUUID = str(uuid.uuid5(uuid.uuid4(), 'Fastermessage'))
+    # myUUID = str(uuid.uuid5(uuid.uuid4(), 'Fastermessage'))
 
     myString = "f308cba7-cfa2-5d2d-9d38-47e50e49f771:Fastermessage"
     ma_key = base64.b64encode(myString.encode('utf-8')).decode('utf-8')
