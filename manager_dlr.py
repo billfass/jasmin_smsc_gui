@@ -153,6 +153,69 @@ def checking():
     except Exception as e:
         return str(e)
 
+@action('api/dlr/checking', method=['GET','POST'])
+@action.uses(db, session, auth, flash)
+def api_checking():
+    data = request.POST
+    import uuid
+
+    try:
+        data['messageId'] = data['id']
+        data['id'] = str(uuid.uuid5(uuid.uuid4(), 'Fastermessage'))
+        data['level'] = "1"
+        data['message_status'] = "ESME_ROK"
+        data['status'] = "1"
+
+        r = requests.post("https://api.fastermessage.com/v1/sms/gatedlr?messageId="+data['messageId'], data=dict(data), headers={})
+        r.close()
+        if r.status_code == 200:
+            return 'ACK/Jasmin'
+
+        return 'NOACK/Jasmin'
+    except Exception as e:
+        return str(e)
+
+@action('api/batchdlr/checking', method=['GET','POST'])
+@action.uses(db, session, auth, flash)
+def batch_checking():
+    data = request.POST
+    callback = None
+    import uuid
+
+    try:
+        callback = db(db.callback.to == data["to"]).select().first()
+        if callback:
+            data['messageId'] = data['id']
+            data['id'] = callback.uuid
+            data['level'] = "1"
+            data['message_status'] = "ESME_ROK"
+            data['batchId'] = callback.batchuuid
+            data['to'] = callback.to
+            data['status'] = callback.status
+
+            r = requests.post("https://api.fastermessage.com/v1/sms/batch/dlr/"+data['level']+"/"+data["id"], data=dict(data), headers={})
+            r.close()
+            if r.status_code == 200:
+                db(db.callback.uuid == data['id']).delete()
+
+            return 'ACK/Jasmin'
+        else:
+            data['messageId'] = data['id']
+            data['id'] = str(uuid.uuid5(uuid.uuid4(), 'Fastermessage'))
+            data['level'] = "1"
+            data['message_status'] = "ESME_ROK"
+            data['batchId'] = ""
+            data['status'] = "1"
+
+            r = requests.post("https://api.fastermessage.com/v1/sms/batch/dlr/"+data['level']+"/"+data["id"], data=dict(data), headers={})
+            r.close()
+            if r.status_code == 200:
+                return 'ACK/Jasmin'
+
+            return 'NOACK/Jasmin'
+    except Exception as e:
+        return str(e)
+
 @action('send/sms', method=['GET'])
 @action.uses(db, session, auth, flash)
 def send():
