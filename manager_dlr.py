@@ -108,7 +108,7 @@ def callback_list():
         callbacks = db(db.callback).select()
     
     for c in callbacks:
-        dataCallback.append(dict(id=c.uuid,batchid=c.batchuuid,to=c.to,status=c.status))
+        dataCallback.append(dict(id=c.uuid,batchid=c.batchuuid,to=c.to,status=c.status,date=c.date))
     
     return dataCallback
 
