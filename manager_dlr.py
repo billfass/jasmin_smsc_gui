@@ -102,6 +102,7 @@ def callback_list():
     data = request.GET
     dataCallback = []
 
+
     try:
         callbacks = db(db.callback.batchuuid == data["batchId"]).select()
     except Exception as e:
