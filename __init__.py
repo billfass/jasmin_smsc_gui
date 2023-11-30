@@ -19,9 +19,9 @@ from . import api_filters
 from . import api_users
 from . import api_refill
 from . import api_mtrouters
-# from . import manager_by_api
 from . import manager_dlr
 from . import account_manager
+
 # optional parameters
 __version__ = "1.0.0.0"
 __author__ = "John Bannister <eudorajab1@gmail.com>"
