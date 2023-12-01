@@ -159,17 +159,16 @@ def web_batch_checking():
 
             return 'ACK/Jasmin'
         else:
-            # data['messageId'] = data['id']
-            # data['id'] = str(uuid.uuid5(uuid.uuid4(), 'Fastermessage'))
-            # data['level'] = "1"
-            # data['message_status'] = "ESME_ROK"
-            # data['batchId'] = ""
-            # data['status'] = "1"
+            data['messageId'] = data['id']
+            data['id'] = str(uuid.uuid5(uuid.uuid4(), 'Fastermessage'))
+            data['level'] = "1"
+            data['message_status'] = "ESME_ROK"
+            data['status'] = "1"
 
-            # r = requests.post("https://fastermessage.com/app/sms/batch/dlr/"+data['level']+"/"+data["id"], data=dict(data), headers={})
-            # r.close()
-            # if r.status_code == 200:
-            #     return 'ACK/Jasmin'
+            r = requests.post("https://fastermessage.com/app/sms/batch/dlr/"+data['level']+"/"+data["id"], data=dict(data), headers={})
+            r.close()
+            if r.status_code == 200:
+                return 'ACK/Jasmin'
 
             return 'NOACK/Jasmin'
     except Exception as e:
