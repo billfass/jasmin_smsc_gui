@@ -23,39 +23,11 @@ def my_task():
         # rollback on failure
         db.rollback()
 
-
-@scheduler.task
-def clear_callback():
-    try:
-        # this task will be executed in its own thread, connect to db
-        print(f"")
-        # rows = db(db.callback.id > 0).select()
-
-        # for row in rows:
-        #     # Accédez aux colonnes de chaque ligne en utilisant la notation point
-        #     uuid = row.callback.uuid
-        #     batchuuid = row.callback.batchuuid
-        #     status = row.callback.status
-        #     to = row.callback.to
-        #     date = row.callback.date
-            
-        #     # Effectuez les opérations nécessaires avec les données
-        #     print(f"UUID: {uuid}, BatchUUID: {batchuuid}, Status: {status}, To: {to}, Date: {date}")
-    except:
-        # rollback on failure
-        print(f"")
-
-
 # run my_task very 10 seconds
 scheduler.conf.beat_schedule = {
     "my_first_task": {
         "task": "apps.%s.tasks.my_task" % settings.APP_NAME,
         "schedule": 10.0,
         "args": (),
-    },
-    "clear_callback_task": {
-        "task": "apps.%s.tasks.clear_callback" % settings.APP_NAME,
-        "schedule": 3600.0,
-        "args": (),
-    },
+    }
 }
