@@ -53,21 +53,17 @@ try:
 
     # Envoi du SMS via l'API HTTP externe
     success, api_response = send_sms_via_api(sender, to, content, type, dlr, url)
+
+    if success:
+        http_status = 200
+    else:
+        http_status = 400
 except Exception as e:
     # We got an error when calling for charging
     # Return ESME_RDELIVERYFAILURE
     # smpp_status = 254
     http_status = 400
 finally:
-    if success == True:
-        # Return ESME_ROK
-        # smpp_status = 0
-        http_status = 200
-    else:
-        # Return ESME_RDELIVERYFAILURE
-        # smpp_status = 254
-        http_status = 400
-
     log_file = "/var/log/jasmin/mt_interceptor.log"
     with open(log_file, "a") as file:
         file.write("{0} : send SMS from {1} to {2} ({3} - {4})".format(dateSend, sender, to, success, api_response))
