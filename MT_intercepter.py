@@ -50,16 +50,19 @@ try:
 except Exception as e:
     # We got an error when calling for charging
     # Return ESME_RDELIVERYFAILURE
-    smpp_status = 254
+    # smpp_status = 254
+    http_status = 400
 else:
     # CGRateS has returned a value
 
     if success:
         # Return ESME_ROK
-        smpp_status = 0
+        # smpp_status = 0
+        http_status = 200
     else:
         # Return ESME_RDELIVERYFAILURE
-        smpp_status = 254
+        # smpp_status = 254
+        http_status = 400
 finally:
     log_file = "/var/log/jasmin/mt_interceptor.log"
     with open(log_file, "a") as file:
