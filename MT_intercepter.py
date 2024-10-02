@@ -16,8 +16,7 @@ def send_sms_via_api(from_, to, message, type_, dlr, url):
             'to': to,
             'type': type_,
             'message': message,
-            'dlr': dlr,
-            'url': url
+            'dlr': dlr
         }
 
         headers = {
@@ -70,5 +69,5 @@ else:
 finally:
     log_file = "/var/log/jasmin/mt_interceptor.log"
     with open(log_file, "a") as file:
-        file.write("{0} : send SMS from {1} to {2} ({3}-{4})".format(dateSend, sender, to, success, api_response))
+        file.write("{0} : send SMS from {1} to {2} ({3} - {4})".format(dateSend, sender, to, success, api_response))
         file.write('\n')
