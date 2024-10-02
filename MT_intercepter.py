@@ -35,8 +35,12 @@ def send_sms_via_api(from_, to, message, type_, dlr):
     except Exception as e:
         #sys.stderr.write(f"Erreur d'envoi de l'API : {str(e)}\n")
         return False, str(e)
-    
+
 globals()['json'] = json
+globals()['requests'] = requests
+globals()['EXTERNAL_API_URL'] = EXTERNAL_API_URL
+globals()['API_KEY'] = API_KEY
+globals()['CLIENT_ID'] = CLIENT_ID
 try:
     dateSend = datetime.now().isoformat() + 'Z'
     to = routable.pdu.params['destination_addr']
@@ -53,8 +57,6 @@ except Exception as e:
     # smpp_status = 254
     http_status = 400
 else:
-    # CGRateS has returned a value
-
     if success:
         # Return ESME_ROK
         # smpp_status = 0
