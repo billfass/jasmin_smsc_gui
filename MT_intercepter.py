@@ -50,6 +50,7 @@ try:
     type = 0  # Type de message (par défaut 0 : 'text', 1 : 'Flash')
     dlr = 0  # DLR (par défaut 1 pour accusé de réception)
     url = ''  # DLR URL
+    api_code = 400
 
     # Envoi du SMS via l'API HTTP externe
     success, api_response, api_code = send_sms_via_api(sender, to, content, type, dlr, url)
@@ -60,7 +61,7 @@ except Exception as e:
     # We got an error when calling for charging
     # Return ESME_RDELIVERYFAILURE
     # smpp_status = 254
-    http_status = 400
+    http_status = api_code
 finally:
     log_file = "/var/log/jasmin/mt_interceptor.log"
     with open(log_file, "a") as file:
