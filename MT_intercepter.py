@@ -54,10 +54,10 @@ try:
     # Envoi du SMS via l'API HTTP externe
     success, api_response = send_sms_via_api(sender, to, content, type, dlr, url)
 
-    if success:
-        http_status = 200
-    else:
-        http_status = 400
+    if success == False:
+        raise Exception(api_response)
+
+    http_status = 200
 except Exception as e:
     # We got an error when calling for charging
     # Return ESME_RDELIVERYFAILURE
