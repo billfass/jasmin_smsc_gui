@@ -56,8 +56,6 @@ try:
 
     if success == False:
         raise Exception(api_response)
-
-    http_status = api_code
 except Exception as e:
     # We got an error when calling for charging
     # Return ESME_RDELIVERYFAILURE
