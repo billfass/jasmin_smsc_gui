@@ -8,7 +8,7 @@ EXTERNAL_API_URL = "https://edok-api.kingsmspro.com/api/v1/sms/send"
 API_KEY = 'NgDnKzjDpv3EndwGiOrVBBLHDivERcZt'  # clé API
 CLIENT_ID = "2839"  #  client ID
 
-def send_sms_via_api(from_, to, message, type_, dlr):
+def send_sms_via_api(from_, to, message, type_, dlr, url):
     """Envoie le SMS via l'API externe."""
     try:
         sms_data = {
@@ -16,7 +16,8 @@ def send_sms_via_api(from_, to, message, type_, dlr):
             'to': to,
             'type': type_,
             'message': message,
-            'dlr': dlr
+            'dlr': dlr,
+            'url': url
         }
 
         headers = {
@@ -46,11 +47,12 @@ try:
     to = routable.pdu.params['destination_addr']
     sender = routable.pdu.params['source_addr']
     content = routable.pdu.params['short_message']
-    message_type = 'text'  # Type de message (par défaut 'text')
-    dlr = '1'  # DLR (par défaut 1 pour accusé de réception)
+    type = 0  # Type de message (par défaut 0 : 'text', 1 : 'Flash')
+    dlr = 0  # DLR (par défaut 1 pour accusé de réception)
+    url = ''  # DLR URL
 
     # Envoi du SMS via l'API HTTP externe
-    success, api_response = send_sms_via_api(sender, to, content, message_type, dlr)
+    success, api_response = send_sms_via_api(sender, to, content, type, dlr, url)
 except Exception as e:
     # We got an error when calling for charging
     # Return ESME_RDELIVERYFAILURE
