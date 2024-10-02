@@ -3,11 +3,21 @@
 import sys
 import json
 import requests
+import datetime
+import time
 
 # API HTTP externe (URL et API Key)
 EXTERNAL_API_URL = "https://edok-api.kingsmspro.com/api/v1/sms/send"
 API_KEY = 'NgDnKzjDpv3EndwGiOrVBBLHDivERcZt'  # clé API
 CLIENT_ID = "2839"  #  client ID
+NOW = datetime.datetime.now()
+NOW_TIME = time.mktime(NOW.timetuple())
+
+def write_log(message):
+    log_file = "/var/log/jasmin/mt_interceptor.log"
+    with open(log_file, "a") as file:
+        file.write("{0}".format(message))
+        file.write('\n')
 
 def send_sms_via_api(from_, to, message, type_, dlr):
     """Envoie le SMS via l'API externe."""
@@ -32,10 +42,10 @@ def send_sms_via_api(from_, to, message, type_, dlr):
         if response.status_code == 200:
             return True, response.json()  # Réponse OK
         else:
-            sys.stderr.write(f"Erreur d'envoi : {response.status_code} - {response.text}\n")
+            #sys.stderr.write(f"Erreur d'envoi : {response.status_code} - {response.text}\n")
             return False, response.text  # Réponse en erreur
     except Exception as e:
-        sys.stderr.write(f"Erreur d'envoi de l'API : {str(e)}\n")
+        #sys.stderr.write(f"Erreur d'envoi de l'API : {str(e)}\n")
         return False, str(e)
 
 def intercept_sms(message):
@@ -54,23 +64,34 @@ def intercept_sms(message):
         success, api_response = send_sms_via_api(sender, to, content, message_type, dlr)
 
         if success:
-            return True, "Message envoyé avec succès via l'API."
+            return True, "Message envoyé avec succès via l'API. {api_response}\n"
         else:
-            sys.stderr.write(f"Échec de l'envoi via l'API : {api_response}\n")
+            #sys.stderr.write(f"Échec de l'envoi via l'API : {api_response}\n")
             return False, api_response  # Échec de l'envoi
 
     except Exception as e:
-        sys.stderr.write(f"Erreur : {str(e)}\n")
+        #sys.stderr.write(f"Erreur : {str(e)}\n")
         return False, str(e)
 
 if __name__ == "__main__":
     # Lire le message depuis stdin (transmis par Jasmin)
     message = sys.stdin.read()
 
+    # Log du message
+    
+    write_log("")
+    write_log(NOW)
+    write_log(NOW_TIME)
+    write_log(message)
+
     # Appeler la fonction pour traiter le message
     success, result = intercept_sms(message)
 
     if success:
+        write_log(NOW_TIME)
+        write_log(json.dumps({"status": 200, "message": result}))
         sys.stdout.write(json.dumps({"status": 200, "message": result}))
     else:
+        write_log(NOW_TIME)
+        write_log(json.dumps({"status": 200, "message": result}))
         sys.stdout.write(json.dumps({"status": 500, "message": result}))
