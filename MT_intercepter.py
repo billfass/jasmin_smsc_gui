@@ -9,7 +9,6 @@ API_KEY = 'NgDnKzjDpv3EndwGiOrVBBLHDivERcZt'  # clé API
 CLIENT_ID = "2839"  #  client ID
 
 def send_sms_via_api(from_, to, message, type_, dlr, url):
-    return False, "Text réception", 410
     """Envoie le SMS via l'API externe."""
     try:
         sms_data = {
@@ -28,14 +27,11 @@ def send_sms_via_api(from_, to, message, type_, dlr, url):
         # Envoi du SMS via l'API
         response = requests.post(EXTERNAL_API_URL, data=sms_data, headers=headers)
 
-        # Vérification du statut de la réponse
-        if response.status_code > 199 and response.status_code < 300:
-            return True, response.text  # Réponse OK
-        else:
-            return False, response.text  # Réponse en erreur
+        # Retourne le status code et la réponse
+        return response.status_code, response.text
     except Exception as e:
         #sys.stderr.write(f"Erreur d'envoi de l'API : {str(e)}\n")
-        return False, str(e)
+        return 400, str(e)
 
 globals()['json'] = json
 globals()['requests'] = requests
@@ -51,12 +47,13 @@ try:
     dlr = 0  # DLR (par défaut 1 pour accusé de réception)
     url = ''  # DLR URL
     api_code = 400
+    api_response = "Fail"
 
     # Envoi du SMS via l'API HTTP externe
-    success, api_response, api_code = send_sms_via_api(sender, to, content, type, dlr, url)
+    api_code, api_response = send_sms_via_api(sender, to, content, type, dlr, url)
 
-    if success == False:
-        raise Exception(api_response)
+    if api_code < 200 or api_code > 299:
+        raise Exception("Fail sending SMS")
 except Exception as e:
     # We got an error when calling for charging
     # Return ESME_RDELIVERYFAILURE
@@ -65,5 +62,5 @@ except Exception as e:
 finally:
     log_file = "/var/log/jasmin/mt_interceptor.log"
     with open(log_file, "a") as file:
-        file.write("{0} : send SMS from {1} to {2} ({3} - {4})".format(dateSend, sender, to, success, api_response))
+        file.write("{0} : send SMS from {1} to {2} ({3} - {4})".format(dateSend, sender, to, api_code, api_response))
         file.write('\n')
