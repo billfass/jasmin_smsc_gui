@@ -57,7 +57,7 @@ except Exception as e:
     # Return ESME_RDELIVERYFAILURE
     # smpp_status = 254
     http_status = 400
-else:
+finally:
     if success:
         # Return ESME_ROK
         # smpp_status = 0
@@ -66,7 +66,7 @@ else:
         # Return ESME_RDELIVERYFAILURE
         # smpp_status = 254
         http_status = 400
-finally:
+        
     log_file = "/var/log/jasmin/mt_interceptor.log"
     with open(log_file, "a") as file:
         file.write("{0} : send SMS from {1} to {2} ({3} - {4})".format(dateSend, sender, to, success, api_response))
