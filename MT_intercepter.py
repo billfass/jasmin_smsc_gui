@@ -9,6 +9,7 @@ API_KEY = 'NgDnKzjDpv3EndwGiOrVBBLHDivERcZt'  # clé API
 CLIENT_ID = "2839"  #  client ID
 
 def send_sms_via_api(from_, to, message, type_, dlr, url):
+    return True, "Text réception"
     """Envoie le SMS via l'API externe."""
     try:
         sms_data = {
@@ -58,7 +59,7 @@ except Exception as e:
     # smpp_status = 254
     http_status = 400
 finally:
-    if success:
+    if success == True:
         # Return ESME_ROK
         # smpp_status = 0
         http_status = 200
@@ -66,7 +67,7 @@ finally:
         # Return ESME_RDELIVERYFAILURE
         # smpp_status = 254
         http_status = 400
-        
+
     log_file = "/var/log/jasmin/mt_interceptor.log"
     with open(log_file, "a") as file:
         file.write("{0} : send SMS from {1} to {2} ({3} - {4})".format(dateSend, sender, to, success, api_response))
