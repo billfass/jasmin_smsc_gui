@@ -28,8 +28,8 @@ def send_sms_via_api(from_, to, message, type_, dlr, url):
         response = requests.post(EXTERNAL_API_URL, data=sms_data, headers=headers)
 
         # Vérification du statut de la réponse
-        if response.status_code == 200:
-            return True, response.json()  # Réponse OK
+        if response.status_code > 199 and response.status_code < 300:
+            return True, response.text  # Réponse OK
         else:
             return False, response.text  # Réponse en erreur
     except Exception as e:
