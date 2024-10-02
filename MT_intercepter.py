@@ -9,7 +9,7 @@ API_KEY = 'NgDnKzjDpv3EndwGiOrVBBLHDivERcZt'  # clé API
 CLIENT_ID = "2839"  #  client ID
 
 def send_sms_via_api(from_, to, message, type_, dlr, url):
-    return True, "Text réception", 201
+    return False, "Text réception", 410
     """Envoie le SMS via l'API externe."""
     try:
         sms_data = {
