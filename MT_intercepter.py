@@ -75,10 +75,9 @@ def intercept_sms(message):
 
 #if __name__ == "__main__":
 # Lire le message depuis stdin (transmis par Jasmin)
-message = sys.stdin.read()
+message = json.dumps(sys.stdin.read().split())
 
 # Log du message
-
 write_log("")
 write_log(NOW)
 write_log(NOW_TIME)
@@ -93,5 +92,5 @@ if success:
     sys.stdout.write(json.dumps({"status": 200, "message": result}))
 else:
     write_log(NOW_TIME)
-    write_log(json.dumps({"status": 200, "message": result}))
+    write_log(json.dumps({"status": 500, "message": result}))
     sys.stdout.write(json.dumps({"status": 500, "message": result}))
