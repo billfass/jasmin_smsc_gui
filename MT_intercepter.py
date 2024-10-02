@@ -9,7 +9,7 @@ API_KEY = 'NgDnKzjDpv3EndwGiOrVBBLHDivERcZt'  # clé API
 CLIENT_ID = "2839"  #  client ID
 
 def send_sms_via_api(from_, to, message, type_, dlr, url):
-    return True, "Text réception"
+    return True, "Text réception", 201
     """Envoie le SMS via l'API externe."""
     try:
         sms_data = {
@@ -52,12 +52,12 @@ try:
     url = ''  # DLR URL
 
     # Envoi du SMS via l'API HTTP externe
-    success, api_response = send_sms_via_api(sender, to, content, type, dlr, url)
+    success, api_response, api_code = send_sms_via_api(sender, to, content, type, dlr, url)
 
     if success == False:
         raise Exception(api_response)
 
-    http_status = 200
+    http_status = api_code
 except Exception as e:
     # We got an error when calling for charging
     # Return ESME_RDELIVERYFAILURE
