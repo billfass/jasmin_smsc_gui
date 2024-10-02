@@ -75,7 +75,8 @@ def intercept_sms(message):
 
 #if __name__ == "__main__":
 # Lire le message depuis stdin (transmis par Jasmin)
-message = json.dumps(sys.stdin.read().split())
+#message = json.dumps(sys.stdin.read().split())
+message = json.dumps(routable.pdu.params)
 
 # Log du message
 write_log("")
