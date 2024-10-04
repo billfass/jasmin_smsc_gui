@@ -8,8 +8,8 @@ EXTERNAL_API_URL = "https://edok-api.kingsmspro.com/api/v1/sms/send"
 API_KEY = 'NgDnKzjDpv3EndwGiOrVBBLHDivERcZt'  # clé API
 CLIENT_ID = "2839"  #  client ID
 
-def send_sms_via_fake(code = 201, text = ""):
-    #return code, json.dumps({}), text
+def send_sms_via_fake(code = 201, text = "Test fake response"):
+    return code, json.dumps({}), text
     import uuid
     from unittest.mock import Mock
 
