@@ -11,22 +11,13 @@ CLIENT_ID = "2839"  #  client ID
 def send_sms_via_fake(code = 201, text = "Test fake response"):
     """Méthode pour simuler un requests.Response"""
     import uuid
-    from unittest.mock import Mock
 
     try:
         id_uniq = uuid.uuid4()
         if text == "":
             text = str('{"messageId":"%s"}' % id_uniq)
 
-        r_mock = Mock(spec=requests.Response)
-
-        r_mock.status_code = code
-        r_mock.text = text
-        r_mock.json.return_value = {"messageId":id_uniq}
-        r_mock.headers = {"Content-Type":"application/json","Server":"Apache"}
-        r_mock.url = "https://example.com/api"
-
-        return r_mock.status_code, r_mock.json, r_mock.text
+        return code, {"messageId":id_uniq}, text
     except Exception as e:
         #sys.stderr.write(f"Erreur d'envoi de l'API : {str(e)}\n")
         return 400, {}, str(e)
