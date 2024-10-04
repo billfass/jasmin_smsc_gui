@@ -79,7 +79,7 @@ except Exception as e:
     # smpp_status = 254
     http_status = api_code
 finally:
-    log_file = "/var/log/jasmin/mt_interceptor/{daySend}.log"
+    log_file = "/var/log/jasmin/mt_interceptor_{daySend}.log"
     with open(log_file, "a") as file:
         file.write("{0} : send SMS from {1} to {2} ({3} - {4} {5})".format(dateSend, sender, to, api_code, api_text, message_id))
         file.write('\n')
