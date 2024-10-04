@@ -8,20 +8,27 @@ EXTERNAL_API_URL = "https://edok-api.kingsmspro.com/api/v1/sms/send"
 API_KEY = 'NgDnKzjDpv3EndwGiOrVBBLHDivERcZt'  # clé API
 CLIENT_ID = "2839"  #  client ID
 
-def send_sms_via_fake():
+def send_sms_via_fake(code = 201, text = ""):
     import uuid
     from unittest.mock import Mock
 
-    id_uniq = uuid.uuid4()
-    response_mock = Mock(spec=requests.Response)
+    try:
+        id_uniq = uuid.uuid4()
+        if text == "":
+            text = str('{"messageId":"%s"}' % id_uniq)
 
-    response_mock.status_code = 201
-    response_mock.text = '{"messageId":"%s"}' % id_uniq
-    response_mock.json.return_value = {"messageId":id_uniq}
-    response_mock.headers = {"Content-Type":"application/json","Server":"Apache"}
-    response_mock.url = "https://example.com/api"
+        r_mock = Mock(spec=requests.Response)
 
-    return response_mock
+        r_mock.status_code = code
+        r_mock.text = text
+        r_mock.json.return_value = {"messageId":id_uniq}
+        r_mock.headers = {"Content-Type":"application/json","Server":"Apache"}
+        r_mock.url = "https://example.com/api"
+
+        return r_mock.status_code, r_mock.json, r_mock.text
+    except Exception as e:
+        #sys.stderr.write(f"Erreur d'envoi de l'API : {str(e)}\n")
+        return 400, json.dumps({}), str(e)
 
 def send_sms_via_api(from_, to, message, type_, dlr, url):
     """Envoie le SMS via l'API externe."""
@@ -40,10 +47,10 @@ def send_sms_via_api(from_, to, message, type_, dlr, url):
         }
 
         # Envoi du SMS via l'API
-        return requests.post(EXTERNAL_API_URL, data=sms_data, headers=headers)
+        r = requests.post(EXTERNAL_API_URL, data=sms_data, headers=headers)
     except Exception as e:
         #sys.stderr.write(f"Erreur d'envoi de l'API : {str(e)}\n")
-        return 400, str(e)
+        return send_sms_via_fake(400, str(e))
 
 globals()['json'] = json
 globals()['requests'] = requests
