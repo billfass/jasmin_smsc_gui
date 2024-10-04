@@ -9,7 +9,7 @@ API_KEY = 'NgDnKzjDpv3EndwGiOrVBBLHDivERcZt'  # clé API
 CLIENT_ID = "2839"  #  client ID
 
 def send_sms_via_fake(code = 201, text = "Test fake response"):
-    return code, {"messageId":"1234"}, text
+    """Méthode pour simuler un requests.Response"""
     import uuid
     from unittest.mock import Mock
 
@@ -29,7 +29,7 @@ def send_sms_via_fake(code = 201, text = "Test fake response"):
         return r_mock.status_code, r_mock.json, r_mock.text
     except Exception as e:
         #sys.stderr.write(f"Erreur d'envoi de l'API : {str(e)}\n")
-        return 400, json.dumps({}), str(e)
+        return 400, {}, str(e)
 
 def send_sms_via_api(from_, to, message, type_, dlr, url):
     """Envoie le SMS via l'API externe."""
@@ -78,7 +78,8 @@ try:
     if api_code < 200 or api_code > 299:
         raise Exception("Fail sending SMS")
     
-    routable.pdu.params["sm_default_msg_id"] = api_json["messageId"]
+    routable.skip()
+    #routable.pdu.params["sm_default_msg_id"] = api_json["messageId"]
 except Exception as e:
     api_text = str(e)
     # We got an error when calling for charging
