@@ -3,15 +3,25 @@
 import json
 import requests
 from datetime import datetime
-import uuid
 
 EXTERNAL_API_URL = "https://edok-api.kingsmspro.com/api/v1/sms/send"
 API_KEY = 'NgDnKzjDpv3EndwGiOrVBBLHDivERcZt'  # clé API
 CLIENT_ID = "2839"  #  client ID
 
 def send_sms_via_fake():
+    import uuid
+    from unittest.mock import Mock
+
     id_uniq = uuid.uuid4()
-    return json.dumps({"status_code":201, "json":{"messageId":id_uniq}, "text":"{\"messageId\":\"%s\"}" % id_uniq})
+    response_mock = Mock(spec=requests.Response)
+
+    response_mock.status_code = 201
+    response_mock.text = '{"messageId":"%s"}' % id_uniq
+    response_mock.json.return_value = {"messageId":id_uniq}
+    response_mock.headers = {"Content-Type":"application/json","Server":"Apache"}
+    response_mock.url = "https://example.com/api"
+
+    return response_mock
 
 def send_sms_via_api(from_, to, message, type_, dlr, url):
     """Envoie le SMS via l'API externe."""
