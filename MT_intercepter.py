@@ -8,7 +8,7 @@ EXTERNAL_API_URL = "https://edok-api.kingsmspro.com/api/v1/sms/send"
 API_KEY = 'NgDnKzjDpv3EndwGiOrVBBLHDivERcZt'  # clé API
 CLIENT_ID = "2839"  #  client ID
 
-def send_sms_via_fake(code = 201, text = "Test fake response"):
+def send_sms_via_fake(code = 401, text = "Test fake response"):
     """Méthode pour simuler un requests.Response"""
     import uuid
 
@@ -68,11 +68,10 @@ try:
     api_code, api_json, api_text = send_sms_via_fake()
     #api_response = send_sms_via_api(sender, to, content, type_, dlr, url)
 
+    message_id = routable.user #routable.pdu.params["sm_default_msg_id"]
+
     if api_code < 200 or api_code > 299:
         raise Exception("Fail sending SMS")
-    
-    message_id = routable.pdu.params["sm_default_msg_id"]
-    smpp_status = 0
 except Exception as e:
     api_text = str(e)
     # We got an error when calling for charging
