@@ -80,6 +80,7 @@ try:
     
     routable.pdu.params["sm_default_msg_id"] = api_json["messageId"]
 except Exception as e:
+    api_text = str(e)
     # We got an error when calling for charging
     # Return ESME_RDELIVERYFAILURE
     # smpp_status = 254
