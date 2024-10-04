@@ -57,6 +57,7 @@ try:
     url = ''  # DLR URL
     api_code = 400
     api_text = "Fail"
+    message_id = ""
     dateSend = datetime.now().isoformat() + 'Z'
     to = routable.pdu.params['destination_addr']
     sender = routable.pdu.params['source_addr']
@@ -69,8 +70,8 @@ try:
     if api_code < 200 or api_code > 299:
         raise Exception("Fail sending SMS")
     
-    routable.skip()
-    #routable.pdu.params["sm_default_msg_id"] = api_json["messageId"]
+    message_id = routable.pdu.params["sm_default_msg_id"]
+    #= api_json["messageId"]
 except Exception as e:
     api_text = str(e)
     # We got an error when calling for charging
@@ -80,5 +81,5 @@ except Exception as e:
 finally:
     log_file = "/var/log/jasmin/mt_interceptor.log"
     with open(log_file, "a") as file:
-        file.write("{0} : send SMS from {1} to {2} ({3} - {4})".format(dateSend, sender, to, api_code, api_text))
+        file.write("{0} : send SMS from {1} to {2} ({3} - {4} {5})".format(dateSend, sender, to, api_code, api_text, message_id))
         file.write('\n')
