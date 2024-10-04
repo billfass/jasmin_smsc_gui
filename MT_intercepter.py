@@ -9,7 +9,7 @@ API_KEY = 'NgDnKzjDpv3EndwGiOrVBBLHDivERcZt'  # clé API
 CLIENT_ID = "2839"  #  client ID
 
 def send_sms_via_fake(code = 201, text = "Test fake response"):
-    return code, json.dumps({}), text
+    return code, {"messageId":"1234"}, text
     import uuid
     from unittest.mock import Mock
 
