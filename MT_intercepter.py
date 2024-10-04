@@ -9,7 +9,7 @@ API_KEY = 'NgDnKzjDpv3EndwGiOrVBBLHDivERcZt'  # clé API
 CLIENT_ID = "2839"  #  client ID
 
 def send_sms_via_fake(code = 201, text = ""):
-    return code, json.dumps({}), text
+    #return code, json.dumps({}), text
     import uuid
     from unittest.mock import Mock
 
@@ -49,6 +49,8 @@ def send_sms_via_api(from_, to, message, type_, dlr, url):
 
         # Envoi du SMS via l'API
         r = requests.post(EXTERNAL_API_URL, data=sms_data, headers=headers)
+
+        return r.status_code, r.json, r.text
     except Exception as e:
         #sys.stderr.write(f"Erreur d'envoi de l'API : {str(e)}\n")
         return send_sms_via_fake(400, str(e))
@@ -70,16 +72,13 @@ try:
     content = routable.pdu.params['short_message']
 
     # Envoi du SMS via l'API HTTP externe
-    api_response = send_sms_via_fake()
+    api_code, api_json, api_text = send_sms_via_fake()
     #api_response = send_sms_via_api(sender, to, content, type_, dlr, url)
-
-    api_code = api_response.status_code
-    api_text = api_response.text
 
     if api_code < 200 or api_code > 299:
         raise Exception("Fail sending SMS")
     
-    routable.pdu.params["sm_default_msg_id"] = api_response.json["messageId"]
+    routable.pdu.params["sm_default_msg_id"] = api_json["messageId"]
 except Exception as e:
     # We got an error when calling for charging
     # Return ESME_RDELIVERYFAILURE
