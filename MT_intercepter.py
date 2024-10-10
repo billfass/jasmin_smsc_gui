@@ -8,7 +8,7 @@ EXTERNAL_API_URL = "https://edok-api.kingsmspro.com/api/v1/sms/send"
 API_KEY = 'NgDnKzjDpv3EndwGiOrVBBLHDivERcZt'  # clé API
 CLIENT_ID = "2839"  #  client ID
 
-def send_sms_via_fake(code = 401, text = "Test fake response"):
+def send_sms_via_fake(code = 201, text = "Test fake response"):
     """Méthode pour simuler un requests.Response"""
     import uuid
 
@@ -58,6 +58,7 @@ try:
     api_code = 400
     api_text = "Fail"
     message_id = ""
+    message_user = ""
     dateSend = datetime.now().isoformat() + 'Z'
     daySend = datetime.now().strftime('%Y%m%d%H')
     to = routable.pdu.params['destination_addr']
@@ -66,12 +67,15 @@ try:
 
     # Envoi du SMS via l'API HTTP externe
     api_code, api_json, api_text = send_sms_via_fake()
-    #api_response = send_sms_via_api(sender, to, content, type_, dlr, url)
-
-    message_id = routable.user #routable.pdu.params["sm_default_msg_id"]
+    #api_code, api_json, api_text = send_sms_via_api(sender, to, content, type_, dlr, url)
 
     if api_code < 200 or api_code > 299:
         raise Exception("Fail sending SMS")
+
+    message_id   = api_json.messageId
+    message_user = routable.user #routable.pdu.params["sm_default_msg_id"]
+
+    smpp_status = 0
 except Exception as e:
     api_text = str(e)
     # We got an error when calling for charging
@@ -79,7 +83,7 @@ except Exception as e:
     # smpp_status = 254
     http_status = api_code
 finally:
-    log_file = "/var/log/jasmin/mt_interceptor_{daySend}.log"
+    log_file = "/var/log/jasmin/mt_interceptor/{0}.log".format(daySend)
     with open(log_file, "a") as file:
         file.write("{0} : send SMS from {1} to {2} ({3} - {4} {5})".format(dateSend, sender, to, api_code, api_text, message_id))
         file.write('\n')
