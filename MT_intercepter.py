@@ -72,10 +72,10 @@ try:
     if api_code < 200 or api_code > 299:
         raise Exception("Fail sending SMS")
 
-    message_id   = api_json.messageId
+    message_id   = api_json["messageId"]
     message_user = routable.user #routable.pdu.params["sm_default_msg_id"]
 
-    smpp_status = 0
+    # smpp_status = 0
 except Exception as e:
     api_text = str(e)
     # We got an error when calling for charging
