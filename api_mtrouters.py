@@ -320,7 +320,6 @@ def bj_routers_by_group(data):
             return ret
 
         #################################
-
         order += 1
 
         d = dict(type=type, order=order, connector='bj_moov', filters=data['gid']+';bj_moov;', rate=data['rate'])
