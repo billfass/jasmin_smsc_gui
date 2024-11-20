@@ -331,7 +331,7 @@ def bj_routers_by_group(data):
         #################################
         order += 1
 
-        d = dict(type=type, order=order, connector='bj_moov', filters=data['gid']+';bj_celtiis;', rate=data['rate'])
+        d = dict(type=type, order=order, connector='bj_sbin_local', filters=data['gid']+';bj_celtiis_3;', rate=data['rate'])
         ret = new_mtrouter(d)
         if ret["code"] != 200:
             return ret
