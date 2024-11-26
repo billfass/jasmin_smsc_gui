@@ -2,7 +2,7 @@ from py4web import action, request
 from .common import db, session, auth, flash, jasmin, api_resp, api_id
 from pydal.validators import *
 from .utils import cols_split
-from .user_manager import list_users, list_groups, disable_user, enable_user
+from .user_manager import list_users, list_groups, disable_user, enable_user, remove_user
 from .api_groups import new_group
 from .api_refill import getCreds, refill
 from .api_filters import new_filter
@@ -19,6 +19,14 @@ def enable_user_api(data):
 def disable_user_api(data):
     try:
         ret = disable_user(data['uid'])
+    except Exception as e:
+        return dict(code=403, message=str(e))
+    
+    return dict(code=200, message=ret)
+
+def delete_user_api(data):
+    try:
+        ret = remove_user(data['uid'])
     except Exception as e:
         return dict(code=403, message=str(e))
     
@@ -79,6 +87,8 @@ def users_manage(action=None):
             ret = enable_user_api(data)
         elif action == "disable":
             ret = disable_user_api(data)
+        elif action == "delete":
+            ret = delete_user_api(data)
         elif action == "list":
             return api_resp(list_users(), 200, "Users")
         else:
