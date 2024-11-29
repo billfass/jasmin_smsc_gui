@@ -309,6 +309,17 @@ def new_mtrouter(data):
     
     return dict(code=200, data=data, message='Added mtrouter')
 
+def update_mtrouter(data):
+    try:
+        if not "order" in data:
+            return dict(code=400, data=data, message="order not found")
+        jasmin.mtrouter(['remove',data["order"]])
+        new_mtrouter(data)
+    except Exception as e:
+        return dict(code=400, data=data, message=str(e))
+    
+    return dict(code=200, data=data, message='Update mtrouter')
+
 def bj_routers_by_group(data):    
     try:
         order = get_order()
@@ -330,7 +341,7 @@ def bj_routers_by_group(data):
         #################################
         order += 1
 
-        d = dict(type=type, order=order, connector='bj_sbin_local', filters=data['gid']+';bj_celtiis_3;', rate=data['rate'])
+        d = dict(type=type, order=order, connector='bj_sbin_local', filters=data['gid']+';bj_celtiis;', rate=data['rate'])
         ret = new_mtrouter(d)
         if ret["code"] != 200:
             return ret
@@ -352,6 +363,9 @@ def groups_manage(action=None):
     try:
         if action == "create":
             ret = new_mtrouter(data)
+            data = ret['data']
+        elif action == "update":
+            ret = update_mtrouter(data)
             data = ret['data']
         elif action == "switch":
             ret = switch(data)
