@@ -314,7 +314,7 @@ def update_mtrouter(data):
         if not "order" in data:
             return dict(code=400, data=data, message="order not found")
         jasmin.mtrouter(['remove',data["order"]])
-        new_mtrouter(data)
+        new_mtrouter(dict(type=data["type"], order=data["order"], connector=data["connector"], filters=data['filters'], rate=data['rate']))
     except Exception as e:
         return dict(code=400, data=data, message=str(e))
     
