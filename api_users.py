@@ -26,7 +26,7 @@ def disable_user_api(data):
 
 def delete_user_api(data):
     try:
-        ret = remove_user(data['uid'])
+        ret = data['uid'] #remove_user(data['uid'])
     except Exception as e:
         return dict(code=403, message=str(e))
     
