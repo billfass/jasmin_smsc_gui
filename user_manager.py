@@ -113,13 +113,15 @@ def enable_user(user):
         return t
     
 
-def remove_user(user):
+def remove_user(user, source = 'web'):
     t = jasmin.users(['remove_user', user] )
     flash.set('User %s removed' % user)
     query = db.j_user.j_uid == user
     db(query).delete()
     query = db.j_user_cred.juser == user
     db(query).delete()
+    if source == 'api':
+        return t
     redirect(URL('manage_users'))
     
 @action('user_credentials/<user>', method=['GET', 'POST'])
