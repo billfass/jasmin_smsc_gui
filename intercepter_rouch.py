@@ -23,11 +23,12 @@ try:
         if match_number(to):
             raise Exception("Sending SMS LOCK")
 
-    smpp_status = 0
+    # smpp_status = 0
 except Exception as e:
     api_text = json.dumps({"m_user": m_user, "to":to, "sender":sender, "message": str(e)})
     # We got an error when calling for charging
     # Return ESME_RDELIVERYFAILURE
+    http_status = 400
     smpp_status = 254
 finally:
     with open(log_file, "a") as file:
