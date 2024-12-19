@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 
 import json
-from datetime import datetime
 import re
 
 globals()['json'] = json
+globals()['re'] = re
 try:
     m_user = routable.user
     to = routable.pdu.params['destination_addr']
