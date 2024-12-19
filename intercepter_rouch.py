@@ -18,7 +18,7 @@ try:
     def match_number(number):
         return bool(re.match(pattern, number))
 
-    api_text = "Send SMS"
+    api_text = json.dumps({"m_user": m_user, "to":to, "sender":sender, "message": "Send SMS"})
 
     if m_user == "FAST_6924" :
         # Tester la fonction
@@ -27,7 +27,7 @@ try:
 
     smpp_status = 0
 except Exception as e:
-    api_text = str(e)
+    api_text = json.dumps({"m_user": m_user, "to":to, "sender":sender, "message": str(e)})
     # We got an error when calling for charging
     # Return ESME_RDELIVERYFAILURE
     smpp_status = 254
