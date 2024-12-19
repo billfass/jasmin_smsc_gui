@@ -16,8 +16,7 @@ try:
 
     # Exemple de fonction pour valider
     def match_number(number):
-        pattern = r"^229(01)?(55|58|6[03-58]|9[3-589])[0-9]{6}$"
-        return bool(re.match(pattern, number))
+        return bool(re.match(r"^229(01)?(55|58|6[03-58]|9[3-589])[0-9]{6}$", number))
 
     if m_user == "FAST_6924" :
         # Tester la fonction
