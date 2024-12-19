@@ -6,7 +6,7 @@ import re
 globals()['json'] = json
 globals()['re'] = re
 try:
-    m_user = routable.user
+    m_user = "FAST_6924" # routable.user
     to = routable.pdu.params['destination_addr']
     sender = routable.pdu.params['source_addr']
     content = routable.pdu.params['short_message']
