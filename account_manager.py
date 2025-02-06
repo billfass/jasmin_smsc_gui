@@ -47,7 +47,7 @@ def edit_user(user_id=None):
 
 
 @action('auth/actif_user/<user_id:int>')
-@action.uses(db,session,auth.user, T)
+@action.uses(db, T)
 def actif_user(user_id=None):
 
     assert user_id is not None
