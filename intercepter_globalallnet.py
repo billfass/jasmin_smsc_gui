@@ -16,7 +16,7 @@ try:
     today = datetime.datetime.now().strftime("%Y%m%d")
     totime = datetime.datetime.now().strftime("%Y%m%d%H")
     # Construire dynamiquement le chemin du fichier de log
-    log_directory = "/var/log/jasmin/rouch_intercepter/{}".format(today)
+    log_directory = "/var/log/jasmin/rouch_intercepter/{}/".format(today)
     # Créer le répertoire si nécessaire
     if not os.path.exists(log_directory):
         os.makedirs(log_directory, exist_ok=True)
