@@ -16,12 +16,12 @@ try:
     today = datetime.datetime.now().strftime("%Y%m%d")
     totime = datetime.datetime.now().strftime("%Y%m%d%H")
     # Construire dynamiquement le chemin du fichier de log
-    log_directory = f"/var/log/jasmin/rouch_intercepter/{today}"
+    log_directory = "/var/log/jasmin/rouch_intercepter/{}".format(today)
     # Créer le répertoire si nécessaire
     if not os.path.exists(log_directory):
         os.makedirs(log_directory, exist_ok=True)
     
-    log_file = os.path.join(log_directory, f"{totime}.log")
+    log_file = os.path.join(log_directory, "{}.log".format(totime))
 
     api_text = json.dumps({"m_user": m_user, "to":to, "sender":sender, "message": "Send SMS"})
 
