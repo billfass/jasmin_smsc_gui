@@ -16,15 +16,17 @@ try:
     today = datetime.datetime.now().strftime("%Y%m%d")
     totime = datetime.datetime.now().strftime("%Y%m%d%H")
 
-    if not os.path.exists("/var/log/jasmin/globalallnet_intercepter"):
-        os.makedirs("/var/log/jasmin/globalallnet_intercepter", 777, True)
-    # Construire dynamiquement le chemin du fichier de log
-    log_directory = "/var/log/jasmin/globalallnet_intercepter/20250307" #os.path.join("/var/log/jasmin/globalallnet_intercepter", today)
-    # Créer le répertoire si nécessaire
-    if not os.path.exists(log_directory):
-        os.makedirs(log_directory, 777, True)
+    log_directory = "/var/log/jasmin/globalallnet_intercepter"
+
+    # if not os.path.exists(log_directory):
+    #     os.makedirs(log_directory, 777, True)
+    # # Construire dynamiquement le chemin du fichier de log
+    # log_directory = os.path.join(log_directory, today)
+    # # Créer le répertoire si nécessaire
+    # if not os.path.exists(log_directory):
+    #     os.makedirs(log_directory, 777, True)
     
-    log_file = os.path.join(log_directory, totime, ".log")
+    log_file = log_directory+".log" #os.path.join(log_directory, totime, ".log")
 
     api_text = json.dumps({"m_user": m_user, "to":to, "sender":sender, "message": "Send SMS"})
 
