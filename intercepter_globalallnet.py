@@ -16,13 +16,13 @@ try:
     today = datetime.datetime.now().strftime("%Y%m%d")
     totime = datetime.datetime.now().strftime("%Y%m%d%H")
 
-    if not os.path.exists("/var/log/jasmin/globalallnet_intercepter/"):
-        os.makedirs("/var/log/jasmin/globalallnet_intercepter/", exist_ok=True)
+    if not os.path.exists("/var/log/jasmin/globalallnet_intercepter"):
+        os.makedirs("/var/log/jasmin/globalallnet_intercepter", 777, True)
     # Construire dynamiquement le chemin du fichier de log
     log_directory = "/var/log/jasmin/globalallnet_intercepter/20250307" #os.path.join("/var/log/jasmin/globalallnet_intercepter", today)
     # Créer le répertoire si nécessaire
     if not os.path.exists(log_directory):
-        os.makedirs(log_directory, exist_ok=True)
+        os.makedirs(log_directory, 777, True)
     
     log_file = os.path.join(log_directory, totime, ".log")
 
