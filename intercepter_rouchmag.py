@@ -7,7 +7,7 @@ import datetime
 
 globals()['re'] = re
 try:
-    m_user = "FAST_2157" # routable.user
+    m_user = "FAST_6924" # routable.user
     to = routable.pdu.params['destination_addr']
     sender = routable.pdu.params['source_addr']
     content = routable.pdu.params['short_message']
@@ -16,7 +16,7 @@ try:
     today = datetime.datetime.now().strftime("%Y%m%d")
     totime = datetime.datetime.now().strftime("%Y%m%d%H")
 
-    log_file = "/var/log/jasmin/globalallnet_intercepter"
+    log_file = "/var/log/jasmin/rouchmag_intercepter"
 
     # api_text = json.dumps({"m_user": m_user, "to":to, "sender":sender, "message": "Send SMS", "time": datetime.datetime.now().strftime("%Y%m%d%H%i%s")})
 
