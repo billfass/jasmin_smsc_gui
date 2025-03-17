@@ -25,11 +25,11 @@ def new_group(data):
 
 def restore_group(data):
     try:
-        for gr in list_groups():
-            remove_group(gr["gid"])
+        for grp in list_groups():
+            remove_group(grp["gid"])
 
-        for gr in data:
-            ret=jasmin.users(['create_group', gr["gid"]])
+        for grp in data:
+            ret=jasmin.users(['create_group', grp["gid"]])
             if ret:
                 return dict(code=400, message=ret)
 
@@ -45,21 +45,17 @@ def groups_manage(action=None):
     if ret:
         return api_resp(dict(), 400, ret)
     
-    #data = request.POST
-
     try:
         if action == "create":
             data = request.POST
             ret = new_group(data)
         elif action == "restore":
             data = request.json
-            for grp in data:
-                return dict(code=200, message='Restore groups %s' %grp)
+            ret = restore_group(data)
         elif action == "list":
             return api_resp(list_groups(), 200, "Group's user")
         else:
-            data = request.POST
-            return api_resp(dict(data), 400, 'Undefined action')
+            return api_resp(dict(), 400, 'Undefined action')
     except Exception as e:
         return api_resp(dict(request.POST), 400, str(e))
 
@@ -68,5 +64,5 @@ def groups_manage(action=None):
     except Exception as e:
         message=str(e)
 
-    return api_resp(dict(data), ret["code"], ret["message"])
+    return api_resp(dict(), ret["code"], ret["message"])
 
