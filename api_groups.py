@@ -25,6 +25,7 @@ def new_group(data):
 
 def restore_group(data):
     try:
+        return dict(code=400, message='here')
         for grp in list_groups():
             remove_group(grp["gid"])
 
