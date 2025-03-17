@@ -45,16 +45,18 @@ def groups_manage(action=None):
     if ret:
         return api_resp(dict(), 400, ret)
     
-    data = request.POST
+    #data = request.POST
 
     try:
         if action == "create":
+            data = request.POST
             ret = new_group(data)
         elif action == "restore":
             return dict(code=200, message='Restore groups')
         elif action == "list":
             return api_resp(list_groups(), 200, "Group's user")
         else:
+            data = request.POST
             return api_resp(dict(data), 400, 'Undefined action')
     except Exception as e:
         return api_resp(dict(request.POST), 400, str(e))
