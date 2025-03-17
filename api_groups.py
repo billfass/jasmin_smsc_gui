@@ -53,7 +53,8 @@ def groups_manage(action=None):
             ret = new_group(data)
         elif action == "restore":
             data = request.json
-            return dict(code=200, message='Restore groups')
+            for grp in data:
+                return dict(code=200, message='Restore groups %s' %grp)
         elif action == "list":
             return api_resp(list_groups(), 200, "Group's user")
         else:
