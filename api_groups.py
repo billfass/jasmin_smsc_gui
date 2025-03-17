@@ -51,7 +51,7 @@ def groups_manage(action=None):
             data = request.POST
             ret = new_group(data)
         elif action == "restore":
-            data = request.json()
+            data = request.json
             return api_resp(dict(), 200, 'Valide Json')
             ret = restore_group(data)
         elif action == "list":
