@@ -43,18 +43,19 @@ def restore_group(data):
 @action('api/groups/<action>', method=['GET', 'POST'])
 @action.uses(db, session, auth, flash)
 def groups_manage(action=None):
-    # ret = api_id(request)
-    # if ret:
-    #     return api_resp(dict(), 400, ret)
+    ret = api_id(request)
+    if ret:
+        return api_resp(dict(), 400, ret)
     
     try:
         if action == "create":
             data = request.POST
             ret = new_group(data)
         elif action == "restore":
-            raw_body = request.body.read().decode("utf-8")  # JSON brut reçu
-            parsed_json = json.loads(raw_body) if raw_body else None
-            return api_resp(parsed_json, 200, "Group's user")
+            data = request.json
+            # raw_body = request.body.read().decode("utf-8")  # JSON brut reçu
+            # parsed_json = json.loads(raw_body) if raw_body else None
+            return api_resp(data, 200, "Group's user")
             ret = restore_group(data)
         elif action == "list":
             return api_resp(list_groups(), 200, "Group's user")
