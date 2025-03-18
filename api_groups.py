@@ -54,6 +54,13 @@ def groups_manage(action=None):
             ret = new_group(data)
         elif action == "restore":
             data = request.json
+            if "items" in data and isinstance(data["items"], list):
+                items = data["items"]
+
+                return dict(status="success", received=items)
+            else:
+                response.status = 400
+                return dict(error="Invalid JSON format: 'items' key missing or not a list")
             return api_resp(data, 200, "Group's user")
             ret = restore_group(data.items)
         elif action == "list":
