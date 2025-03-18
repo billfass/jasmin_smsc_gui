@@ -26,7 +26,7 @@ def new_group(data):
 
 def restore_group(data):
     try:
-        return dict(code=400, message='here')
+        # return dict(code=400, message='here')
         for grp in list_groups():
             remove_group(grp["gid"])
 
@@ -52,26 +52,8 @@ def groups_manage(action=None):
             data = request.POST
             ret = new_group(data)
         elif action == "restore":
-            # data = request.json
-            try:
-                # Lire le contenu brut du body (sinon, request.json ne fonctionnera pas après)
-                raw_body = request.body.read().decode("utf-8")  
-
-                # Re-parsing du JSON (car après .read(), request.json sera None)
-                parsed_json = json.loads(raw_body) if raw_body else None  
-
-                # Retourner les informations en JSON
-                return {
-                    "status": "success",
-                    # "data": json.loads(data),
-                    "headers": dict(request.headers),  # Convertir les headers en dictionnaire
-                    # "raw_body": raw_body,
-                    "parsed_json": parsed_json
-                }
-            except Exception as e:
-                return {"status": "error", "message": str(e)}
-            for grp in data:
-                return dict()
+            data = request.json
+            return api_resp(data, 200, "Group's user")
             ret = restore_group(data)
         elif action == "list":
             return api_resp(list_groups(), 200, "Group's user")
