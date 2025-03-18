@@ -26,11 +26,12 @@ def new_group(data):
 
 def restore_group(data):
     try:
-        # return dict(code=400, message='here')
+        return data
         for grp in list_groups():
             remove_group(grp["gid"])
 
         for grp in data:
+            return dict(code=400, message=grp["gid"])
             ret=jasmin.users(['create_group', grp["gid"]])
             if ret:
                 return dict(code=400, message=ret)
