@@ -40,7 +40,7 @@ def restore_group(data):
     except Exception as e:
         return dict(code=403, message=str(e))
     
-    return dict(code=200, message='Restore groups %s' %data)
+    return dict(code=200, message='Restore groups')
 
 @action('api/groups/<action>', method=['GET', 'POST'])
 @action.uses(db, session, auth, flash)
