@@ -27,9 +27,10 @@ def new_group(data):
 def restore_group(data):
     try:
         for grp in list_groups():
-            ret=jasmin.users(['remove_group',grp["gid"]])
-            if ret:
-                return dict(code=400, message=ret)
+            try:
+                jasmin.users(['remove_group',grp["gid"]])
+            except Exception as e:
+                continue
 
         for grp in data:
             ret=jasmin.users(['create_group', grp["gid"]])
