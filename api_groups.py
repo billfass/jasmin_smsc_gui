@@ -26,12 +26,11 @@ def new_group(data):
 
 def restore_group(data):
     try:
-        return data
         for grp in list_groups():
             remove_group(grp["gid"])
 
         for grp in data:
-            return dict(code=400, message=grp["gid"])
+            return dict(code=200, message=grp["gid"])
             ret=jasmin.users(['create_group', grp["gid"]])
             if ret:
                 return dict(code=400, message=ret)
@@ -57,12 +56,9 @@ def groups_manage(action=None):
             if "items" in data and isinstance(data["items"], list):
                 items = data["items"]
 
-                return dict(status="success", received=items)
+                ret = restore_group(items)
             else:
-                response.status = 400
-                return dict(error="Invalid JSON format: 'items' key missing or not a list")
-            return api_resp(data, 200, "Group's user")
-            ret = restore_group(data.items)
+                ret = dict(code=400, message="Invalid JSON format: 'items' key missing or not a list")
         elif action == "list":
             return api_resp(list_groups(), 200, "Group's user")
         else:
