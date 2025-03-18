@@ -71,6 +71,24 @@ def new_user(data):
     
     return dict(code=200, balance=ret["balance"], message='Added user %s' %data['username'])
 
+def restore_user(data):
+    try:
+        # for usr in list_users():
+        #     try:
+        #         remove_user(usr["uid"], "api")
+        #     except Exception as e:
+        #         continue
+
+        for usr in data:
+            ret = jasmin.users(['create_user', usr['uid'], usr['username'], usr['password'], usr['group']])
+            if ret:
+                return dict(code=400, message=ret)
+
+    except Exception as e:
+        return dict(code=403, message=str(e))
+    
+    return dict(code=200, message='Restore users')
+
 @action('api/users/<action>', method=['GET', 'POST'])
 @action.uses(db, session, auth, flash)
 def users_manage(action=None):
@@ -89,6 +107,14 @@ def users_manage(action=None):
             ret = disable_user_api(data)
         elif action == "delete":
             ret = delete_user_api(data)
+        elif action == "restore":
+            data = request.json
+            if "items" in data and isinstance(data["items"], list):
+                items = data["items"]
+                ret = dict(code=400, message=jasmin.list_it('users'))
+                # ret = restore_user(items)
+            else:
+                ret = dict(code=400, message="Invalid JSON format: 'items' key missing or not a list")
         elif action == "list":
             return api_resp(list_users(), 200, "Users")
         else:
