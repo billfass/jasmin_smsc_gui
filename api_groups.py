@@ -43,9 +43,9 @@ def restore_group(data):
 @action('api/groups/<action>', method=['GET', 'POST'])
 @action.uses(db, session, auth, flash)
 def groups_manage(action=None):
-    ret = api_id(request)
-    if ret:
-        return api_resp(dict(), 400, ret)
+    # ret = api_id(request)
+    # if ret:
+    #     return api_resp(dict(), 400, ret)
     
     try:
         if action == "create":
