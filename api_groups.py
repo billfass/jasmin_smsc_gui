@@ -52,7 +52,7 @@ def groups_manage(action=None):
             data = request.POST
             ret = new_group(data)
         elif action == "restore":
-            data = request.json
+            # data = request.json
             try:
                 # Lire le contenu brut du body (sinon, request.json ne fonctionnera pas après)
                 raw_body = request.body.read().decode("utf-8")  
@@ -63,7 +63,7 @@ def groups_manage(action=None):
                 # Retourner les informations en JSON
                 return {
                     "status": "success",
-                    # "data": dict(data),
+                    # "data": json.loads(data),
                     "headers": dict(request.headers),  # Convertir les headers en dictionnaire
                     "raw_body": raw_body,
                     "parsed_json": parsed_json
