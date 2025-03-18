@@ -6,6 +6,7 @@ from .user_manager import list_groups, remove_group
 from .api_filters import new_filter
 from .api_mtrouters import bj_routers_by_group
 from .super_admin import api_popualate_database
+import json
 
 def new_group(data):
     try:
@@ -52,8 +53,25 @@ def groups_manage(action=None):
             ret = new_group(data)
         elif action == "restore":
             data = request.json
+            try:
+                # Lire le contenu brut du body (sinon, request.json ne fonctionnera pas après)
+                raw_body = request.body.read().decode("utf-8")  
+
+                # Re-parsing du JSON (car après .read(), request.json sera None)
+                parsed_json = json.loads(raw_body) if raw_body else None  
+
+                # Retourner les informations en JSON
+                return {
+                    "status": "success",
+                    "data": dict(data),
+                    "headers": dict(request.headers),  # Convertir les headers en dictionnaire
+                    "raw_body": raw_body,
+                    "parsed_json": parsed_json
+                }
+            except Exception as e:
+                return {"status": "error", "message": str(e)}
             for grp in data:
-                return api_resp(dict(), 200, 'Valide Json %s' %grp)
+                return dict()
             ret = restore_group(data)
         elif action == "list":
             return api_resp(list_groups(), 200, "Group's user")
