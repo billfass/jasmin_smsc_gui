@@ -52,21 +52,21 @@ def groups_manage(action=None):
             data = request.POST
             ret = new_group(data)
         elif action == "restore":
-            # data = request.json
+            data = request.json
             try:
                 # Lire le contenu brut du body (sinon, request.json ne fonctionnera pas après)
-                # raw_body = request.body.read().decode("utf-8")  
+                raw_body = request.body.read().decode("utf-8")  
 
                 # Re-parsing du JSON (car après .read(), request.json sera None)
-                # parsed_json = json.loads(raw_body) if raw_body else None  
+                parsed_json = json.loads(raw_body) if raw_body else None  
 
                 # Retourner les informations en JSON
                 return {
                     "status": "success",
                     # "data": json.loads(data),
-                    # "headers": dict(request.headers),  # Convertir les headers en dictionnaire
+                    "headers": dict(request.headers),  # Convertir les headers en dictionnaire
                     # "raw_body": raw_body,
-                    # "parsed_json": parsed_json
+                    "parsed_json": parsed_json
                 }
             except Exception as e:
                 return {"status": "error", "message": str(e)}
