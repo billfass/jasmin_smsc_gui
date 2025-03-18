@@ -64,7 +64,7 @@ def groups_manage(action=None):
                 return {
                     "status": "success",
                     # "data": json.loads(data),
-                    "headers": dict(request.headers),  # Convertir les headers en dictionnaire
+                    # "headers": dict(request.headers),  # Convertir les headers en dictionnaire
                     # "raw_body": raw_body,
                     # "parsed_json": parsed_json
                 }
