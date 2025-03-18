@@ -1,4 +1,4 @@
-from py4web import action, request
+from py4web import action, request, response
 from .common import db, session, auth, flash, jasmin, api_resp, api_id
 from pydal.validators import *
 from .utils import cols_split
@@ -52,8 +52,9 @@ def groups_manage(action=None):
             data = request.POST
             ret = new_group(data)
         elif action == "restore":
-            data = request.json
-            return api_resp(data, 200, "Group's user")
+            raw_body = request.body.read().decode("utf-8")  # JSON brut reçu
+            parsed_json = json.loads(raw_body) if raw_body else None
+            return api_resp(parsed_json, 200, "Group's user")
             ret = restore_group(data)
         elif action == "list":
             return api_resp(list_groups(), 200, "Group's user")
