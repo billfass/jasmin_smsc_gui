@@ -3,6 +3,7 @@ import requests
 # Tu peux définir ici une correspondance username => password
 USER_CREDENTIALS = {
     'Urban002': 'Urban002',
+    'inte5564': 'd7a9763c',
     #'user2': 'pass2',
     #'smppuser': 'smpppass',
     # Ajoute tous tes utilisateurs ici
@@ -32,8 +33,7 @@ def mt_interceptor_smpp(message):
                 "to": to,
                 "from": sender,
                 "text": content,
-                "messageId": message.message_id,
-                "resend": true
+                "messageId": message.message_id
             }
             
             if dlr_url:
