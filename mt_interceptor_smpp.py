@@ -11,7 +11,7 @@ USER_CREDENTIALS = {
 
 def mt_interceptor_smpp(message):
     if message.status == 'ERROR/ESME_RSUBMITFAIL':
-        message.log.info(f"[Interceptor] ESME_RSUBMITFAIL - triggering resend.")
+        message.log.info("[Interceptor] ESME_RSUBMITFAIL - triggering resend.")
     
         try:
             # Récupération des infos du message
@@ -23,7 +23,7 @@ def mt_interceptor_smpp(message):
             dlr_url = getattr(message, 'dlr_url', None)
 
             if not password:
-                message.log.error(f"[Interceptor] No password found for user: {username}, skipping resend.")
+                message.log.error("[Interceptor] No password found for user: , skipping resend.")
                 return message
 
             # Requête vers /send
@@ -33,7 +33,8 @@ def mt_interceptor_smpp(message):
                 "to": to,
                 "from": sender,
                 "text": content,
-                "messageId": message.message_id
+                "messageId": message.message_id,
+                "resend": "true"
             }
             
             if dlr_url:
@@ -44,9 +45,9 @@ def mt_interceptor_smpp(message):
                 data=data,
                 timeout=5
             )
-            message.log.info(f"[Interceptor] Resend done: {response.status_code} {response.text}")
+            message.log.info("[Interceptor] Resend done: ")
         except Exception as e:
-            message.log.error(f"[Interceptor] Resend failed: {e}")
+            message.log.error("[Interceptor] Resend failed:")
 
         message.retry = False  # On évite que Jasmin retry lui-même
 
