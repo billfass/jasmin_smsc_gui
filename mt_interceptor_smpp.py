@@ -12,6 +12,8 @@ USER_CREDENTIALS = {
 }
 
 def mt_interceptor_smpp(message):
+    message.log.info("[Interceptor] {0} to {1}.".format(message.status, message.destination_addr))
+
     if message.status == 'ERROR/ESME_RSUBMITFAIL':
         message.log.info("[Interceptor] ESME_RSUBMITFAIL - triggering resend.")
     
