@@ -12,11 +12,16 @@ USER_CREDENTIALS = {
     # Ajoute tous tes utilisateurs ici
 }
 
+today = datetime.datetime.now().strftime("%Y%m%d")
+log_file = "/var/log/jasmin/intercepter_rsubmitfail_{0}.log".format(today)
+
+text_log = "[Interceptor] reading..."
+with open(log_file, "a") as file:
+    file.write("{0}".format(text_log))
+    file.write('\n')
+
 def mt_interceptor_smpp(message):
     # Obtenir la date du jour
-    today = datetime.datetime.now().strftime("%Y%m%d")
-    log_file = "/var/log/jasmin/intercepter_rsubmitfail_{0}.log".format(today)
-
     text_log = "[Interceptor] {0} to {1}.".format(message.status, message.destination_addr)
     with open(log_file, "a") as file:
         file.write("{0}".format(text_log))
