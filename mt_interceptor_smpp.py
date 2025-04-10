@@ -4,6 +4,8 @@ import requests
 USER_CREDENTIALS = {
     'Urban002': 'Urban002',
     'inte5564': 'd7a9763c',
+    'supp7769': '42e2e514',
+    'josa8235': '8964d378',
     #'user2': 'pass2',
     #'smppuser': 'smpppass',
     # Ajoute tous tes utilisateurs ici
