@@ -1,4 +1,5 @@
 import requests
+import datetime
 
 # Tu peux définir ici une correspondance username => password
 USER_CREDENTIALS = {
@@ -12,10 +13,20 @@ USER_CREDENTIALS = {
 }
 
 def mt_interceptor_smpp(message):
-    message.log.info("[Interceptor] {0} to {1}.".format(message.status, message.destination_addr))
+    # Obtenir la date du jour
+    today = datetime.datetime.now().strftime("%Y%m%d")
+    log_file = "/var/log/jasmin/intercepter_rsubmitfail_{0}.log".format(today)
+
+    text_log = "[Interceptor] {0} to {1}.".format(message.status, message.destination_addr)
+    with open(log_file, "a") as file:
+        file.write("{0}".format(text_log))
+        file.write('\n')
 
     if message.status == 'ERROR/ESME_RSUBMITFAIL':
-        message.log.info("[Interceptor] ESME_RSUBMITFAIL - triggering resend.")
+        text_log = "[Interceptor] ESME_RSUBMITFAIL - triggering resend."
+        with open(log_file, "a") as file:
+            file.write("{0}".format(text_log))
+            file.write('\n')
     
         try:
             # Récupération des infos du message
