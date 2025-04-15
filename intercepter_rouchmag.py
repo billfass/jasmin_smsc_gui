@@ -30,7 +30,7 @@ try:
 
     # smpp_status = 0
 except Exception as e:
-    api_text = json.dumps({"m_user": m_user, "to":to, "sender":sender, "message": str(e), "time": datetime.datetime.now().strftime("%Y%m%d%H%i%s")})
+    api_text = json.dumps({"m_user": m_user, "to":to, "sender":sender, "message": str(e), "time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")})
     # We got an error when calling for charging
     with open("{0}_{1}.log".format(log_file, totime), "a") as file:
         file.write("{0}".format(api_text))
