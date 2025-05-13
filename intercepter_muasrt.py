@@ -14,7 +14,7 @@ try:
     today = datetime.datetime.now().strftime("%Y%m%d")
     totime = datetime.datetime.now().strftime("%Y%m%d%H")
 
-    log_file = "/var/log/jasmin/intercepter_rouchmag"
+    log_file = "/var/log/jasmin/intercepter_muasrt"
 
     # Exemple de fonction pour valider
     def match_number(number):
