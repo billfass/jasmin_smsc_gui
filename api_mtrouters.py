@@ -375,7 +375,8 @@ def groups_manage(action=None):
             return api_resp(list_mtroutes(), 200, "MT Routers")
         elif action == "list-smppc":
             connectors = []
-            for c in list_smpp_connectors()
+            cc = list_smpp_connectors()
+            for c in cc
                 con = c.cid
                 tt = jasmin.connector(['show',con])
                 connector = c
