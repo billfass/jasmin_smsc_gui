@@ -1,4 +1,4 @@
-from py4web import action, request
+from py4web import action, request, DIR
 from .common import db, session, auth, flash, jasmin, api_resp, api_id
 from pydal.validators import *
 from .utils import cols_split
@@ -8,6 +8,10 @@ from .api_mtrouters import list_connectors, list_mtroutes
 
 import json
 import copy
+import os
+
+# Chemin absolu vers le dossier de ton app py4web
+app_folder = os.path.join(DIR, "apps", "jasmin_smsc_gui")
 
 def transform_filters(input_data, output_file="resultat.json"):
     """
@@ -20,6 +24,9 @@ def transform_filters(input_data, output_file="resultat.json"):
     Returns:
         list: La liste des données transformées.
     """
+    # Construction du chemin complet
+    output_file = os.path.join(app_folder, output_file)
+
     type_mapping = {
         "UserFilter": {
             "key": "uid", 
@@ -71,6 +78,8 @@ def transform_groups(input_data, output_file="groups_result.json"):
     Returns:
         list: La liste transformée avec la clé 'activated': True ajoutée.
     """
+    # Construction du chemin complet
+    output_file = os.path.join(app_folder, output_file)
     
     output_list = [
         {
@@ -97,6 +106,8 @@ def transform_user_creds(input_data, output_file="users_creds_result.json"):
     Returns:
         list: La liste transformée avec la structure de configuration complète.
     """
+    # Construction du chemin complet
+    output_file = os.path.join(app_folder, output_file)
     
     template = {
         "mt_messaging_cred": {
@@ -167,6 +178,9 @@ def transform_routes(input_data, output_file="routes_result.json"):
     Returns:
         list: La liste transformée avec les connecteurs formatés et les types convertis.
     """
+    # Construction du chemin complet
+    output_file = os.path.join(app_folder, output_file)
+
     output_list = []
 
     for item in input_data:
@@ -218,6 +232,8 @@ def transform_connectors(input_data, output_file="connectors_result.json"):
     Returns:
         list: La liste transformée avec les bons types (int, bool, null).
     """
+    # Construction du chemin complet
+    output_file = os.path.join(app_folder, output_file)
     
     def clean_str(val):
         """Retourne None si la chaine est 'None', sinon la valeur."""
@@ -299,19 +315,19 @@ def export_manage(action=None):
 
     try:
         if action == "groups":
-            l= transform_groups(list_groups(), "groups.json")
+            return transform_groups(list_groups(), "groups.json")
         elif action == "users":
-            l=  transform_user_creds(list_users(), "users.json")
+            return transform_user_creds(list_users(), "users.json")
         elif action == "filters":
-            l=  transform_filters(list_filters(), "filters.json")
+            return transform_filters(list_filters(), "filters.json")
         elif action == "connectors":
-            l=  transform_connectors(list_connectors(), "smppconnectors.json")
+            return transform_connectors(list_connectors(), "smppconnectors.json")
         elif action == "mtroutes":
-            l=  transform_routes(list_mtroutes(), "mtroutes.json")
+            return transform_routes(list_mtroutes(), "mtroutes.json")
         else:
             return api_resp(dict(data), 400, 'Undefined action')
     except Exception as e:
         return api_resp(dict(request.POST), 400, str(e))
 
-    return api_resp(dict(data), ret["code"], ret["message"])
+    # return api_resp(dict(data), ret["code"], ret["message"])
 
