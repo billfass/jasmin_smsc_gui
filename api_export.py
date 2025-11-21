@@ -316,19 +316,19 @@ def export_manage(action=None):
     try:
         if action == "groups":
             l = transform_groups(list_groups(), "{0}.json".format(action))
-            return download_manage(action)
+            return l#download_manage(action)
         elif action == "users":
             l = transform_user_creds(list_users(), "{0}.json".format(action))
-            return download_manage(action)
+            return l#download_manage(action)
         elif action == "filters":
             l = transform_filters(list_filters(), "{0}.json".format(action))
-            return download_manage(action)
+            return l#download_manage(action)
         elif action == "smppconnectors":
             l = transform_connectors(list_connectors(), "{0}.json".format(action))
-            return download_manage(action)
+            return l#download_manage(action)
         elif action == "mtroutes":
             l = transform_routes(list_mtroutes(), "{0}.json".format(action))
-            return download_manage(action)
+            return l#download_manage(action)
         else:
             return api_resp(dict(data), 400, 'Undefined action')
     except Exception as e:
