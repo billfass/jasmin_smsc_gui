@@ -1,4 +1,4 @@
-from py4web import action, request, DIR
+from py4web import action, request
 from .common import db, session, auth, flash, jasmin, api_resp, api_id
 from pydal.validators import *
 from .utils import cols_split
@@ -11,7 +11,7 @@ import copy
 import os
 
 # Chemin absolu vers le dossier de ton app py4web
-app_folder = os.path.join(DIR, "apps", "jasmin_smsc_gui")
+app_folder = "/opt/py4web/apps/jasmin_smsc_gui/uploads/"
 
 def transform_filters(input_data, output_file="resultat.json"):
     """
@@ -25,7 +25,7 @@ def transform_filters(input_data, output_file="resultat.json"):
         list: La liste des données transformées.
     """
     # Construction du chemin complet
-    output_file = os.path.join(app_folder, output_file)
+    output_file = "{0}{1}".format(app_folder, output_file)
 
     type_mapping = {
         "UserFilter": {
@@ -79,7 +79,7 @@ def transform_groups(input_data, output_file="groups_result.json"):
         list: La liste transformée avec la clé 'activated': True ajoutée.
     """
     # Construction du chemin complet
-    output_file = os.path.join(app_folder, output_file)
+    output_file = "{0}{1}".format(app_folder, output_file)
     
     output_list = [
         {
@@ -107,7 +107,7 @@ def transform_user_creds(input_data, output_file="users_creds_result.json"):
         list: La liste transformée avec la structure de configuration complète.
     """
     # Construction du chemin complet
-    output_file = os.path.join(app_folder, output_file)
+    output_file = "{0}{1}".format(app_folder, output_file)
     
     template = {
         "mt_messaging_cred": {
@@ -179,7 +179,7 @@ def transform_routes(input_data, output_file="routes_result.json"):
         list: La liste transformée avec les connecteurs formatés et les types convertis.
     """
     # Construction du chemin complet
-    output_file = os.path.join(app_folder, output_file)
+    output_file = "{0}{1}".format(app_folder, output_file)
 
     output_list = []
 
@@ -233,7 +233,7 @@ def transform_connectors(input_data, output_file="connectors_result.json"):
         list: La liste transformée avec les bons types (int, bool, null).
     """
     # Construction du chemin complet
-    output_file = os.path.join(app_folder, output_file)
+    output_file = "{0}{1}".format(app_folder, output_file)
     
     def clean_str(val):
         """Retourne None si la chaine est 'None', sinon la valeur."""
