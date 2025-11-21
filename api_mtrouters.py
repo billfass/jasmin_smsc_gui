@@ -374,7 +374,25 @@ def groups_manage(action=None):
         elif action == "list":
             return api_resp(list_mtroutes(), 200, "MT Routers")
         elif action == "list-smppc":
-            return api_resp(list_smpp_connectors(), 200, "SMPP Connectors")
+            connectors = []
+            for c in list_smpp_connectors()
+                con = c.cid
+                tt = jasmin.connector(['show',con])
+                connector = c
+                for t in tt[1:-1]:
+                    i = []
+                    r = str.split(t)
+                    l = len(r)
+                    if l ==2:
+                        fld = r[0]
+                        val = r[1]
+                        i.append(fld)
+                        i.append(val)
+                        connector.append(i)
+                    else:
+                        pass
+                connectors.append(connector)
+            return api_resp(connectors, 200, "SMPP Connectors")
         else:
             return api_resp(dict(data), 400, 'Undefined action')
     except Exception as e:
