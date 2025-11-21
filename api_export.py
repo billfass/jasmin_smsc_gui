@@ -298,15 +298,15 @@ def export_manage(action=None):
 
     try:
         if action == "groups":
-            transform_groups(list_groups(), "static/groups.json")
+            transform_groups(list_groups(), "./static/groups.json")
         elif action == "users":
-            transform_user_creds(list_users(), "static/users.json")
+            transform_user_creds(list_users(), "./static/users.json")
         elif action == "filters":
-            transform_filters(list_filters(), "static/filters.json")
+            transform_filters(list_filters(), "./static/filters.json")
         elif action == "connectors":
-            transform_connectors(list_connectors(), "static/smppconnectors.json")
+            transform_connectors(list_connectors(), "./static/smppconnectors.json")
         elif action == "mtroutes":
-            transform_routes(list_mtroutes(), "static/mtroutes.json")
+            transform_routes(list_mtroutes(), "./static/mtroutes.json")
         else:
             return api_resp(dict(data), 400, 'Undefined action')
     except Exception as e:
