@@ -71,7 +71,7 @@ def transform_groups(input_data, output_file="groups_result.json"):
     Returns:
         list: La liste transformée avec la clé 'activated': True ajoutée.
     """
-    return dict(input=input_data)
+    
     output_list = [
         {
             "gid": item.get("gid"),
@@ -79,7 +79,7 @@ def transform_groups(input_data, output_file="groups_result.json"):
         }
         for item in input_data
     ]
-
+    
     with open(output_file, 'w', encoding='utf-8') as f:
         json.dump(output_list, f, indent=2)
     
