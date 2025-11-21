@@ -315,15 +315,20 @@ def export_manage(action=None):
 
     try:
         if action == "groups":
-            return transform_groups(list_groups(), "groups.json")
+            l = transform_groups(list_groups(), "{0}.json".format(action))
+            return download_manage(action)
         elif action == "users":
-            return transform_user_creds(list_users(), "users.json")
+            l = transform_user_creds(list_users(), "{0}.json".format(action))
+            return download_manage(action)
         elif action == "filters":
-            return transform_filters(list_filters(), "filters.json")
-        elif action == "connectors":
-            return transform_connectors(list_connectors(), "smppconnectors.json")
+            l = transform_filters(list_filters(), "{0}.json".format(action))
+            return download_manage(action)
+        elif action == "smppconnectors":
+            l = transform_connectors(list_connectors(), "{0}.json".format(action))
+            return download_manage(action)
         elif action == "mtroutes":
-            return transform_routes(list_mtroutes(), "mtroutes.json")
+            l = transform_routes(list_mtroutes(), "{0}.json".format(action))
+            return download_manage(action)
         else:
             return api_resp(dict(data), 400, 'Undefined action')
     except Exception as e:
@@ -334,7 +339,7 @@ def export_manage(action=None):
 @action('download/export/<action>', method=['GET'])
 def download_manage(action=""):
     filepath = "{0}{1}.json".format(app_folder, action)
-    print(filepath)
+    
     # Vérification que le fichier existe
     if not os.path.exists(filepath):
         return "File not found"
