@@ -375,11 +375,33 @@ def groups_manage(action=None):
             return api_resp(list_mtroutes(), 200, "MT Routers")
         elif action == "list-smppc":
             connectors = []
-            cc = dict(list_smpp_connectors())
-            for c in cc
-                con = c.cid
-                tt = jasmin.connector(['show',con])
-                connector = c
+            rows=(jasmin.list_it('smppcs'))
+            lines=rows
+            if not lines:
+                return api_resp([], 200, "SMPP Connectors")
+            rr = cols_split(lines[2:-2])
+            n = len(rows[0])
+            for row in rr:
+                cid=row[0][1:]
+                connector = []
+                i = []
+                i.append("status")
+                i.append(row[1])
+                connector.append(i)
+                i = []
+                i.append("session")
+                i.append(row[2])
+                connector.append(i)
+                i = []
+                i.append("starts")
+                i.append(row[3])
+                connector.append(i)
+                i = []
+                i.append("stops")
+                i.append(row[4])
+                connector.append(i)
+                
+                tt = jasmin.connector(['show',cid])
                 for t in tt[1:-1]:
                     i = []
                     r = str.split(t)
