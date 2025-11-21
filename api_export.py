@@ -334,7 +334,7 @@ def export_manage(action=None):
 @action('download/export/<action>', method=['GET'])
 def download_manage(action=""):
     filepath = "{0}{1}.json".format(app_folder, action)
-
+    print(filepath)
     # Vérification que le fichier existe
     if not os.path.exists(filepath):
         return "File not found"
