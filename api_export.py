@@ -289,7 +289,7 @@ def transform_connectors(input_data, output_file="connectors_result.json"):
 
 @action('api/export/<action>', method=['GET', 'POST'])
 @action.uses(db, session, auth, flash)
-def groups_manage(action=None):
+def export_manage(action=None):
     ret = api_id(request)
     if ret:
         return api_resp(dict(), 400, ret)
