@@ -383,23 +383,12 @@ def groups_manage(action=None):
             n = len(rows[0])
             for row in rr:
                 cid=row[0][1:]
-                connector = []
-                i = []
-                i.append("status")
-                i.append(row[1])
-                connector.append(i)
-                i = []
-                i.append("session")
-                i.append(row[2])
-                connector.append(i)
-                i = []
-                i.append("starts")
-                i.append(row[3])
-                connector.append(i)
-                i = []
-                i.append("stops")
-                i.append(row[4])
-                connector.append(i)
+                connector = dict(
+                    status=row[1],
+                    session=row[2],
+                    starts=row[3],
+                    stops=row[4]
+                )
                 
                 tt = jasmin.connector(['show',cid])
                 for t in tt[1:-1]:
@@ -407,11 +396,7 @@ def groups_manage(action=None):
                     r = str.split(t)
                     l = len(r)
                     if l ==2:
-                        fld = r[0]
-                        val = r[1]
-                        i.append(fld)
-                        i.append(val)
-                        connector.append(i)
+                        connector[r[0]] = r[1]
                     else:
                         pass
                 connectors.append(connector)
