@@ -351,6 +351,35 @@ def bj_routers_by_group(data):
     
     return dict(code=200, message="Adds mt routers")
 
+def list_connectors():
+    connectors = []
+    rows=(jasmin.list_it('smppcs'))
+    lines=rows
+    if not lines:
+        return connectors
+    rr = cols_split(lines[2:-2])
+    n = len(rows[0])
+    for row in rr:
+        cid=row[0][1:]
+        connector = dict(
+            status=row[1],
+            session=row[2],
+            starts=row[3],
+            stops=row[4]
+        )
+        
+        tt = jasmin.connector(['show',cid])
+        for t in tt[1:-1]:
+            i = []
+            r = str.split(t)
+            l = len(r)
+            if l ==2:
+                connector[r[0]] = r[1]
+            else:
+                pass
+        connectors.append(connector)
+    return connectors
+
 @action('api/mtrouters/<action>', method=['GET', 'POST'])
 @action.uses(db, session, auth, flash)
 def groups_manage(action=None):
@@ -374,32 +403,7 @@ def groups_manage(action=None):
         elif action == "list":
             return api_resp(list_mtroutes(), 200, "MT Routers")
         elif action == "list-smppc":
-            connectors = []
-            rows=(jasmin.list_it('smppcs'))
-            lines=rows
-            if not lines:
-                return api_resp([], 200, "SMPP Connectors")
-            rr = cols_split(lines[2:-2])
-            n = len(rows[0])
-            for row in rr:
-                cid=row[0][1:]
-                connector = dict(
-                    status=row[1],
-                    session=row[2],
-                    starts=row[3],
-                    stops=row[4]
-                )
-                
-                tt = jasmin.connector(['show',cid])
-                for t in tt[1:-1]:
-                    i = []
-                    r = str.split(t)
-                    l = len(r)
-                    if l ==2:
-                        connector[r[0]] = r[1]
-                    else:
-                        pass
-                connectors.append(connector)
+            connectors = list_connectors()
             return api_resp(connectors, 200, "SMPP Connectors")
         else:
             return api_resp(dict(data), 400, 'Undefined action')
