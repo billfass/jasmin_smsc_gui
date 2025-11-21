@@ -373,6 +373,8 @@ def groups_manage(action=None):
             ret = bj_routers_by_group(data)
         elif action == "list":
             return api_resp(list_mtroutes(), 200, "MT Routers")
+        elif action == "list-smppc":
+            return api_resp(list_smpp_connectors(), 200, "SMPP Connectors")
         else:
             return api_resp(dict(data), 400, 'Undefined action')
     except Exception as e:
