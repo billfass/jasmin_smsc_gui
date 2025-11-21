@@ -1,4 +1,4 @@
-from py4web import action, request
+from py4web import action, request, response
 from .common import db, session, auth, flash, jasmin, api_resp, api_id
 from pydal.validators import *
 from .utils import cols_split
@@ -331,3 +331,20 @@ def export_manage(action=None):
 
     # return api_resp(dict(data), ret["code"], ret["message"])
 
+@action('download/export/<action>', method=['GET'])
+def download_manage(action=""):
+    filepath = "{0}{1}.json".format(app_folder, action)
+
+    # Vérification que le fichier existe
+    if not os.path.exists(filepath):
+        return "File not found"
+
+    # Définition des headers pour forcer le téléchargement
+    response.headers['Content-Type'] = 'application/json'
+    response.headers['Content-Disposition'] = 'attachment; filename="groups.json"'
+
+    # Lecture du fichier
+    with open(filepath, 'rb') as f:
+        data = f.read()
+
+    return data
