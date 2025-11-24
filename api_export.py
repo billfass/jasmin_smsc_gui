@@ -1,4 +1,4 @@
-from py4web import action, request, response
+from py4web import action, request, response, URL
 from .common import db, session, auth, flash, jasmin, api_resp, api_id
 from pydal.validators import *
 from .utils import cols_split
@@ -316,21 +316,19 @@ def export_manage(action=None):
     try:
         if action == "groups":
             l = transform_groups(list_groups(), "{0}.json".format(action))
-            return l#download_manage(action)
         elif action == "users":
             l = transform_user_creds(list_users(), "{0}.json".format(action))
-            return l#download_manage(action)
         elif action == "filters":
             l = transform_filters(list_filters(), "{0}.json".format(action))
-            return l#download_manage(action)
         elif action == "smppconnectors":
             l = transform_connectors(list_connectors(), "{0}.json".format(action))
-            return l#download_manage(action)
         elif action == "mtroutes":
             l = transform_routes(list_mtroutes(), "{0}.json".format(action))
-            return l#download_manage(action)
         else:
             return api_resp(dict(data), 400, 'Undefined action')
+        
+        url = URL(f"download/export/{action}")
+        return api_resp(dict(url=url, data=l))
     except Exception as e:
         return api_resp(dict(request.POST), 400, str(e))
 
@@ -346,7 +344,7 @@ def download_manage(action=""):
 
     # Définition des headers pour forcer le téléchargement
     response.headers['Content-Type'] = 'application/json'
-    response.headers['Content-Disposition'] = 'attachment; filename="groups.json"'
+    response.headers['Content-Disposition'] = 'attachment; filename="{action}.json"'
 
     # Lecture du fichier
     with open(filepath, 'rb') as f:
