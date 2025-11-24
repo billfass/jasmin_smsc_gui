@@ -313,6 +313,10 @@ def export_manage(action=None):
     
     data = request.POST
 
+    scheme = request.environ.get("wsgi.url_scheme", "http")
+    host = request.environ.get("HTTP_HOST")
+    base_url = f"{scheme}://{host}"
+
     try:
         if action == "groups":
             l = transform_groups(list_groups(), "{0}.json".format(action))
@@ -327,7 +331,7 @@ def export_manage(action=None):
         else:
             return api_resp(dict(data), 400, 'Undefined action')
         
-        url = URL(f"download/export/{action}")
+        url = base_url + URL(f"download/export/{action}")
         return api_resp(dict(url=url, data=l))
     except Exception as e:
         return api_resp(dict(request.POST), 400, str(e))
