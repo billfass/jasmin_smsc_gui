@@ -348,7 +348,7 @@ def download_manage(action=""):
 
     # Définition des headers pour forcer le téléchargement
     response.headers['Content-Type'] = 'application/json'
-    response.headers['Content-Disposition'] = 'attachment; filename="{action}.json"'
+    response.headers['Content-Disposition'] = 'attachment; filename="{0}.json"'.format(action)
 
     # Lecture du fichier
     with open(filepath, 'rb') as f:
